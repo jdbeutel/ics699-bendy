@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bendy.iml" filepath="$PROJECT_DIR$/bendy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bendy-grailsPlugins.iml" filepath="$PROJECT_DIR$/bendy-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ics699-bendy.iml" filepath="$PROJECT_DIR$/ics699-bendy.iml" />
     </modules>
   </component>
 </project>
