@@ -14,15 +14,19 @@ class WcyTagLib {
 
     def authenticationService
 
-    private static VALID_TIME_ZONES = TimeZone.availableIDs.toList().grep(~/US\/.*|Pacific\/Honolulu/).collect { String id ->
+    // limit to a simple selection, US/*; todo: multi-level select by / into all time zones
+    private static VALID_TIME_ZONES = (List<TimeZone>) TimeZone.availableIDs.toList().grep(~/US\/.*/).collect { String id ->
         TimeZone.getTimeZone(id)
     }.sort {it.rawOffset} // do not unique() because it's not consistent with equals()
     static {
         def dtz = TimeZone.default
         def availIDs = TimeZone.availableIDs.toList()
-        def gotten = TimeZone.getTimeZone('US/Hawaii')
+        // def gotten = TimeZone.getTimeZone('US/Hawaii')
         assert availIDs.contains(dtz.ID)
-        assert VALID_TIME_ZONES.contains(dtz)
+        def canonical = VALID_TIME_ZONES.find {dtz.hasSameRules(it)}
+        assert canonical : "default $dtz has no equivalent in $VALID_TIME_ZONES"
+        TimeZone.setDefault(canonical)
+        assert VALID_TIME_ZONES.contains(TimeZone.default)
     }
 
     /**

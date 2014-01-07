@@ -22,7 +22,7 @@ class User {
     static constraints = {
         login blank:false, email:true, unique:true
         password blank:false
-        person validator: { it?.validate() }  // work-around to deepValidate for cascade
+//        person validator: { it?.validate() }  // work-around to deepValidate for cascade
     }
 
     static mapping = {
