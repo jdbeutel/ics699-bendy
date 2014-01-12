@@ -14,11 +14,11 @@
 		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
+        <r:require module="application"/>
         <g:setProvider library="prototype"/>
+        <r:layoutResources />
 		<g:layoutHead/>
-		<g:javascript library="application"/>
         <nav:resources/>
-		<r:layoutResources />
 	</head>
 	<body>
         <div id="auth">
