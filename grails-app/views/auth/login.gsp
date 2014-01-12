@@ -32,7 +32,7 @@
 </auth:ifUnconfirmed>
 --}%
     <auth:ifNotLoggedIn>
-        <g:if test="${flash.authenticationFailure || hasErrors(bean: flash.loginFormErrors, true)}">
+        <g:if test="${flash.authenticationFailure || flash.loginFormErrors && hasErrors(bean: flash.loginFormErrors, true)}">
             %{-- get all the errors together into the same list for display --}%
             <g:if test="${flash.authenticationFailure}">
                 %{ flash.loginFormErrors = flash.loginFormErrors ?: flash.loginForm.errors;
