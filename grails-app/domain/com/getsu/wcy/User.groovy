@@ -38,7 +38,7 @@ class User {
         def home = new Place().addToAddresses(address)
         def connection = new Connection(place:home, type:ConnectionType.HOME)
         def p = new Person(firstGivenName:'during signup', familyName:'during signup')
-        def s = new Settings( dateFormat:new SimpleDateFormat('yyyy-MM-dd HH:mm'), timeZone:TimeZone.default )
+        def s = new Settings( dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
         def u = new User(login:loginID, person:p, settings:s)
         u.person.addToConnections(connection)
         return u

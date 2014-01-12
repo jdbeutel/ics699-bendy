@@ -28,7 +28,7 @@ class SettingsController {
         f.newPassword = ''
         f.newPasswordConfirm = ''
 
-        f.dateFormat = user.settings.dateFormat
+        f.dateFormat = new SimpleDateFormat(user.settings.dateFormat)
         f.timeZone = user.settings.timeZone
         f.settingsVersion = user.settings.version
 
@@ -81,7 +81,7 @@ class SettingsController {
             render(view: "edit", model: [settingsForm:sf]) // failure, try again, displaying sf errors
             return
         }
-        user.settings.dateFormat = sf.dateFormat
+        user.settings.dateFormat = sf.dateFormat?.toPattern()
         user.settings.timeZone = sf.timeZone
         user.login = sf.loginEmail
         if (sf.changePassword) {

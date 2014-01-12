@@ -45,7 +45,7 @@ class Person {
         middleGivenNames nullable:true
         familyName blank:false
         suffix nullable:true
-        photo nullable:true
+        photo nullable:true, size: 0..(1024*1024)       // todo: proper type for a binary in a real db?
         photoFileName nullable:true
         birthDate nullable:true
 

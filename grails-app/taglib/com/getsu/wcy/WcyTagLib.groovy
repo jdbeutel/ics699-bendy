@@ -95,7 +95,7 @@ class WcyTagLib {
 
     def formatDate = {attrs ->
         User u = authenticationService.userPrincipal
-        String format = u?.settings?.dateFormat?.toPattern()
+        String format = u?.settings?.dateFormat
         attrs['format'] = format ?: attrs['format']
         out << g.formatDate(attrs)
     }

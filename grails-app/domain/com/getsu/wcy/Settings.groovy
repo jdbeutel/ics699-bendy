@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 
 class Settings {
 
-    SimpleDateFormat dateFormat
+    String dateFormat   // pattern for SimpleDateFormat
     TimeZone timeZone
 
     static belongsTo = [user:User]
