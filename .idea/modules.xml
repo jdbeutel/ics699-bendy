@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ics699-bendy.iml" filepath="$PROJECT_DIR$/ics699-bendy.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ics699-bendy-grailsPlugins.iml" filepath="$PROJECT_DIR$/ics699-bendy-grailsPlugins.iml" />
     </modules>
   </component>
 </project>
