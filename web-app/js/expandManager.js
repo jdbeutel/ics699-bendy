@@ -3,7 +3,7 @@
  *
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
-/* requires <g:javascript library="scriptaculous"/> */
+/* <r:require module="scriptaculous"/> */
 var ExpandManager = {
     init: function() {
         $$('a.ExpandManager.swapToNextRow').invoke('observe', 'click', ExpandManager.swapToNextRow);

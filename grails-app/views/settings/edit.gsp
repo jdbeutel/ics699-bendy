@@ -8,7 +8,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
-    <g:javascript library="scriptaculous"/>
+    <r:require module="scriptaculous"/>
     <g:set var="entityName" value="${message(code: 'settings.label', default: 'Settings')}"/>
     <title><g:message code="default.edit.label" args="[entityName]"/></title>
     <g:javascript src="changeManager.js"/>

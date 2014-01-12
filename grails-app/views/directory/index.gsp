@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
     <title>Directory</title>
-  <g:javascript library="scriptaculous"/>
+  <r:require module="scriptaculous"/>
   <g:javascript src="expandManager.js"/>
   <script type="text/javascript">
     $(document).observe('dom:loaded', function() {ExpandManager.init()});

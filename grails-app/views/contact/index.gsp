@@ -10,7 +10,7 @@
   <meta name="layout" content="main" />
   <g:set var="entityName" value="${message(code: 'contact.label', default: 'Contact')}"/>
   <title><g:message code="default.list.label" args="[entityName]" /></title>
-    <g:javascript library="scriptaculous"/>
+    <r:require module="scriptaculous"/>
     <g:javascript src="expandManager.js"/>
     <script type="text/javascript">
         $(document).observe('dom:loaded', function() {ExpandManager.init()});

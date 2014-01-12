@@ -9,7 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
     <title>My Profile</title>
-    <g:javascript library="scriptaculous"/>
+    <r:require module="scriptaculous"/>
     <g:javascript src="changeManager.js"/>
     <script type="text/javascript">
         $(document).observe('dom:loaded', function() {
