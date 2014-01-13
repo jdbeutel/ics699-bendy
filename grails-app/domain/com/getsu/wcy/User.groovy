@@ -5,7 +5,6 @@
  */
 package com.getsu.wcy
 
-import java.text.SimpleDateFormat
 import com.getsu.wcy.Connection.ConnectionType
 
 class User {

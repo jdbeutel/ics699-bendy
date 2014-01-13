@@ -4,7 +4,6 @@ import com.getsu.wcy.Connection.ConnectionType
 import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 import com.getsu.wcy.Person
 import com.getsu.wcy.Notification
-import java.text.SimpleDateFormat
 import com.getsu.wcy.WcyDomainBuilder
 import com.getsu.wcy.PhoneNumber.PhoneNumberType
 
@@ -55,7 +54,7 @@ class BootStrap {
                     }
                 }
             }
-            settings(dateFormat:new SimpleDateFormat('yyyy-MM-dd HH:mm'), timeZone:TimeZone.default )
+            settings(dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
         }
         joe.save(failOnError:true)
     }
@@ -88,7 +87,7 @@ class BootStrap {
                 phoneNumber(type:PhoneNumberType.MOBILE, number:'555-5555')
                 emailAddress(name:'Jane Cool', address:'jane.cool@rr.net')
             }
-            settings(dateFormat:new SimpleDateFormat('yyyy-MM-dd HH:mm'), timeZone:TimeZone.default )
+            settings(dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
         }
         jane.save(failOnError:true)
     }
@@ -112,7 +111,7 @@ class BootStrap {
                     emailAddress(name:'Alex McFee, Engineer', address:'coworker@example.com')
                 }
             }
-            settings(dateFormat:new SimpleDateFormat('yyyy-MM-dd HH:mm'), timeZone:TimeZone.default )
+            settings(dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
         }
         jane.save(failOnError:true)
     }

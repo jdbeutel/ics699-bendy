@@ -6,8 +6,6 @@
 
 package com.getsu.wcy
 
-import java.text.SimpleDateFormat
-
 class Settings {
 
     String dateFormat   // pattern for SimpleDateFormat
