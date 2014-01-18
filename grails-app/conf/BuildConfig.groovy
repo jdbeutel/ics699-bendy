@@ -54,7 +54,7 @@ grails.project.dependency.resolution = {
 
     plugins {
         // plugins for the build system only
-        build ":tomcat:7.0.47"
+        build ":tomcat:7.0.50"
 
         // plugins for the compile step
         compile ":scaffolding:2.0.1"
@@ -63,7 +63,7 @@ grails.project.dependency.resolution = {
         compile ":navigation:1.1.1"     // todo: change to platform-core?
 
         // plugins needed at runtime but not for compilation
-        runtime ":hibernate:3.6.10.6" // or ":hibernate4:4.1.11.6"
+        runtime ":hibernate:3.6.10.7" // or ":hibernate4:4.1.11.6"
         runtime ":database-migration:1.3.8"
         // runtime ":jquery:1.10.2.2"
         runtime ":prototype:1.0"    // todo: convert to jquery
