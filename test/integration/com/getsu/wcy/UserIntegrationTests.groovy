@@ -39,10 +39,10 @@ class UserIntegrationTests extends GroovyTestCase {
         User u = User.createSignupInstance('foo@bar.com')
         u.password = 'my password'
         assert u.validate() // defaults to deepValidate:true
-        assert !u.person.errors.allErrors.collect {it.code}.contains('blank')
+        assert !u.errors.allErrors.collect {it.code}.contains('blank')
         u.person.firstGivenName = '' // looking for the blank error
         assert !u.validate() // defaults to deepValidate:true
-        assert u.person.errors.allErrors.collect {it.code}.contains('blank')
+        assert u.errors.allErrors.collect {it.code}.contains('blank')
         assert !u.person.validate()
         shouldFail(ValidationException) {
             u.save()
