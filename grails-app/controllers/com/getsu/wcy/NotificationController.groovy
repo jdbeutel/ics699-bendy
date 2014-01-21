@@ -2,8 +2,6 @@ package com.getsu.wcy
 
 class NotificationController {
 
-    static navigation = [group:'tabs', order:40, title:'notifications']
-
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def authenticationService

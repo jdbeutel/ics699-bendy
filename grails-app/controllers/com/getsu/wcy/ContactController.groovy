@@ -10,8 +10,6 @@ import grails.orm.PagedResultList
 
 class ContactController {
 
-    static navigation = [group:'tabs', order:10, title:'contacts']
-
     def index = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def result = Person.createCriteria().list(params) { not { like('name', 'Test%')}}

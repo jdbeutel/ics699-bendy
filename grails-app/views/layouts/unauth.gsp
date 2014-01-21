@@ -18,7 +18,6 @@
     <g:setProvider library="prototype"/>
     <r:layoutResources />
     <g:layoutHead/>
-    <nav:resources/>
 </head>
 <body>
 <div class="logo"><h1>We'll Call You</h1></div>

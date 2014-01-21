@@ -7,8 +7,6 @@ package com.getsu.wcy
 
 class DirectoryController {
 
-    static navigation = [group:'tabs', order:50, title:'directory']
-
     def index = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         // todo: access controls

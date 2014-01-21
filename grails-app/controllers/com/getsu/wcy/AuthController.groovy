@@ -16,9 +16,7 @@ class AuthController {
 
     def authenticationService
 
-    static navigation = [
-		[group:'authOptions', action:'logout', title:'logout', order:99, isVisible:{ authenticationService.isLoggedIn(request) }]
-	]
+    static navigationScope = 'authOptions'
 
     def index = {
         redirect(action: "login", params: params)

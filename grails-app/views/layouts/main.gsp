@@ -18,15 +18,15 @@
         <g:setProvider library="prototype"/>
         <r:layoutResources />
 		<g:layoutHead/>
-        <nav:resources/>
 	</head>
 	<body>
         <div id="auth">
-            <nav:render group="authOptions"/>
+            <nav:menu scope="authOptions" class="navigation"/>
         </div>
         <div class="logo"><h1>We'll Call You</h1></div>
         <div id="menu">
-            <nav:render group="tabs"/>
+            <nav:primary class="navigation"/>
+            <nav:secondary/>
         </div>
 		<g:layoutBody/>
 		<div class="footer" role="contentinfo"></div>

@@ -4,8 +4,6 @@ import org.springframework.web.multipart.MultipartFile
 
 class PersonController {
 
-    static navigation = [group:'tabs', order:30, title:'my profile', action:'editMyProfile']
-
     static allowedMethods = [save: "POST", update: "POST", updateMyProfile:"POST", delete: "POST"]
 
     def authenticationService

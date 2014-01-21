@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat
 
 class SettingsController {
 
-    static navigation = [group:'tabs', order:60, title:'settings']
-
     static allowedMethods = [update:"POST"]
 
     def authenticationService

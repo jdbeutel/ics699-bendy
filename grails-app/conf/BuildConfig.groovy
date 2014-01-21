@@ -60,7 +60,7 @@ grails.project.dependency.resolution = {
         compile ":scaffolding:2.0.1"
         compile ':cache:1.1.1'
         compile ":authentication:2.0.1"
-        compile ":navigation:1.1.1"     // todo: change to platform-core?
+        compile ":platform-core:1.0.RC6"	// for navigation
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.7" // or ":hibernate4:4.1.11.6"
