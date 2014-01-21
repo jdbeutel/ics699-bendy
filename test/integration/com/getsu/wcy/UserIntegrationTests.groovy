@@ -5,12 +5,11 @@
  */
 package com.getsu.wcy
 
-import grails.test.GrailsUnitTestCase
 import grails.validation.ValidationException
 import com.getsu.wcy.Connection.ConnectionType
 import com.getsu.wcy.PhoneNumber.PhoneNumberType
 
-class UserIntegrationTests extends GrailsUnitTestCase {
+class UserIntegrationTests extends GroovyTestCase {
 
     void testSave() {
         User u = User.createSignupInstance('foo@bar.com')
