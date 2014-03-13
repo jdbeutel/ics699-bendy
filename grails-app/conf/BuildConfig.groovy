@@ -68,6 +68,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.0.2"
         runtime ":prototype:1.0"    // todo: convert to jquery
         runtime ":resources:1.2.7"
+        runtime ":twitter-bootstrap:3.0.3"  // Angular UI Bootstrap 0.10.0 was tested with Bootstrap CSS 3.0.3.
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0.1"
         //runtime ":cached-resources:1.1"
