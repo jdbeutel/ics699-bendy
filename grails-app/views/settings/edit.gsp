@@ -93,7 +93,7 @@
                                             <label for="oldPassword"><g:message code="settings.oldPassword.label" default="Current Password"/></label>
                                         </td>
                                         <td valign="top" class="required value ${hasErrors(bean: settingsForm, field: 'oldPassword', 'errors')}">
-                                            <g:passwordField name="oldPassword" value="${settingsForm?.oldPassword}" autocomplete="off" bendy-change-checker="" ng-required="changePassword"/> <wcy:required/>
+                                            <g:textField name="oldPassword" value="${settingsForm?.oldPassword}" autocomplete="off" bendy-change-checker="" ng-required="changePassword"/> <wcy:required/>
                                         </td>
                                     </tr>
 
@@ -102,7 +102,7 @@
                                             <label for="newPassword"><g:message code="settings.newPassword.label" default="New Password"/></label>
                                         </td>
                                         <td valign="top" class="required value ${hasErrors(bean: settingsForm, field: 'newPassword', 'errors')}">
-                                            <g:passwordField name="newPassword" value="${settingsForm?.newPassword}" autocomplete="off" bendy-change-checker="" ng-required="changePassword"/> <wcy:required/>
+                                            <g:textField name="newPassword" value="${settingsForm?.newPassword}" autocomplete="off" bendy-change-checker="" ng-required="changePassword"/> <wcy:required/>
                                         </td>
                                     </tr>
 
@@ -111,7 +111,7 @@
                                             <label for="newPasswordConfirm"><g:message code="settings.newPasswordConfirm.label" default="Confirm New Password"/></label>
                                         </td>
                                         <td valign="top" class="required value ${hasErrors(bean: settingsForm, field: 'newPasswordConfirm', 'errors')}">
-                                            <g:passwordField name="newPasswordConfirm" value="${settingsForm?.newPasswordConfirm}" autocomplete="off" bendy-change-checker="" ng-required="changePassword"/> <wcy:required/>
+                                            <g:textField name="newPasswordConfirm" value="${settingsForm?.newPasswordConfirm}" autocomplete="off" bendy-change-checker="" ng-required="changePassword"/> <wcy:required/>
                                         </td>
                                     </tr>
 
