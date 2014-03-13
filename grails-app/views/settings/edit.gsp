@@ -81,7 +81,7 @@
                         <a href="#" id="changePasswordToggle" class="expander" onclick="PasswordExpandManager.toggleChangePassword()" style="display: none">&gt; Change Password</a>
                         <span id="changePasswordWithoutJsSpan">
                             <label for="changePassword">Change Password</label>
-                            <g:checkBox name="changePassword" value="${settingsForm?.changePassword}" ng-model="changePassword"/>
+                            <g:checkBox name="changePassword" value="${settingsForm?.changePassword}" ng-model="changePassword" ng-init="changePassword=${settingsForm?.changePassword}"/>
                         </span>
                         <div id="changePasswordDiv" collapse="!changePassword">
                             <div class="dialog well well-large">
