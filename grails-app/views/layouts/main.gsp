@@ -15,7 +15,6 @@
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
         <r:require module="application"/>
-        <g:setProvider library="prototype"/>
         <r:layoutResources />
 		<g:layoutHead/>
 	</head>

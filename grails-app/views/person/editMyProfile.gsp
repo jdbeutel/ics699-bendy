@@ -9,13 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
     <title>My Profile</title>
-    <r:require module="scriptaculous"/>
-    <g:javascript src="changeManager.js"/>
-    <script type="text/javascript">
-        $(document).observe('dom:loaded', function() {
-            ChangeManager.init($('htmlForm'), $$('input.save')[0], [])
-        });
-    </script>
+    <r:require module="angular"/>
 </head>
 <body>
 <div class="body">
@@ -27,7 +21,8 @@
             <g:renderErrors bean="${personInstance}" as="list"/>
         </div>
     </g:hasErrors>
-    <g:uploadForm name="htmlForm" method="post">
+    %{--<g:uploadForm name="htmlForm" method="post" ng-app="bendyApp" bendy-change-manager="">--}%
+    <g:uploadForm name="htmlForm" method="post" ng-app="bendyApp" ng-controller="BendyChangeCtrl">
         <div class="dialog">
             <table>
                 <tbody>
@@ -41,7 +36,11 @@
             </table>
         </div>
         <div class="buttons">
-            <span class="button"><g:actionSubmit class="save" action="updateMyProfile" value="${message(code: 'default.button.update.label', default: 'Save')}"/></span>
+            <span class="button">
+                <g:actionSubmit class="save" action="updateMyProfile" ng-disabled="!dirty" ng-class="{changed: dirty}"
+                                value="${message(code: 'default.button.update.label', default: 'Save')}"/>
+                dirty: {{dirty}}, changed: {{changed}}
+            </span>
         </div>
     </g:uploadForm>
 </div>

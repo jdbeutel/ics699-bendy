@@ -9,11 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="unauth"/>
     <title>Sign up</title>
-    <r:require module="scriptaculous"/>
-    <g:javascript src="changeManager.js"/>
-    <script type="text/javascript">
-        $(document).observe('dom:loaded', function() {ChangeManager.init($('htmlForm'), $('doSignup'), [])});
-    </script>
+    <r:require module="angular"/>
 </head>
 <body>
 <div class="body">
@@ -33,7 +29,7 @@
     </auth:ifLoggedIn>
 
     <auth:ifNotLoggedIn>
-        <div class="body">
+        <div class="body" ng-app="bendyApp">
             <h2>Please sign up</h2>
             <g:if test="${flash.message}">
                 <div class="message">${flash.message}</div>
@@ -48,7 +44,7 @@
                     <g:renderErrors bean="${signupForm}" as="list" />
                 </div>
             </g:hasErrors>
-            <g:uploadForm name="htmlForm" action="doSignup" method="post" >
+            <g:uploadForm name="htmlForm" action="doSignup" method="post" ng-controller="BendyChangeCtrl">
                 <div class="dialog">
 
                     <table>
@@ -58,7 +54,7 @@
                                 <label for="login">Email</label>
                             </td>
                             <td valign="top" class="required value ${hasErrors(bean: signupForm, field: 'login', 'errors')}">
-                                <g:textField name="login" size="42" value="${signupForm?.login}" /> <wcy:required/>
+                                <g:textField name="login" size="42" value="${signupForm?.login}" bendy-change-checker="" required="required"/> <wcy:required/>
                             </td>
                         </tr>
 
@@ -69,7 +65,7 @@
                                 <label for="password">Password</label>
                             </td>
                             <td valign="top" class="required value ${hasErrors(bean: signupForm, field: 'password', 'errors')}">
-                                <g:passwordField name="password" value="" /> <wcy:required/>
+                                <g:passwordField name="password" value="" bendy-change-checker="" required="required"/> <wcy:required/>
                             </td>
                         </tr>
 
@@ -78,7 +74,7 @@
                                 <label for="passwordConfirm">Confirm password</label>
                             </td>
                             <td valign="top" class="required value ${hasErrors(bean: signupForm, field: 'passwordConfirm', 'errors')}">
-                                <g:passwordField name="passwordConfirm" value="" /> <wcy:required/>
+                                <g:passwordField name="passwordConfirm" value="" bendy-change-checker="" required="required"/> <wcy:required/>
                             </td>
                         </tr>
 
@@ -92,7 +88,7 @@
                                 <g:hiddenField name="connections[0].type" value="HOME" /> %{-- constraint --}%
                                 <g:hiddenField name="connections[0].place.addresses[0].streetType" value="true" /> %{-- force bind to create, for easier validation --}%
                                 <g:textField name="connections[0].place.addresses[0].city"
-                                        value="${personInstance?.connections?.first()?.place?.addresses?.first()?.city}" /> <wcy:required/>
+                                        value="${personInstance?.connections?.first()?.place?.addresses?.first()?.city}" bendy-change-checker="" required="required"/> <wcy:required/>
                             </td>
                         </tr>
 
@@ -102,7 +98,7 @@
                             </td>
                             <td valign="top" class="required value ${hasErrors(bean: personInstance, field: 'connections[0].place.addresses[0].state', 'errors')}">
                                 <g:textField name="connections[0].place.addresses[0].state"
-                                        value="${personInstance?.connections?.first()?.place?.addresses?.first()?.state}" /> <wcy:required/>
+                                        value="${personInstance?.connections?.first()?.place?.addresses?.first()?.state}" bendy-change-checker="" required="required"/> <wcy:required/>
                             </td>
                         </tr>
 
@@ -115,7 +111,10 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:submitButton name="doSignup" class="save" value="Sign up" /></span>
+                    <span class="button">
+                        <g:submitButton name="doSignup" class="save" ng-disabled="!dirty" ng-class="{changed: dirty}"
+                                        value="Sign up" />
+                    </span>
                 </div>
             </g:uploadForm>
         </div>
