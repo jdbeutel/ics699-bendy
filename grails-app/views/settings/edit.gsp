@@ -11,43 +11,6 @@
     <r:require module="angular"/>
     <g:set var="entityName" value="${message(code: 'settings.label', default: 'Settings')}"/>
     <title><g:message code="default.edit.label" args="[entityName]"/></title>
-    %{--<script type="text/javascript">--}%
-        %{--$(document).observe('dom:loaded', function() {PasswordExpandManager.init()});--}%
-        %{--$(document).observe('dom:loaded', function() {ChangeManager.init($('htmlForm'), $$('input.save')[0], [])});--}%
-    %{--</script>--}%
-    %{--<script type="text/javascript">--}%
-        %{--var PasswordExpandManager = {--}%
-            %{--init: function() {--}%
-                %{--$('changePasswordToggle').show();--}%
-                %{--$('changePasswordWithoutJsSpan').hide();--}%
-                %{--if (!$F($('htmlForm')['changePassword'])) {--}%
-                    %{-- trying to stop Firefox from filling in oldPassword later, but nothing is working --}%
-                    %{--var opw = $('htmlForm')['oldPassword'];--}%
-                    %{--$(opw).focus().clear();--}%
-                    %{--$($('htmlForm')['timeZone']).focus(); --}%%{----}%%{-- harmless if accidentally changed --}%
-                    %{--$('changePasswordDiv').hide();--}%
-                %{--}--}%
-                %{--PasswordExpandManager.updateChangePasswordToggle();--}%
-            %{--},--}%
-            %{--toggleChangePassword: function() {--}%
-                %{--var showNow = !$F($('htmlForm')['changePassword']);--}%
-                %{--$($('htmlForm')['changePassword']).setValue(showNow);--}%
-                %{--if (showNow) {--}%
-                    %{--Effect.SlideDown('changePasswordDiv', {duration:0.5});--}%
-                %{--} else {--}%
-                    %{--Effect.SlideUp('changePasswordDiv', {duration:0.5});--}%
-                %{--}--}%
-                %{--PasswordExpandManager.updateChangePasswordToggle();--}%
-            %{--},--}%
-            %{--updateChangePasswordToggle: function() {--}%
-                %{--if ($F($('htmlForm')['changePassword'])) {--}%
-                    %{--$('changePasswordToggle').update('V Cancel password change').removeClassName('closed').addClassName('open');--}%
-                %{--} else {--}%
-                    %{--$('changePasswordToggle').update('&gt; Change Password').removeClassName('open').addClassName('closed');--}%
-                %{--}--}%
-            %{--}--}%
-        %{--}--}%
-    %{--</script>--}%
 </head>
 <body>
 <div class="body" ng-app="bendyApp">
@@ -78,12 +41,10 @@
 
                 <tr>
                     <td colspan="2">
-                        <a href="#" id="changePasswordToggle" class="expander" onclick="PasswordExpandManager.toggleChangePassword()" style="display: none">&gt; Change Password</a>
-                        <span id="changePasswordWithoutJsSpan">
-                            <label for="changePassword">Change Password</label>
-                            <g:checkBox name="changePassword" value="${settingsForm?.changePassword}" ng-model="changePassword" ng-init="changePassword=${settingsForm?.changePassword}"/>
-                        </span>
-                        <div id="changePasswordDiv" collapse="!changePassword">
+                        <g:hiddenField name="changePassword" ng-init="changePassword=${settingsForm?.changePassword}" ng-value="changePassword"/>
+                        <a href="#" class="expander" ng-hide="changePassword" ng-click="changePassword = true">&gt; Change Password</a>
+                        <a href="#" class="expander" ng-show="changePassword" ng-click="changePassword = false">V Cancel password change</a>
+                        <div collapse="!changePassword">
                             <div class="dialog well well-large">
                                 <table>
                                     <tbody>
