@@ -6,7 +6,7 @@ authenticationUserClass = User
 grails.gorm.failOnError = true // fast fail for testing
 
 grails.validateable.classes = [com.grailsrocks.authentication.SignupForm, com.grailsrocks.authentication.LoginForm]
-grails.databinding.useSpringBinder = true
+//grails.databinding.useSpringBinder = true     // the Spring binder silently fails to bind JSON requests to commands (and eats the JSON)
 
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes

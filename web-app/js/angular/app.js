@@ -8,5 +8,6 @@
 var bendyApp = angular.module('bendyApp', [
         'ui.bootstrap',
         'bendyControllers',
+        'bendyServices',
         'bendyDirectives'
 ]);

@@ -25,3 +25,29 @@ bendyControllers.controller('BendyChangeCtrl', ['$scope',
         }
     }
 ]);
+
+bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$log',
+    function ($scope, Settings, $log) {
+        var settings = Settings.get(function() {    // SettingsModel
+            $scope.settingsCommand = settings.settingsCommand;
+            $scope.timeZoneOptions = settings.timeZoneOptions;
+            $scope.dateFormatOptions = settings.dateFormatOptions;
+        });
+        $scope.update = function(settingsCommand) {
+            Settings.update(
+                    settingsCommand,
+                    function(settingsCommand, putResponseHeaders) { // success
+                        $log.log('got success response');
+                        $log.log(settingsCommand);
+                        $scope.settingsCommand = settingsCommand;
+                    },
+                    function(response) { // error
+//                        $log.log('got error response ' + response.status);
+//                        $log.log(response.data);
+//                        $log.log('updating errors to ' + response.data.errors);
+                        $scope.errors = response.data.errors;
+                    }
+            )
+        }
+    }
+]);

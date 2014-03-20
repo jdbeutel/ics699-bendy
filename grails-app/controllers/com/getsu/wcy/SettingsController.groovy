@@ -1,117 +1,122 @@
 package com.getsu.wcy
 
-import java.text.SimpleDateFormat
+import grails.transaction.Transactional
 
-class SettingsController {
+import static org.springframework.http.HttpStatus.CONFLICT
+import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
-    static allowedMethods = [update:"POST"]
+@Transactional(readOnly = true)
+class SettingsController {  // similar to RestfulController
 
     def authenticationService
 
-    def index = {
-        redirect(action: "edit", params: params)
+    def edit() {
+        render view: 'edit'
     }
 
-    def edit = {
+    def show() {
         assert authenticationService.isLoggedIn(request) // otherwise the filter would have redirected
         // not using params.id because one can edit only one's own Settings
-        User user = authenticationService.userPrincipal
-        def f = new SettingsForm()
-
-        f.loginEmail = user.login
-        f.userVersion = user.version
-
-        f.changePassword = false
-        f.oldPassword = ''
-        f.newPassword = ''
-        f.newPasswordConfirm = ''
-
-        f.dateFormat = new SimpleDateFormat(user.settings.dateFormat)
-        f.timeZone = user.settings.timeZone
-        f.settingsVersion = user.settings.version
-
-        return [settingsForm:f]
+        User user = (User) authenticationService.userPrincipal
+        respond new SettingsModel(settingsCommand: new SettingsCommand(user))
     }
 
-    def update = { SettingsForm sf ->
+    @Transactional
+    def update(SettingsCommand cmd) {
         assert authenticationService.isLoggedIn(request) // otherwise the filter would have redirected
         // not using params.id nor params.settings.id/params.user.id because one can edit only one's own User/Settings
-        User user = authenticationService.userPrincipal
-        if (user.version > sf.userVersion) {
-            sf.errors.rejectValue("userVersion", "default.optimistic.locking.failure", [message(code: 'settings.label', default: 'Settings')] as Object[], "Another user has updated this Settings while you were editing")
-            render(view: "edit", model: [settingsForm:sf]) // failure, trying again won't help, but do redisplay the edited data
+        User user = (User) authenticationService.userPrincipal
+        if (user.version > cmd.userVersion) {
+            cmd.errors.rejectValue("userVersion", "default.optimistic.locking.failure", ['Settings'] as Object[], "Another user has updated this Settings while you were editing")
+            respond cmd.errors, [status: CONFLICT, view: 'edit']    // todo: actually send this 409 instead of 422, and make client refresh on 409
             return
         }
-        if (user.settings.version > sf.settingsVersion) {
-            sf.errors.rejectValue("settingsVersion", "default.optimistic.locking.failure", [message(code: 'settings.label', default: 'Settings')] as Object[], "Another user has updated this Settings while you were editing")
-            render(view: "edit", model: [settingsForm:sf]) // failure, trying again won't help, but do redisplay the edited data
+        if (user.settings.version > cmd.settingsVersion) {
+            cmd.errors.rejectValue("settingsVersion", "default.optimistic.locking.failure", ['Settings'] as Object[], "Another user has updated this Settings while you were editing")
+            respond cmd.errors, [status: CONFLICT, view: 'edit']
             return
         }
-        if (sf.changePassword) {
-            if (user.password != authenticationService.encodePassword(sf.oldPassword)) { // extra authentication
-                sf.errors.rejectValue("oldPassword", "settingsForm.oldPassword.mismatch")
-                render(view: "edit", model: [settingsForm:sf]) // failure, show errors and try again
+        if (cmd.changePassword) {
+            if (user.password != authenticationService.encodePassword(cmd.oldPassword)) { // extra authentication
+                cmd.errors.rejectValue("oldPassword", "settingsForm.oldPassword.mismatch")
+                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
-            sf.newPassword = sf.newPassword?.trim() // todo: see if grails does this automatically
-            if (!sf.newPassword) {
-                sf.errors.rejectValue("newPassword", "settingsForm.newPassword.missing", "Please type in a new password")
-                render(view: "edit", model: [settingsForm:sf]) // failure, show errors and try again
+            cmd.newPassword = cmd.newPassword?.trim() // todo: see if grails does this automatically
+            if (!cmd.newPassword) {
+                cmd.errors.rejectValue("newPassword", "settingsForm.newPassword.missing", "Please type in a new password")
+                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
-            if (!(6..40).contains(sf.newPassword.size())) {
-                sf.errors.rejectValue("newPassword", "settingsForm.newPassword.length", "New password needs from 6 to 40 characters")
-                render(view: "edit", model: [settingsForm:sf]) // failure, show errors and try again
+            if (!(6..40).contains(cmd.newPassword.size())) {
+                cmd.errors.rejectValue("newPassword", "settingsForm.newPassword.length", "New password needs from 6 to 40 characters")
+                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
-            if (!authenticationService.checkPassword(sf.newPassword)) { // for consistency with signup
-                sf.errors.rejectValue("newPassword", "settingsForm.newPassword.unacceptable", "The new password is unacceptable")
-                render(view: "edit", model: [settingsForm:sf]) // failure, show errors and try again
+            if (!authenticationService.checkPassword(cmd.newPassword)) { // for consistency with signup
+                cmd.errors.rejectValue("newPassword", "settingsForm.newPassword.unacceptable", "The new password is unacceptable")
+                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
-            if (sf.newPassword != sf.newPasswordConfirm) {
-                sf.errors.rejectValue("newPasswordConfirm", "settingsForm.newPasswordConfirm.mismatch", "New password not confirmed.  Please type in your new password again")
-                render(view: "edit", model: [settingsForm:sf]) // failure, show errors and try again
+            if (cmd.newPassword != cmd.newPasswordConfirm) {
+                cmd.errors.rejectValue("newPasswordConfirm", "settingsForm.newPasswordConfirm.mismatch", "New password not confirmed.  Please type in your new password again")
+                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
         }
-        if (!sf.validate()) {
-            render(view: "edit", model: [settingsForm:sf]) // failure, try again, displaying sf errors
+        if (!cmd.validate()) {
+            respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
             return
         }
-        user.settings.dateFormat = sf.dateFormat?.toPattern()
-        user.settings.timeZone = sf.timeZone
-        user.login = sf.loginEmail
-        if (sf.changePassword) {
-            user.password = authenticationService.encodePassword(sf.newPassword)
-            flash.message = "Password changed"
-        } else {
-            flash.message = "Settings changed"
+        user.settings.dateFormat = cmd.dateFormat
+        user.settings.timeZone = TimeZone.getTimeZone(cmd.timeZone)
+        user.login = cmd.loginEmail
+        if (cmd.changePassword) {
+            user.password = authenticationService.encodePassword(cmd.newPassword)
         }
-        user.save(flush:true, failOnError:true)
-        redirect(action: "edit") // success, but stay on the same tab anyway
+        user.save flush:true, failOnError:true
+        respond new SettingsCommand(user), [status: OK]     // with updated user version
     }
 }
 
-class SettingsForm {
+class SettingsModel {
+    SettingsCommand settingsCommand
+    def dateFormatOptions = WcyTagLib.dateFormatOptions()
+    def timeZoneOptions = WcyTagLib.timeZoneOptions()
+}
+
+class SettingsCommand {
     String loginEmail
     long userVersion
 
-    SimpleDateFormat dateFormat
-    TimeZone timeZone
+    String dateFormat
+    String timeZone
     long settingsVersion
 
-    boolean changePassword
+    boolean changePassword = false
     // optional if !changePassword
-    String oldPassword
-    String newPassword
-    String newPasswordConfirm
+    String oldPassword = ''
+    String newPassword = ''
+    String newPasswordConfirm = ''
 
-    String originalValuesJSON
+    // String originalValuesJSON
 
     static constraints = {
         loginEmail(size:6..40, email:true, blank:false, nullable:false)
         newPassword(password:true, blank:false, nullable: true)
         newPasswordConfirm(password:true, blank:false, nullable:true)
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    SettingsCommand() {}    // used by Grails binder
+
+    SettingsCommand(User user) {
+        loginEmail = user.login
+        userVersion = user.version
+
+        dateFormat = user.settings.dateFormat
+        timeZone = user.settings.timeZone.ID
+        settingsVersion = user.settings.version
     }
 }

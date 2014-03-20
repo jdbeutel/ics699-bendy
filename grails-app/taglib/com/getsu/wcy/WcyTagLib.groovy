@@ -44,7 +44,11 @@ class WcyTagLib {
         out << g.select(attrs)
     }
 
-    def formatTimeZone = {TimeZone tz ->
+    static List timeZoneOptions() {
+        VALID_TIME_ZONES.collect {[key: it.ID, value: formatTimeZone(TimeZone.getTimeZone(it.ID))]}
+    }
+
+    static formatTimeZone(TimeZone tz) {
         def now = new Date()
         def shortName = tz.getDisplayName(tz.inDaylightTime(now), TimeZone.SHORT)
         def longName = tz.getDisplayName(tz.inDaylightTime(now), TimeZone.LONG)
@@ -56,7 +60,7 @@ class WcyTagLib {
         return "${shortName} (${tz.ID}), ${longName} ${hour}:${min}"
     }
 
-    private static VALID_DATE_FORMATS = [
+    static VALID_DATE_FORMATS = [
             'MM/dd/yyyy h:mm a',
             'yyyy-MM-dd HH:mm',
             'yyyy-MM-dd HH:mm z',
@@ -66,6 +70,10 @@ class WcyTagLib {
             'EEE, d MMM yyyy HH:mm',
             'EEE, d MMM yyyy HH:mm z'
     ]
+
+    static List dateFormatOptions() {
+        VALID_DATE_FORMATS.collect {[key: it, value: formatDateFormat(new SimpleDateFormat(it))]}
+    }
 
     /**
      *  A dateFormatSelect tag.
@@ -85,7 +93,7 @@ class WcyTagLib {
         out << g.select(attrs)
     }
 
-    def formatDateFormat = {SimpleDateFormat df ->
+    static formatDateFormat(SimpleDateFormat df) {
         def now = new Date()
         df.format(now)
     }
