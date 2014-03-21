@@ -27,14 +27,8 @@ class SettingsController {  // similar to RestfulController
         assert authenticationService.isLoggedIn(request) // otherwise the filter would have redirected
         // not using params.id nor params.settings.id/params.user.id because one can edit only one's own User/Settings
         User user = (User) authenticationService.userPrincipal
-        if (user.version > cmd.userVersion) {
-            cmd.errors.rejectValue("userVersion", "default.optimistic.locking.failure", ['Settings'] as Object[], "Another user has updated this Settings while you were editing")
-            respond cmd.errors, [status: CONFLICT, view: 'edit']    // todo: actually send this 409 instead of 422, and make client refresh on 409
-            return
-        }
-        if (user.settings.version > cmd.settingsVersion) {
-            cmd.errors.rejectValue("settingsVersion", "default.optimistic.locking.failure", ['Settings'] as Object[], "Another user has updated this Settings while you were editing")
-            respond cmd.errors, [status: CONFLICT, view: 'edit']
+        if (user.version > cmd.userVersion || user.settings.version > cmd.settingsVersion) {
+            respond new SettingsCommand(user), [status: CONFLICT]
             return
         }
         if (cmd.changePassword) {

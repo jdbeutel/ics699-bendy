@@ -13,6 +13,7 @@
 </head>
 <body>
 <div class="body" ng-app="bendyApp" ng-controller="BendySettingsCtrl">
+    <div ng-show="message" class="message">{{message}}</div>
     <div ng-show="errors" class="errors">
         <ul>
             <li ng-repeat="error in errors">{{error.message}}</li>

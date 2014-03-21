@@ -17,7 +17,7 @@ html * {
     margin-top: -6px;
 }
 
-.changed, .ng-dirty {
+.changed, input.ng-dirty, select.ng-dirty {
     background-color: #ffff99;
 }
 .save.changed {

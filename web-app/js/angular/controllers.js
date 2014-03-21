@@ -40,12 +40,22 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$log',
                         $log.log('got success response');
                         $log.log(settingsCommand);
                         $scope.settingsCommand = settingsCommand;
+                        $scope.settingsForm.$setPristine();
+                        $scope.errors = [];
+                        $scope.message = 'Settings updated.';
                     },
                     function(response) { // error
-//                        $log.log('got error response ' + response.status);
-//                        $log.log(response.data);
-//                        $log.log('updating errors to ' + response.data.errors);
-                        $scope.errors = response.data.errors;
+                        $log.log('got error response ' + response.status);
+                        $log.log(response.data);
+                        $scope.message = '';
+                        if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
+                            $scope.errors = [{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}];
+                            // todo: since it is the same user, forget about optimistic locking and just let the last one win?
+                            $scope.settingsCommand = response.data; // display updated
+                            $scope.settingsForm.$setPristine();
+                        } else {
+                            $scope.errors = response.data.errors;
+                        }
                     }
             )
         }
