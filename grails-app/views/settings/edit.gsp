@@ -20,7 +20,7 @@
         </ul>
     </div>
     <form name="settingsForm">
-        <div class="dialog">
+        <div class="dialog" ng-controller="BendyDirtyFormCtrl">
             <table>
                 <tbody>
 
@@ -29,14 +29,14 @@
                         <label for="loginEmail">Email Address (for log in)</label>
                     </td>
                     <td class="required value">
-                        <input type="email" id="loginEmail" name="loginEmail" ng-model="settingsCommand.loginEmail" size="42" required/> <wcy:required/>
+                        <input type="email" id="loginEmail" name="loginEmail" ng-model="settingsCommand.loginEmail" bendy-dirty size="42" required/> <wcy:required/>
                     </td>
                 </tr>
 
                 <tr>
                     <td colspan="2">
-                        <a href="#" class="expander" ng-hide="settingsCommand.changePassword" ng-click="settingsCommand.changePassword = true">&gt; Change Password</a>
-                        <a href="#" class="expander" ng-show="settingsCommand.changePassword" ng-click="settingsCommand.changePassword = false">V Cancel password change</a>
+                        <a href="#" class="expander" ng-hide="settingsCommand.changePassword" ng-click="changePassword()">&gt; Change Password</a>
+                        <a href="#" class="expander" ng-show="settingsCommand.changePassword" ng-click="cancelPasswordChange()">V Cancel password change</a>
                         <div collapse="!settingsCommand.changePassword">
                             <div class="dialog well well-large">
                                 <table>
@@ -48,7 +48,7 @@
                                         </td>
                                         <td class="required value">
                                             <input type="text" id="oldPassword" name="oldPassword"
-                                                   ng-model="settingsCommand.oldPassword" autocomplete="off" ng-required="settingsCommand.changePassword"/> <wcy:required/>
+                                                   ng-model="settingsCommand.oldPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"/> <wcy:required/>
                                         </td>
                                     </tr>
 
@@ -58,7 +58,7 @@
                                         </td>
                                         <td class="required value">
                                             <input type="text" id="newPassword" name="newPassword"
-                                                   ng-model="settingsCommand.newPassword" autocomplete="off" ng-required="settingsCommand.changePassword"/> <wcy:required/>
+                                                   ng-model="settingsCommand.newPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"/> <wcy:required/>
                                         </td>
                                     </tr>
 
@@ -68,7 +68,7 @@
                                         </td>
                                         <td class="required value">
                                             <input type="text" id="newPasswordConfirm" name="newPasswordConfirm"
-                                                   ng-model="settingsCommand.newPasswordConfirm" autocomplete="off" ng-required="settingsCommand.changePassword"/> <wcy:required/>
+                                                   ng-model="settingsCommand.newPasswordConfirm" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"/> <wcy:required/>
                                         </td>
                                     </tr>
 
@@ -85,7 +85,7 @@
                     </td>
                     <td class="required value">
                         <select id="timeZone" name="timeZone"
-                                ng-model="settingsCommand.timeZone" ng-options="o.key as o.value for o in timeZoneOptions" required></select> <!-- redundant wcy:required/-->
+                                ng-model="settingsCommand.timeZone" bendy-dirty ng-options="o.key as o.value for o in timeZoneOptions" required></select> <!-- redundant wcy:required/-->
                     </td>
                 </tr>
 
@@ -95,7 +95,7 @@
                     </td>
                     <td class="required value">
                         <select id="dateFormat" name="dateFormat"
-                                ng-model="settingsCommand.dateFormat" ng-options="o.key as o.value for o in dateFormatOptions" required></select> <!-- redundant wcy:required/-->
+                                ng-model="settingsCommand.dateFormat" bendy-dirty ng-options="o.key as o.value for o in dateFormatOptions" required></select> <!-- redundant wcy:required/-->
                     </td>
                 </tr>
 

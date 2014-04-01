@@ -26,27 +26,56 @@ bendyControllers.controller('BendyChangeCtrl', ['$scope',
     }
 ]);
 
-bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$log',
-    function ($scope, Settings, $log) {
+bendyControllers.controller('BendyDirtyFormCtrl', ['$scope', '$timeout',
+    function($scope, $timeout) {
+        this.makePristine = function() {
+            $scope.changed = {};    // not a service because there is one for each form
+            $scope.formIsDirty = false;
+        };
+        this.makePristine();
+
+        this.addDirty = function(name) {
+            $scope.changed[name] = true;
+            $scope.formIsDirty = true;
+        };
+
+        this.removeDirty = function(name) {
+            delete $scope.changed[name];
+            $scope.formIsDirty = !jQuery.isEmptyObject($scope.changed);
+        };
+
+        this.checkPristineForm = function(formCtrl) {
+            if (!$scope.formIsDirty) {
+                $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                    formCtrl.$setPristine();
+                });
+            }
+        }
+    }
+]);
+
+bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeout',
+    function ($scope, Settings, $timeout) {
         var settings = Settings.get(function() {    // SettingsModel
             $scope.settingsCommand = settings.settingsCommand;
             $scope.timeZoneOptions = settings.timeZoneOptions;
             $scope.dateFormatOptions = settings.dateFormatOptions;
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.settingsForm.$setPristine();
+            });
         });
         $scope.update = function(settingsCommand) {
             Settings.update(
                     settingsCommand,
-                    function(settingsCommand, putResponseHeaders) { // success
-                        $log.log('got success response');
-                        $log.log(settingsCommand);
-                        $scope.settingsCommand = settingsCommand;
-                        $scope.settingsForm.$setPristine();
+                    function success(updatedSettingsCommand, putResponseHeaders) {
+                        $scope.settingsCommand = updatedSettingsCommand;
+                        $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                            $scope.settingsForm.$setPristine();
+                        });
                         $scope.errors = [];
                         $scope.message = 'Settings updated.';
                     },
-                    function(response) { // error
-                        $log.log('got error response ' + response.status);
-                        $log.log(response.data);
+                    function error(response) {
                         $scope.message = '';
                         if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
                             $scope.errors = [{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}];
@@ -58,6 +87,16 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$log',
                         }
                     }
             )
+        };
+        $scope.changePassword = function() {
+            $scope.settingsCommand.changePassword = true;
+        };
+        $scope.cancelPasswordChange = function() {
+            var sc = $scope.settingsCommand;
+            sc.changePassword = false;
+            sc.oldPassword = '';
+            sc.newPassword = '';
+            sc.newPasswordConfirm = '';
         }
     }
 ]);
