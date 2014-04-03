@@ -3,6 +3,9 @@ html * {
     /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
 }
 
+/* added for http://angular-ui.github.io/bootstrap/ */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
 #menu {
     float: left;
 }
