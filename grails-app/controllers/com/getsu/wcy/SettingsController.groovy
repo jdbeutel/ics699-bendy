@@ -32,29 +32,14 @@ class SettingsController {  // similar to RestfulController
             return
         }
         if (cmd.changePassword) {
+            // I'm not sure authenticationService would be safe in cmd, so I'm doing this here instead of in a validator.
             if (user.password != authenticationService.encodePassword(cmd.oldPassword)) { // extra authentication
                 cmd.errors.rejectValue("oldPassword", "settingsForm.oldPassword.mismatch")
                 respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
-            cmd.newPassword = cmd.newPassword?.trim() // todo: see if grails does this automatically
-            if (!cmd.newPassword) {
-                cmd.errors.rejectValue("newPassword", "settingsForm.newPassword.missing", "Please type in a new password")
-                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
-                return
-            }
-            if (!(6..40).contains(cmd.newPassword.size())) {
-                cmd.errors.rejectValue("newPassword", "settingsForm.newPassword.length", "New password needs from 6 to 40 characters")
-                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
-                return
-            }
             if (!authenticationService.checkPassword(cmd.newPassword)) { // for consistency with signup
                 cmd.errors.rejectValue("newPassword", "settingsForm.newPassword.unacceptable", "The new password is unacceptable")
-                respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
-                return
-            }
-            if (cmd.newPassword != cmd.newPasswordConfirm) {
-                cmd.errors.rejectValue("newPasswordConfirm", "settingsForm.newPasswordConfirm.mismatch", "New password not confirmed.  Please type in your new password again")
                 respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
                 return
             }
@@ -94,12 +79,10 @@ class SettingsCommand {
     String newPassword = ''
     String newPasswordConfirm = ''
 
-    // String originalValuesJSON
-
     static constraints = {
-        loginEmail(size:6..40, email:true, blank:false, nullable:false)
-        newPassword(password:true, blank:false, nullable: true)
-        newPasswordConfirm(password:true, blank:false, nullable:true)
+        loginEmail              size: 6..40, email: true, blank: false, nullable: false
+        newPassword             password: true, size: 6..40, blank: false, nullable: true, validator: {val, obj -> !obj.changePassword || val}
+        newPasswordConfirm      password: true, blank: false, nullable: true, validator: {val, obj -> !obj.changePassword || val == obj.newPassword}
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
