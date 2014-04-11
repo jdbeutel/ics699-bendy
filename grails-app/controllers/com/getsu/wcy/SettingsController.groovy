@@ -1,6 +1,8 @@
 package com.getsu.wcy
 
+import grails.converters.JSON
 import grails.transaction.Transactional
+import groovy.time.TimeCategory
 
 import static org.springframework.http.HttpStatus.CONFLICT
 import static org.springframework.http.HttpStatus.OK
@@ -56,6 +58,27 @@ class SettingsController {  // similar to RestfulController
         }
         user.save flush:true, failOnError:true
         respond new SettingsCommand(user), [status: OK]     // with updated user version
+    }
+
+    // for ajaxvalidate (not restful)
+    def validateCurrentPassword(String oldPassword) {
+        assert authenticationService.isLoggedIn(request) // otherwise the filter would have redirected
+        User user = (User) authenticationService.userPrincipal
+        def valid = user.password == authenticationService.encodePassword(oldPassword)
+        throttleIfNecessary()
+        render([valid: valid] as JSON)
+    }
+
+    private static final LIMITER = 'nextValidateCurrentPassword'
+    private static final SECONDS = 5
+    // guarding against XSS brute-force attack (although I don't know what the front door allows)
+    private throttleIfNecessary() {
+        def now = new Date()
+        def allowed = session[LIMITER]
+        if (allowed?.after(now)) {
+            sleep((long) allowed.time - now.time)
+        }
+        session[LIMITER] = TimeCategory.getSeconds(SECONDS) + now
     }
 }
 
