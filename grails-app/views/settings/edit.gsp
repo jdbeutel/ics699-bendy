@@ -32,6 +32,15 @@
                     }
         });
         webshims.polyfill('forms');
+
+        $(document).ready(function() {
+            $('#newPassword').on('valuevalidation', function(e, extra) {
+                var val = $.trim(extra.value);
+                if (val.length < 6) {
+                    return 'Please enter at least 6 characters.';
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -81,7 +90,7 @@
                             <div class="col-sm-8">
                                 <input type="text" id="newPassword" name="newPassword"
                                        ng-model="settingsCommand.newPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"
-                                       class="form-control"/>
+                                       class="form-control" maxlength="40"/>
                             </div>
                         </div>
 
