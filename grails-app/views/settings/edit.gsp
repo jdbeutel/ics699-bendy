@@ -52,7 +52,7 @@
             <li ng-repeat="error in errors">{{error.message}}</li>
         </ul>
     </div>
-    <form name="settingsForm" id="settingsForm" class="form-horizontal ws-validate" role="form">
+    <form name="settingsForm" id="settingsForm" class="form-horizontal ws-validate" role="form" ng-submit="update(settingsCommand)">
         <div ng-controller="BendyDirtyFormCtrl">
             <div class="form-group">
                 <label for="loginEmail" class="col-sm-4 control-label">Email Address (for sign in)</label>
@@ -128,7 +128,6 @@
         <div class="form-group">
             <div class="col-sm-offset-4 col-sm-8">
                 <button type="submit" class="save btn btn-default"
-                        ng-click="update(settingsCommand)"
                         ng-disabled="!settingsForm.$dirty"
                         ng-class="{changed: settingsForm.$dirty}">
                     Save
