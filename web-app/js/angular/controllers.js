@@ -71,6 +71,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeou
                         $scope.settingsCommand = updatedSettingsCommand;
                         $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                             $scope.settingsForm.$setPristine();
+                            $('#settingsForm').trigger('resetvalui');
                         });
                         $scope.errors = [];
                         $scope.message = 'Settings updated.';
