@@ -97,10 +97,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeou
             sc.oldPassword = '';
             sc.newPassword = '';
             sc.newPasswordConfirm = '';
-            // XXX this isn't working; e.g., "Please fill out this field." errors remain after the required attribute is removed.
-//            $timeout(function() { // after current cycle, so webshim sees they are no longer required (but this isn't working)
-//                $('#changePasswordSection').updatePolyfill();
-//            });
+            $('#changePasswordSection').trigger('resetvalui');
         }
     }
 ]);

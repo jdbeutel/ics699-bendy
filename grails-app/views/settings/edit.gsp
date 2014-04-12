@@ -43,7 +43,7 @@
             <li ng-repeat="error in errors">{{error.message}}</li>
         </ul>
     </div>
-    <form name="settingsForm" class="form-horizontal ws-validate" role="form">
+    <form name="settingsForm" id="settingsForm" class="form-horizontal ws-validate" role="form">
         <div ng-controller="BendyDirtyFormCtrl">
             <div class="form-group">
                 <label for="loginEmail" class="col-sm-4 control-label">Email Address (for sign in)</label>
@@ -63,8 +63,8 @@
                 </div>
             </div>
             <div class="row">
-                <div id="changePasswordSection" collapse="!settingsCommand.changePassword">
-                    <div class="well well-large">
+                <div collapse="!settingsCommand.changePassword">
+                    <fieldset id="changePasswordSection" class="well well-large">
                         <div class="form-group">
                             <label for="oldPassword" class="col-sm-4 control-label">Current Password</label>
                             <div class="col-sm-8">
@@ -94,7 +94,7 @@
                                        data-dependent-validation="newPassword" data-errormessage-dependent="This does not match your New Password."/>
                             </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
 
