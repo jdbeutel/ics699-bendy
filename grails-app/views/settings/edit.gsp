@@ -66,9 +66,9 @@
             <div class="row">
                 <div class="col-sm-4">
                     <a href="#" class="expander btn btn-default" role="button"
-                       ng-hide="settingsCommand.changePassword" ng-click="changePassword()">&gt; Change Password</a>
+                       ng-hide="settingsCommand.changePassword" ng-click="changePassword()"><i class="glyphicon glyphicon-chevron-right"></i> Change Password</a>
                     <a href="#" class="expander btn btn-default" role="button"
-                       ng-show="settingsCommand.changePassword" ng-click="cancelPasswordChange()">V Cancel password change</a>
+                       ng-show="settingsCommand.changePassword" ng-click="cancelPasswordChange()"><i class="glyphicon glyphicon-chevron-down"></i> Cancel password change</a>
                 </div>
             </div>
             <div class="row">
