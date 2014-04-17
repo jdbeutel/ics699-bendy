@@ -15,9 +15,10 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">Bendy</a>
+            <p class="navbar-text active visible-xs" ng-show="navbarCollapse">{{pageTitle}}</p>
         </div>
 
-        <div class="navbar-collapse" ng-class="{collapse: navbarCollapse}">
+        <div class="navbar-collapse" collapse="navbarCollapse">
             <ul class="nav navbar-nav">
                 <li ng-class="{active: pageTitle == 'Contacts'}">
                     <a href="#/contacts">Contacts</a>

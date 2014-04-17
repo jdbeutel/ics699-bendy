@@ -140,10 +140,11 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
     }
 ]);
 
-bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route',
-    function($rootScope, $route) {
+bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route', '$scope',
+    function($rootScope, $route, $scope) {
         $rootScope.$on('$routeChangeSuccess', function() {
             $rootScope.pageTitle = $route.current.title;
+            $scope.navbarCollapse = true;
         })
     }
 ]);
