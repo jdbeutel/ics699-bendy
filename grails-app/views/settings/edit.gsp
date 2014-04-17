@@ -58,17 +58,17 @@
                 <label for="loginEmail" class="col-sm-4 control-label">Email Address (for sign in)</label>
                 <div class="col-sm-8">
                     <input type="email" class="form-control"
-                           id="loginEmail" name="loginEmail" ng-model="settingsCommand.loginEmail" bendy-dirty
+                           id="loginEmail" name="loginEmail" ng-model="settingsCommand.loginEmail" bendy-dirty ng-disabled="!editing"
                            size="42" required placeholder="john@example.com"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-4">
-                    <a href="#" class="expander btn btn-default" role="button"
-                       ng-hide="settingsCommand.changePassword" ng-click="changePassword()"><i class="glyphicon glyphicon-chevron-right"></i> Change Password</a>
-                    <a href="#" class="expander btn btn-default" role="button"
-                       ng-show="settingsCommand.changePassword" ng-click="cancelPasswordChange()"><i class="glyphicon glyphicon-chevron-down"></i> Cancel password change</a>
+                    <button type="button" class="expander btn btn-default" ng-disabled="!editing"
+                       ng-hide="settingsCommand.changePassword" ng-click="changePassword()"><i class="glyphicon glyphicon-chevron-right"></i> Change Password</button>
+                    <button type="button" class="expander btn btn-default"
+                       ng-show="settingsCommand.changePassword" ng-click="cancelPasswordChange()"><i class="glyphicon glyphicon-chevron-down"></i> Cancel password change</button>
                 </div>
             </div>
             <div class="row">
@@ -78,7 +78,7 @@
                             <label for="oldPassword" class="col-sm-4 control-label">Current Password</label>
                             <div class="col-sm-8">
                                 <input type="text" id="oldPassword" name="oldPassword"
-                                       ng-model="settingsCommand.oldPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"
+                                       ng-model="settingsCommand.oldPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword" ng-disabled="!editing"
                                        class="form-control"
                                        data-ajaxvalidate="validateCurrentPassword"
                                        data-errormessage-ajaxvalidate="Current password is different.  Please try again."/>
@@ -89,7 +89,7 @@
                             <label for="newPassword" class="col-sm-4 control-label">New Password</label>
                             <div class="col-sm-8">
                                 <input type="text" id="newPassword" name="newPassword"
-                                       ng-model="settingsCommand.newPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"
+                                       ng-model="settingsCommand.newPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword" ng-disabled="!editing"
                                        class="form-control" maxlength="40"/>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             <label for="newPasswordConfirm" class="col-sm-4 control-label">Confirm New Password</label>
                             <div class="col-sm-8">
                                 <input type="text" id="newPasswordConfirm" name="newPasswordConfirm"
-                                       ng-model="settingsCommand.newPasswordConfirm" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword"
+                                       ng-model="settingsCommand.newPasswordConfirm" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword" ng-disabled="!editing"
                                        class="form-control"
                                        data-dependent-validation="newPassword" data-errormessage-dependent="This does not match your New Password."/>
                             </div>
@@ -110,7 +110,7 @@
             <div class="form-group">
                 <label for="timeZone" class="col-sm-4 control-label">Time Zone</label>
                 <div class="col-sm-8">
-                    <select id="timeZone" name="timeZone"
+                    <select id="timeZone" name="timeZone" ng-disabled="!editing"
                             ng-model="settingsCommand.timeZone" bendy-dirty ng-options="o.key as o.value for o in timeZoneOptions"
                             required class="form-control"></select>
                 </div>
@@ -119,18 +119,28 @@
             <div class="form-group">
                 <label for="dateFormat" class="col-sm-4 control-label">Date Format</label>
                 <div class="col-sm-8">
-                    <select id="dateFormat" name="dateFormat"
+                    <select id="dateFormat" name="dateFormat" ng-disabled="!editing"
                             ng-model="settingsCommand.dateFormat" bendy-dirty ng-options="o.key as o.value for o in dateFormatOptions"
                             required class="form-control"></select>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-8">
+            <div class="col-sm-offset-4 col-sm-2">
+                <button type="button" class="btn btn-default"
+                        ng-hide="editing" ng-click="edit()">
+                    Edit
+                </button>
                 <button type="submit" class="save btn btn-default"
-                        ng-disabled="!settingsForm.$dirty"
+                        ng-show="editing" ng-disabled="!settingsForm.$dirty"
                         ng-class="{changed: settingsForm.$dirty}">
                     Save
+                </button>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-default"
+                    ng-show="editing" ng-click="cancel()">
+                    Cancel
                 </button>
             </div>
         </div>

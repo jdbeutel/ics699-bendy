@@ -56,33 +56,45 @@ bendyControllers.controller('BendyDirtyFormCtrl', ['$scope', '$timeout',
 
 bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeout',
     function ($scope, Settings, $timeout) {
-        var settings = Settings.get(function() {    // SettingsModel
-            $scope.settingsCommand = settings.settingsCommand;
-            $scope.timeZoneOptions = settings.timeZoneOptions;
-            $scope.dateFormatOptions = settings.dateFormatOptions;
+        $scope.editing = false;
+        $scope.resetCommand = function(settingsCommand) {
+            $scope.errors = [];
+            $scope.message = '';
+            $scope.settingsCommand = settingsCommand;
             $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                 $scope.settingsForm.$setPristine();
+                $('#settingsForm').trigger('resetvalui');
             });
-        });
+        };
+        $scope.refresh = function() {
+            var settings = Settings.get(function() {    // SettingsModel
+                $scope.timeZoneOptions = settings.timeZoneOptions;
+                $scope.dateFormatOptions = settings.dateFormatOptions;
+                $scope.resetCommand(settings.settingsCommand);
+            });
+        };
+        $scope.refresh();
+        $scope.edit = function() {
+            $scope.refresh();
+            $scope.editing = true;
+        };
+        $scope.cancel = function() {
+            $scope.editing = false;
+            $scope.refresh();
+        };
         $scope.update = function(settingsCommand) {
             Settings.update(
                     settingsCommand,
                     function success(updatedSettingsCommand, putResponseHeaders) {
-                        $scope.settingsCommand = updatedSettingsCommand;
-                        $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
-                            $scope.settingsForm.$setPristine();
-                            $('#settingsForm').trigger('resetvalui');
-                        });
-                        $scope.errors = [];
+                        $scope.resetCommand(updatedSettingsCommand);
                         $scope.message = 'Settings updated.';
+                        $scope.editing = false;
                     },
                     function error(response) {
-                        $scope.message = '';
                         if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
+                            $scope.resetCommand(response.data); // display the more recent version
                             $scope.errors = [{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}];
                             // todo: since it is the same user, forget about optimistic locking and just let the last one win?
-                            $scope.settingsCommand = response.data; // display updated
-                            $scope.settingsForm.$setPristine();
                         } else {
                             $scope.errors = response.data.errors;
                         }
