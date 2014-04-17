@@ -4,3 +4,49 @@
 ul.nav {
     margin-bottom: 1em;
 }
+
+.changed, input.ng-dirty, select.ng-dirty {
+    background-color: #ffff99;
+}
+.save.changed {
+    -webkit-animation: highlightAnimation 2s;
+    -moz-animation: highlightAnimation 2s;
+    -o-animation: highlightAnimation 2s;
+    animation: highlightAnimation 2s;
+}
+@-webkit-keyframes highlightAnimation {
+    from {
+        background-color: #ffaa00;
+        -webkit-animation-timing-function: ease-in;
+    }
+    to {
+        background-color: #ffff99;
+    }
+}
+@-moz-keyframes highlightAnimation {
+    from {
+        background-color: #ffaa00;
+        -moz-animation-timing-function: ease-in;
+    }
+    to {
+        background-color: #ffff99;
+    }
+}
+@-o-keyframes highlightAnimation {
+    from {
+        background-color: #ffaa00;
+        -o-animation-timing-function: ease-in;
+    }
+    to {
+        background-color: #ffff99;
+    }
+}
+@keyframes highlightAnimation {
+    from {
+        background-color: #ffaa00;
+        animation-timing-function: ease-in;
+    }
+    to {
+        background-color: #ffff99;
+    }
+}

@@ -6,7 +6,6 @@ modules = {
     }
     angular {
         dependsOn 'jquery'
-        resource url:'css/bendy.css', disposition: "head"
         resource url:'/js/lib/angular-1.2.14/angular.js'
         resource url:'/js/lib/angular-1.2.14/angular-resource.js'
         resource url:'/js/lib/angular-1.2.14/angular-route.js'
