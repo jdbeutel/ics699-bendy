@@ -14,3 +14,11 @@ bendyServices.factory('Settings', ['$resource',
         });
     }
 ]);
+
+bendyServices.factory('Password', ['$resource',
+    function($resource) {
+        return $resource('/wcy/password.json', {}, {
+            update: {method:'PUT'}
+        });
+    }
+]);

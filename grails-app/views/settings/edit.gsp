@@ -63,50 +63,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-4">
-                    <button type="button" class="expander btn btn-default" ng-disabled="!editing"
-                       ng-hide="settingsCommand.changePassword" ng-click="changePassword()"><i class="glyphicon glyphicon-chevron-right"></i> Change Password</button>
-                    <button type="button" class="expander btn btn-default"
-                       ng-show="settingsCommand.changePassword" ng-click="cancelPasswordChange()"><i class="glyphicon glyphicon-chevron-down"></i> Cancel password change</button>
-                </div>
-            </div>
-            <div class="row">
-                <div collapse="!settingsCommand.changePassword">
-                    <fieldset id="changePasswordSection" class="well well-large">
-                        <div class="form-group">
-                            <label for="oldPassword" class="col-sm-4 control-label">Current Password</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="oldPassword" name="oldPassword"
-                                       ng-model="settingsCommand.oldPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword" ng-disabled="!editing"
-                                       class="form-control"
-                                       data-ajaxvalidate="validateCurrentPassword"
-                                       data-errormessage-ajaxvalidate="Current password is different.  Please try again."/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="newPassword" class="col-sm-4 control-label">New Password</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="newPassword" name="newPassword"
-                                       ng-model="settingsCommand.newPassword" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword" ng-disabled="!editing"
-                                       class="form-control" maxlength="40"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="newPasswordConfirm" class="col-sm-4 control-label">Confirm New Password</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="newPasswordConfirm" name="newPasswordConfirm"
-                                       ng-model="settingsCommand.newPasswordConfirm" bendy-dirty autocomplete="off" ng-required="settingsCommand.changePassword" ng-disabled="!editing"
-                                       class="form-control"
-                                       data-dependent-validation="newPassword" data-errormessage-dependent="This does not match your New Password."/>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-
             <div class="form-group">
                 <label for="timeZone" class="col-sm-4 control-label">Time Zone</label>
                 <div class="col-sm-8">
@@ -145,6 +101,69 @@
             </div>
         </div>
     </form>
+
+    <form name="passwordForm" id="passwordForm" class="form-horizontal ws-validate" role="form" ng-submit="updatePassword(passwordCommand)">
+        <div ng-controller="BendyDirtyFormCtrl">
+            <div class="row">
+                <div class="col-sm-4">
+                    <button type="button" class="expander btn btn-default"
+                            ng-hide="changingPassword" ng-click="changePassword()"><i class="glyphicon glyphicon-chevron-right"></i> Change Password</button>
+                    <button type="button" class="expander btn btn-default"
+                            ng-show="changingPassword" ng-click="cancelPasswordChange()"><i class="glyphicon glyphicon-chevron-down"></i> Cancel password change</button>
+                </div>
+            </div>
+            <div class="row">
+                <div collapse="!changingPassword">
+                    <fieldset id="changePasswordSection" class="well well-large">
+                        <div class="form-group">
+                            <label for="oldPassword" class="col-sm-4 control-label">Current Password</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="oldPassword" name="oldPassword"
+                                       ng-model="passwordCommand.oldPassword" bendy-dirty autocomplete="off" required
+                                       ng-disabled="!changingPassword"
+                                       class="form-control"
+                                       data-ajaxvalidate="../password/validateCurrent"
+                                       data-errormessage-ajaxvalidate="Current password is different.  Please try again."/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword" class="col-sm-4 control-label">New Password</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="newPassword" name="newPassword"
+                                       ng-model="passwordCommand.newPassword" bendy-dirty autocomplete="off" required
+                                       ng-disabled="!changingPassword"
+                                       class="form-control" maxlength="40"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPasswordConfirm" class="col-sm-4 control-label">Confirm New Password</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="newPasswordConfirm" name="newPasswordConfirm"
+                                       ng-model="passwordCommand.newPasswordConfirm" bendy-dirty autocomplete="off" required
+                                       ng-disabled="!changingPassword"
+                                       class="form-control"
+                                       data-dependent-validation="newPassword"
+                                       data-errormessage-dependent="This does not match your New Password."/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-2">
+                                <button type="submit" class="save btn btn-default"
+                                        ng-disabled="!passwordForm.$dirty"
+                                        ng-class="{changed: passwordForm.$dirty}">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </form>
+
 </div>
 </body>
 </html>

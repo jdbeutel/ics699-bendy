@@ -13,7 +13,8 @@ navigation = {
         myProfile       order: 30, controller: 'person', action: 'editMyProfile'
         notifications   order: 40, controller: 'notification', action: 'index', actionAliases: ['list']
         directory       order: 50, action: 'index'
-        settings        order: 60, action: 'index', actionAliases: ['edit']
+        settings        order: 60, action: 'edit'
+        password        visible: false
     }
 
     authOptions {

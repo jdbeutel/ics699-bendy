@@ -54,45 +54,49 @@ bendyControllers.controller('BendyDirtyFormCtrl', ['$scope', '$timeout',
     }
 ]);
 
-bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeout',
-    function ($scope, Settings, $timeout) {
+bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Password', '$timeout',
+    function ($scope, Settings, Password, $timeout) {
         $scope.editing = false;
-        $scope.resetCommand = function(settingsCommand) {
-            $scope.errors = [];
+        $scope.changingPassword = false;
+        $scope.resetAlerts = function() {
             $scope.alerts = [];
+            $scope.errors = [];
+        };
+        $scope.resetSettingsCommand = function(settingsCommand) {
+            $scope.resetAlerts();
             $scope.settingsCommand = settingsCommand;
             $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                 $scope.settingsForm.$setPristine();
                 $('#settingsForm').trigger('resetvalui');
             });
         };
-        $scope.refresh = function() {
+        $scope.refreshSettings = function() {
             var settings = Settings.get(function() {    // SettingsModel
                 $scope.timeZoneOptions = settings.timeZoneOptions;
                 $scope.dateFormatOptions = settings.dateFormatOptions;
-                $scope.resetCommand(settings.settingsCommand);
+                $scope.resetSettingsCommand(settings.settingsCommand);
             });
         };
-        $scope.refresh();
+        $scope.refreshSettings();
         $scope.edit = function() {
-            $scope.refresh();
+            $scope.refreshSettings();
             $scope.editing = true;
         };
         $scope.cancel = function() {
             $scope.editing = false;
-            $scope.refresh();
+            $scope.refreshSettings();
         };
         $scope.update = function(settingsCommand) {
             Settings.update(
                     settingsCommand,
                     function success(updatedSettingsCommand, putResponseHeaders) {
-                        $scope.resetCommand(updatedSettingsCommand);
+                        $scope.resetSettingsCommand(updatedSettingsCommand);
                         $scope.alerts = [{type: 'success', msg: 'Settings updated.'}];
                         $scope.editing = false;
                     },
                     function error(response) {
                         if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
-                            $scope.resetCommand(response.data); // display the more recent version
+                            $scope.resetSettingsCommand(response.data); // display the more recent version
                             $scope.errors = [{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}];
                             // todo: since it is the same user, forget about optimistic locking and just let the last one win?
                         } else {
@@ -101,16 +105,37 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeou
                     }
             )
         };
+        $scope.resetPasswordCommand = function() {
+            $scope.resetAlerts();
+            $scope.passwordCommand = {oldPassword: '', newPassword: '', newPasswordConfirm: ''};
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.passwordForm.$setPristine();
+                $('#passwordForm').trigger('resetvalui');
+            });
+        };
         $scope.changePassword = function() {
-            $scope.settingsCommand.changePassword = true;
+            $scope.resetPasswordCommand();
+            $scope.changingPassword = true;
+            $timeout(function() { // after current cycle, so angular enables this input first
+                $('#oldPassword').focus();
+            });
         };
         $scope.cancelPasswordChange = function() {
-            var sc = $scope.settingsCommand;
-            sc.changePassword = false;
-            sc.oldPassword = '';
-            sc.newPassword = '';
-            sc.newPasswordConfirm = '';
-            $('#changePasswordSection').trigger('resetvalui');
+            $scope.changingPassword = false;
+            $scope.resetPasswordCommand();
         }
+        $scope.updatePassword = function(passwordCommand) {
+            Password.update(
+                    passwordCommand,
+                    function success(updatedPasswordCommand, putResponseHeaders) {
+                        $scope.changingPassword = false;
+                        $scope.resetPasswordCommand();
+                        $scope.alerts = [{type: 'success', msg: 'Password updated.'}];
+                    },
+                    function error(response) {
+                        $scope.errors = response.data.errors;
+                    }
+            )
+        };
     }
 ]);
