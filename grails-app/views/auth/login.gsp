@@ -47,7 +47,7 @@
         </g:if>
 
         <h2>Please log in</h2>
-        <auth:form authAction="login" success="[controller:'contact', action:'index']" error="[controller:'auth', action:'login']">
+        <auth:form authAction="login" success="[controller:'settings', action:'appIndex']" error="[controller:'auth', action:'login']">
            <div class="dialog">
            <table>
                <tbody>

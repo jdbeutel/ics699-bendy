@@ -11,6 +11,10 @@ class SettingsController {  // similar to RestfulController
 
     def authenticationService
 
+    def appIndex() {
+        redirect uri: '/'
+    }
+
     def edit() {
         render view: 'edit'
     }

@@ -16,13 +16,33 @@ var bendyApp = angular.module('bendyApp', [
 bendyApp.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.
+                    when('/contacts', {
+                        templateUrl: 'partials/contacts.html',
+//                        controller: 'BendySettingsCtrl',
+                        title: 'Contacts'
+                    }).
+                    when('/groups', {
+                        templateUrl: 'partials/groups.html',
+//                        controller: 'BendySettingsCtrl',
+                        title: 'Groups'
+                    }).
+                    when('/profile', {
+                        templateUrl: 'partials/profile.html',
+//                        controller: 'BendySettingsCtrl',
+                        title: 'Profile'
+                    }).
+                    when('/notifications', {
+                        templateUrl: 'partials/notifications.html',
+//                        controller: 'BendySettingsCtrl',
+                        title: 'Notifications'
+                    }).
                     when('/settings', {
                         templateUrl: 'partials/settings.html',
                         controller: 'BendySettingsCtrl',
                         title: 'Settings'
                     }).
                     otherwise({
-                        redirectTo: '/settings'
+                        redirectTo: '/contacts'
                     });
         }
 ]);

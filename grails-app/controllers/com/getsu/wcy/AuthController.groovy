@@ -56,7 +56,7 @@ class AuthController {
                     log.debug("Signup succeeded for [${sf.login}]")
                 }
             }
-            redirect(controller:'contact', action:'index') // success
+            redirect(uri: '/') // success
         } else {
             sf.errors.rejectValue("login", "authentication.failure.${signupResult.result}")
             render(view:'signup', model:[personInstance:p, signupForm:sf]) // try again
