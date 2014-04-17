@@ -46,12 +46,12 @@
 <body>
 <div class="clearfix"></div>
 <div class="container" ng-app="bendyApp" ng-controller="BendySettingsCtrl">
-    <div ng-show="message" class="message">{{message}}</div>
-    <div ng-show="errors" class="errors">
-        <ul>
-            <li ng-repeat="error in errors">{{error.message}}</li>
-        </ul>
-    </div>
+    <alert ng-repeat="alert in alerts" type="alert.type">
+        <bendy-alert-icon type="alert.type"></bendy-alert-icon> {{alert.msg}}
+    </alert>
+    <alert ng-repeat="error in errors" type="'danger'">
+        <bendy-alert-icon type="'danger'"></bendy-alert-icon> {{error.message}}
+    </alert>
     <form name="settingsForm" id="settingsForm" class="form-horizontal ws-validate" role="form" ng-submit="update(settingsCommand)">
         <div ng-controller="BendyDirtyFormCtrl">
             <div class="form-group">

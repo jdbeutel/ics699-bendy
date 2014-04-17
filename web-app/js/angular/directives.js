@@ -89,3 +89,24 @@ bendyDirectives.directive('bendyDirty', [function() {
         }
     }
 }]);
+
+// Strangely, I couldn't find some built-in way to do this.
+bendyDirectives.directive('bendyAlertIcon', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            type: '='   // duplicate attr because scope of parent alert directive is inaccessible due to transclude:true
+        },
+        controller: function($scope) {
+            var icons = {
+                success: 'glyphicon-ok-sign',
+                info: 'glyphicon-info-sign',
+                warning: 'glyphicon-warning-sign',
+                danger: 'glyphicon-exclamation-sign'
+            };
+            $scope.iconClass = icons[$scope.type] || icons.warning;
+        },
+        template: '<i class="glyphicon {{iconClass}}"></i>',
+        replace: true
+    }
+});

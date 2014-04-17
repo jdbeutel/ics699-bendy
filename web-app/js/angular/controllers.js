@@ -59,7 +59,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeou
         $scope.editing = false;
         $scope.resetCommand = function(settingsCommand) {
             $scope.errors = [];
-            $scope.message = '';
+            $scope.alerts = [];
             $scope.settingsCommand = settingsCommand;
             $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                 $scope.settingsForm.$setPristine();
@@ -87,7 +87,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', '$timeou
                     settingsCommand,
                     function success(updatedSettingsCommand, putResponseHeaders) {
                         $scope.resetCommand(updatedSettingsCommand);
-                        $scope.message = 'Settings updated.';
+                        $scope.alerts = [{type: 'success', msg: 'Settings updated.'}];
                         $scope.editing = false;
                     },
                     function error(response) {
