@@ -46,7 +46,7 @@ class PasswordController {  // similar to RestfulController
     }
 
     private static final LIMITER = 'nextValidateCurrentPassword'
-    private static final SECONDS = 5
+    private static final SECONDS = 2
     // guarding against XSS brute-force attack (although I don't know what the front door allows)
     private throttleIfNecessary() {
         def now = new Date()

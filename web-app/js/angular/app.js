@@ -7,7 +7,22 @@
  */
 var bendyApp = angular.module('bendyApp', [
         'ui.bootstrap',
+        'ngRoute',
         'bendyControllers',
         'bendyServices',
         'bendyDirectives'
+]);
+
+bendyApp.config(['$routeProvider',
+        function($routeProvider) {
+            $routeProvider.
+                    when('/settings', {
+                        templateUrl: 'partials/settings.html',
+                        controller: 'BendySettingsCtrl',
+                        title: 'Settings'
+                    }).
+                    otherwise({
+                        redirectTo: '/settings'
+                    });
+        }
 ]);

@@ -139,3 +139,11 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
         };
     }
 ]);
+
+bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route',
+    function($rootScope, $route) {
+        $rootScope.$on('$routeChangeSuccess', function() {
+            $rootScope.pageTitle = $route.current.title;
+        })
+    }
+]);
