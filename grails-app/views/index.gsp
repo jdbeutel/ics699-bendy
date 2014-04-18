@@ -23,14 +23,14 @@
                 <li ng-class="{active: pageTitle == 'Contacts'}">
                     <a href="#/contacts">Contacts</a>
                 </li>
+                <li ng-class="{active: pageTitle == 'Notifications'}">
+                    <a href="#/notifications">Notification</a>
+                </li>
                 <li ng-class="{active: pageTitle == 'Groups'}">
                     <a href="#/groups">Groups</a>
                 </li>
-                <li ng-class="{active: pageTitle == 'Profile'}">
+                <li ng-class="{active: pageTitle == 'My Profile'}">
                     <a href="#/profile">My Profile</a>
-                </li>
-                <li ng-class="{active: pageTitle == 'Notifications'}">
-                    <a href="#/notifications">Notification</a>
                 </li>
                 <li ng-class="{active: pageTitle == 'Settings'}">
                     <a href="#/settings">Settings</a>

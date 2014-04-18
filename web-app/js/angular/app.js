@@ -21,6 +21,11 @@ bendyApp.config(['$routeProvider',
 //                        controller: 'BendySettingsCtrl',
                         title: 'Contacts'
                     }).
+                    when('/notifications', {
+                        templateUrl: 'partials/notifications.html',
+//                        controller: 'BendySettingsCtrl',
+                        title: 'Notifications'
+                    }).
                     when('/groups', {
                         templateUrl: 'partials/groups.html',
 //                        controller: 'BendySettingsCtrl',
@@ -29,12 +34,7 @@ bendyApp.config(['$routeProvider',
                     when('/profile', {
                         templateUrl: 'partials/profile.html',
 //                        controller: 'BendySettingsCtrl',
-                        title: 'Profile'
-                    }).
-                    when('/notifications', {
-                        templateUrl: 'partials/notifications.html',
-//                        controller: 'BendySettingsCtrl',
-                        title: 'Notifications'
+                        title: 'My Profile'
                     }).
                     when('/settings', {
                         templateUrl: 'partials/settings.html',
