@@ -1,9 +1,8 @@
-<alert ng-repeat="alert in alerts" type="alert.type">
-    <bendy-alert-icon type="alert.type"></bendy-alert-icon> {{alert.msg}}
-</alert>
-<alert ng-repeat="error in errors" type="'danger'">
-    <bendy-alert-icon type="'danger'"></bendy-alert-icon> {{error.message}}
-</alert>
+<div collapse="!hasAlerts">
+    <alert ng-repeat="alert in alerts" type="alert.type">
+        <bendy-alert-icon type="alert.type"></bendy-alert-icon> {{alert.msg}}
+    </alert>
+</div>
 <form name="settingsForm" id="settingsForm" class="form-horizontal ws-validate" role="form" ng-submit="update(settingsCommand)">
     <div ng-controller="BendyDirtyFormCtrl">
         <div class="form-group">

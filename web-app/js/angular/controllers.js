@@ -59,8 +59,25 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
         $scope.editing = false;
         $scope.changingPassword = false;
         $scope.resetAlerts = function() {
-            $scope.alerts = [];
-            $scope.errors = [];
+            $scope.hasAlerts = false;   // don't clear the array yet, to give the collapse time to animate
+            $timeout(function() {
+                if (!$scope.hasAlerts) {    // if none were added/replaced during the collapse animation
+                    $scope.alerts = [];
+                }
+            }, 1000);   // 1 second for collapse to finish its animation
+        };
+        $scope.replaceAlerts = function(type, msg) {
+            $scope.alerts = [{type: type, msg: msg}];
+            $scope.hasAlerts = true;
+        };
+        $scope.addAlert = function(type, msg) {
+            $scope.alerts.push({type: type, msg: msg});
+            $scope.hasAlerts = true;
+        };
+        $scope.addErrors = function(errors) {
+            angular.forEach( errors, function(it) {
+                $scope.addAlert('danger', it.message);
+            })
         };
         $scope.resetSettingsCommand = function(settingsCommand) {
             $scope.resetAlerts();
@@ -91,16 +108,16 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
                     settingsCommand,
                     function success(updatedSettingsCommand, putResponseHeaders) {
                         $scope.resetSettingsCommand(updatedSettingsCommand);
-                        $scope.alerts = [{type: 'success', msg: 'Settings updated.'}];
+                        $scope.replaceAlerts('success', 'Settings updated.');
                         $scope.editing = false;
                     },
                     function error(response) {
                         if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
                             $scope.resetSettingsCommand(response.data); // display the more recent version
-                            $scope.errors = [{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}];
+                            $scope.addErrors([{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}]);
                             // todo: since it is the same user, forget about optimistic locking and just let the last one win?
                         } else {
-                            $scope.errors = response.data.errors;
+                            $scope.addErrors(response.data.errors);
                         }
                     }
             )
@@ -130,10 +147,10 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
                     function success(updatedPasswordCommand, putResponseHeaders) {
                         $scope.changingPassword = false;
                         $scope.resetPasswordCommand();
-                        $scope.alerts = [{type: 'success', msg: 'Password updated.'}];
+                        $scope.replaceAlerts('success', 'Password updated.');
                     },
                     function error(response) {
-                        $scope.errors = response.data.errors;
+                        $scope.addErrors(response.data.errors);
                     }
             )
         };
