@@ -24,7 +24,7 @@
                     <a href="#/contacts">Contacts</a>
                 </li>
                 <li ng-class="{active: pageTitle == 'Notifications'}">
-                    <a href="#/notifications">Notification</a>
+                    <a href="#/notifications">Notifications</a>
                 </li>
                 <li ng-class="{active: pageTitle == 'Groups'}">
                     <a href="#/groups">Groups</a>
