@@ -14,7 +14,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Bendy</a>
+            <p class="navbar-brand">Bendy</p>
             <p class="navbar-text visible-xs" ng-show="navbarCollapse">{{pageTitle}}</p>
         </div>
 

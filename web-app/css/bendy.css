@@ -1,6 +1,10 @@
 /* added for http://angular-ui.github.io/bootstrap/ */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
+p.navbar-brand {
+    margin-bottom: 0;
+}
+
 .changed, input.ng-dirty, select.ng-dirty {
     background-color: #ffff99;
 }
