@@ -112,13 +112,13 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
                         $scope.editing = false;
                     },
                     function error(response) {
-                        if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
-                            $scope.resetSettingsCommand(response.data); // display the more recent version
-                            $scope.addErrors([{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}]);
-                            // todo: since it is the same user, forget about optimistic locking and just let the last one win?
-                        } else {
+                        // since it is the same user, forget about optimistic locking and just let the last request win
+//                        if (response.status == 409) {   // CONFLICT, optimistic locking exception (with the user herself, as others cannot edit her Settings)
+//                            $scope.resetSettingsCommand(response.data); // display the more recent version
+//                            $scope.addErrors([{message: 'You updated your Settings in another window, so your changes here were lost.  Please redo them.'}]);
+//                        } else {
                             $scope.addErrors(response.data.errors);
-                        }
+//                        }
                     }
             )
         };

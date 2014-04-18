@@ -31,10 +31,11 @@ class SettingsController {  // similar to RestfulController
         assert authenticationService.isLoggedIn(request) // otherwise the filter would have redirected
         // not using params.id nor params.settings.id/params.user.id because one can edit only one's own User/Settings
         User user = (User) authenticationService.userPrincipal
-        if (user.version > cmd.userVersion || user.settings.version > cmd.settingsVersion) {
-            respond new SettingsCommand(user), [status: CONFLICT]
-            return
-        }
+        // Since users cannot edit each other's data, don't check versions; just let the user's last request stand.
+//        if (user.version > cmd.userVersion || user.settings.version > cmd.settingsVersion) {
+//            respond new SettingsCommand(user), [status: CONFLICT]
+//            return
+//        }
         if (!cmd.validate()) {
             respond cmd.errors, [status: UNPROCESSABLE_ENTITY, view: 'edit']
             return
@@ -55,11 +56,11 @@ class SettingsModel {
 
 class SettingsCommand {
     String loginEmail
-    long userVersion
+//    long userVersion
 
     String dateFormat
     String timeZone
-    long settingsVersion
+//    long settingsVersion
 
     static constraints = {
         loginEmail              size: 6..40, email: true, blank: false, nullable: false
@@ -70,10 +71,10 @@ class SettingsCommand {
 
     SettingsCommand(User user) {
         loginEmail = user.login
-        userVersion = user.version
+//        userVersion = user.version
 
         dateFormat = user.settings.dateFormat
         timeZone = user.settings.timeZone.ID
-        settingsVersion = user.settings.version
+//        settingsVersion = user.settings.version
     }
 }
