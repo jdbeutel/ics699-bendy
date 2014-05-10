@@ -1,6 +1,11 @@
 /* added for http://angular-ui.github.io/bootstrap/ */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
+/* added so angular.js need not be loaded in head */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 p.navbar-brand {
     margin-bottom: 0;
 }

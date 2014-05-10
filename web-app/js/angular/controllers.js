@@ -54,10 +54,11 @@ bendyControllers.controller('BendyDirtyFormCtrl', ['$scope', '$timeout',
     }
 ]);
 
-bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Password', '$timeout',
-    function ($scope, Settings, Password, $timeout) {
+bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Password', '$timeout', 'BendyUtil',
+    function ($scope, Settings, Password, $timeout, BendyUtil) {
         $scope.editing = false;
         $scope.changingPassword = false;
+        // todo: split the alerts into their own thing.  controller methods via inherited scope?  directives sharing controllers (works with ng-view)?  app-wide service for easy injection?
         $scope.resetAlerts = function() {
             $scope.hasAlerts = false;   // don't clear the array yet, to give the collapse time to animate
             $timeout(function() {
@@ -90,7 +91,9 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
         $scope.refreshSettings = function() {
             var settings = Settings.get(function() {    // SettingsModel
                 $scope.timeZoneOptions = settings.timeZoneOptions;
+                $scope.timeZoneOptionsMap = BendyUtil.optionsToMap(settings.timeZoneOptions);
                 $scope.dateFormatOptions = settings.dateFormatOptions;
+                $scope.dateFormatOptionsMap = BendyUtil.optionsToMap(settings.dateFormatOptions);
                 $scope.resetSettingsCommand(settings.settingsCommand);
             });
         };
@@ -140,7 +143,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
         $scope.cancelPasswordChange = function() {
             $scope.changingPassword = false;
             $scope.resetPasswordCommand();
-        }
+        };
         $scope.updatePassword = function(passwordCommand) {
             Password.update(
                     passwordCommand,

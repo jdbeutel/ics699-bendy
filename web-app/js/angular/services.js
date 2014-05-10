@@ -22,3 +22,17 @@ bendyServices.factory('Password', ['$resource',
         });
     }
 ]);
+
+bendyServices.factory('BendyUtil', [
+    function() {
+        return {
+            optionsToMap: function(options) {
+                var map = {};
+                angular.forEach(options, function(element) {
+                    map[element.key] = element.value;
+                });
+                return map;
+            }
+        };
+    }
+]);
