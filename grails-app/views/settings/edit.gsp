@@ -10,8 +10,8 @@
     <meta name="layout" content="main"/>
     <r:require module="angular"/>
     <title>Settings</title>
-    <script src="${resource(dir:'js/lib/js-webshim-1.12.5/dev/extras', file:'modernizr-custom.js')}" ></script>
-    <script src="${resource(dir:'js/lib/js-webshim-1.12.5/dev', file:'polyfiller.js')}" ></script>
+    <script src="${resource(dir:'js/lib/js-webshim-1.12.7/dev/extras', file:'modernizr-custom.js')}" ></script>
+    <script src="${resource(dir:'js/lib/js-webshim-1.12.7/dev', file:'polyfiller.js')}" ></script>
     <script>
         webshims.setOptions('forms', {
                     lazyCustomMessages: true,

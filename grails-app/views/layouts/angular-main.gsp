@@ -12,8 +12,8 @@
         <r:require module="angular"/>
         <r:layoutResources />
         %{-- js-webshim loads more files dynamically, so needs non-static path, cannot go in ApplicationResources. --}%
-        <script src="${resource(dir:'js/lib/js-webshim-1.12.5/dev/extras', file:'modernizr-custom.js')}" ></script>
-        <script src="${resource(dir:'js/lib/js-webshim-1.12.5/dev', file:'polyfiller.js')}" ></script>
+        <script src="${resource(dir:'js/lib/js-webshim-1.12.7/dev/extras', file:'modernizr-custom.js')}" ></script>
+        <script src="${resource(dir:'js/lib/js-webshim-1.12.7/dev', file:'polyfiller.js')}" ></script>
         <link rel="stylesheet" href="${resource(dir:'css', file:'bendy.css')}" type="text/css" media="screen, projection">
         <script>
             webshims.setOptions('forms', {

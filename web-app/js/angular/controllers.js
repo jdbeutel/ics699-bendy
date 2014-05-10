@@ -85,7 +85,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
             $scope.settingsCommand = settingsCommand;
             $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                 $scope.settingsForm.$setPristine();
-                $('#settingsForm').trigger('resetvalui');
+                $('#settingsForm').trigger('resetvalidation');
             });
         };
         $scope.refreshSettings = function() {
@@ -130,7 +130,7 @@ bendyControllers.controller('BendySettingsCtrl', ['$scope', 'Settings', 'Passwor
             $scope.passwordCommand = {oldPassword: '', newPassword: '', newPasswordConfirm: ''};
             $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                 $scope.passwordForm.$setPristine();
-                $('#passwordForm').trigger('resetvalui');
+                $('#passwordForm').trigger('resetvalidation');
             });
         };
         $scope.changePassword = function() {
