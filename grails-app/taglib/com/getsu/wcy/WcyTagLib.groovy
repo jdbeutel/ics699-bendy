@@ -19,9 +19,9 @@ class WcyTagLib {
         TimeZone.getTimeZone(id)
     }.sort {it.rawOffset} // do not unique() because it's not consistent with equals()
     static {
-        def dtz = TimeZone.default
+        // def dtz = TimeZone.default
+        def dtz = TimeZone.getTimeZone('US/Hawaii')
         def availIDs = TimeZone.availableIDs.toList()
-        // def gotten = TimeZone.getTimeZone('US/Hawaii')
         assert availIDs.contains(dtz.ID)
         def canonical = VALID_TIME_ZONES.find {dtz.hasSameRules(it)}
         assert canonical : "default $dtz has no equivalent in $VALID_TIME_ZONES"
