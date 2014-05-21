@@ -5,7 +5,19 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.work.dir = "target/work"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
-grails.server.port.http = 8080
+
+environments {
+    development {
+        grails.server.port.http = 8080
+    }
+    test {
+        grails.server.port.http = 8080
+    }
+    production {
+        grails.server.port.http = 80
+    }
+}
+
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.fork = [
