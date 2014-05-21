@@ -9,7 +9,7 @@ var bendyServices = angular.module('bendyServices', ['ngResource']);
 
 bendyServices.factory('Settings', ['$resource',
     function($resource) {
-        return $resource('/wcy/settings.json', {}, {
+        return $resource('/settings.json', {}, {
             update: {method:'PUT'}
         });
     }
@@ -17,7 +17,7 @@ bendyServices.factory('Settings', ['$resource',
 
 bendyServices.factory('Password', ['$resource',
     function($resource) {
-        return $resource('/wcy/password.json', {}, {
+        return $resource('/password.json', {}, {
             update: {method:'PUT'}
         });
     }

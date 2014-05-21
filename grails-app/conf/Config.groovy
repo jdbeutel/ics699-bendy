@@ -96,12 +96,14 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
+grails.app.context = '/'
+
 environments {
     development {
-        grails.serverURL = "http://localhost:9090/${appName}"
+        // grails.serverURL = "http://localhost:9090/${appName}"
     }
     test {
-        grails.serverURL = "http://localhost:9090/${appName}"
+        // grails.serverURL = "http://localhost:9090/${appName}"
     }
     production {
         grails.logging.jul.usebridge = false
