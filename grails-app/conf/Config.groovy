@@ -105,7 +105,7 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        grails.serverURL = "http://rocky-meadow-9347.herokuapp.com/"
+        // let Heroku configure this itself; grails.serverURL = "http://rocky-meadow-9347.herokuapp.com/"
     }
 }
 

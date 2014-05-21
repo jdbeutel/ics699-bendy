@@ -14,7 +14,7 @@ environments {
         grails.server.port.http = 8080
     }
     production {
-        grails.server.port.http = 80
+        // let Heroku configure the port itself
     }
 }
 
