@@ -27,8 +27,8 @@ class BootStrap {
          }
 //         events.onValidatePassword = { password -> return !appCtx.myDictionaryService.containsWord(password) }
 
-         environments {
-             development {
+//         environments {
+//             development {
                  addJoe(events.onEncodePassword)
                  addJane(events.onEncodePassword)
                  addCoworker(events.onEncodePassword)
@@ -36,8 +36,8 @@ class BootStrap {
                  addPhoneOnly()
                  addGenericPeople()
                  addNotifications()
-             }
-         }
+//             }
+//         }
      }
 
     private static addJoe(Closure passwordEncoder) {
