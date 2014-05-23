@@ -95,7 +95,7 @@ bendyDirectives.directive('bendyAlertIcon', function() {
     return {
         restrict: 'E',
         scope: {
-            type: '='   // duplicate attr because scope of parent alert directive is inaccessible due to transclude:true
+            type: '@'   // duplicate attr because scope of parent alert directive is inaccessible due to transclude:true
         },
         controller: function($scope) {
             var icons = {

@@ -1,6 +1,6 @@
 <div collapse="!hasAlerts">
-    <alert ng-repeat="alert in alerts" type="alert.type">
-        <bendy-alert-icon type="alert.type"></bendy-alert-icon> {{alert.msg}}
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}">
+        <bendy-alert-icon type="{{alert.type}}"></bendy-alert-icon> {{alert.msg}}
     </alert>
 </div>
 <form name="settingsForm" id="settingsForm" class="form-horizontal ws-validate" role="form" ng-submit="update(settingsCommand)">
