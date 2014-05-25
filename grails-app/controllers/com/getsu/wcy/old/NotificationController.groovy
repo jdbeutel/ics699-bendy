@@ -1,4 +1,7 @@
-package com.getsu.wcy
+package com.getsu.wcy.old
+
+import com.getsu.wcy.Notification
+import com.getsu.wcy.User
 
 class NotificationController {
 

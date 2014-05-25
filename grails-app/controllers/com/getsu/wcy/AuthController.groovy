@@ -5,6 +5,7 @@
  */
 package com.getsu.wcy
 
+import com.getsu.wcy.old.PersonController
 import com.grailsrocks.authentication.SignupForm
 import com.grailsrocks.authentication.AuthenticatedUser
 import org.springframework.web.multipart.MultipartFile

@@ -3,7 +3,9 @@
  *
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
-package com.getsu.wcy
+package com.getsu.wcy.old
+
+import com.getsu.wcy.Person
 
 class DirectoryController {
 

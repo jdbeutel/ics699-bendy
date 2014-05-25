@@ -1,25 +1,22 @@
-/*
- * Copyright (c) 2010 J. David Beutel <software@getsu.com>
- *
- * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
- */
-package com.getsu.wcy
+package com.getsu.wcy.old
 
+import com.getsu.wcy.Person
+import com.getsu.wcy.User
 import org.springframework.web.multipart.MultipartFile
-import grails.orm.PagedResultList
 
-class ContactController {
+class PersonController {
+
+    static allowedMethods = [save: "POST", update: "POST", updateMyProfile:"POST", delete: "POST"]
+
+    def authenticationService
 
     def index = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def result = Person.createCriteria().list(params) { not { like('name', 'Test%')}}
-        assert result instanceof PagedResultList
-        assert result.totalCount != null
-        [personInstanceList: result, personInstanceTotal: result.totalCount]
+        redirect(action: "list", params: params)
     }
 
-    def search = {
-        render(view: "index", model: index() + [search:params.search])
+    def list = {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        [personInstanceList: Person.list(params), personInstanceTotal: Person.count()]
     }
 
     def create = {
@@ -109,7 +106,7 @@ class ContactController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (personInstance.version > version) {
-
+                    
                     personInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'person.label', default: 'Person')] as Object[], "Another user has updated this Person while you were editing")
                     render(view: "editMyProfile", model: [personInstance: personInstance])
                     return
@@ -124,7 +121,9 @@ class ContactController {
             }
             // todo: remember photo from previous tries and provide it for display
             // todo: validate file image format and scale down if too big?
-            if (!personInstance.hasErrors() && personInstance.save(flush: true)) {
+
+            // without validate() (just binding), hasErrors() wasn't noticing missing required field familyName?
+            if (personInstance.validate() && personInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
                 redirect(action: "editMyProfile", id: personInstance.id) // success, but always editing
             }
