@@ -10,6 +10,7 @@ class UrlMappings {
         // REST
         "/settings"(resource:'settings', includes:['show', 'edit', 'update'])   // one per user, with implicit id from authentication
         "/password"(resource:'password', includes:['update'])                   // one per user, with implicit id from authentication
+        "/people"(resources:'person')
 
         "/"(view:"/index")
         "500"(view:'/error')

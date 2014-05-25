@@ -23,6 +23,14 @@ bendyServices.factory('Password', ['$resource',
     }
 ]);
 
+bendyServices.factory('Person', ['$resource',
+    function($resource) {
+        return $resource('/people/:id.json', {}, {
+            update: {method:'PUT'}
+        });
+    }
+]);
+
 bendyServices.factory('BendyUtil', [
     function() {
         return {

@@ -168,3 +168,9 @@ bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route', '$scope',
         })
     }
 ]);
+
+bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
+    function ($scope, Person) {
+        $scope.contacts = Person.query();
+    }
+]);

@@ -18,7 +18,7 @@ bendyApp.config(['$routeProvider',
             $routeProvider.
                     when('/contacts', {
                         templateUrl: 'partials/contacts.html',
-//                        controller: 'BendySettingsCtrl',
+                        controller: 'BendyContactsCtrl',
                         title: 'Contacts'
                     }).
                     when('/notifications', {
