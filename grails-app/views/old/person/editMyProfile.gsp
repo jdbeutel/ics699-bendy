@@ -26,7 +26,7 @@
         <div class="dialog">
             <table>
                 <tbody>
-                <g:render template="/person/editCore"/>
+                <g:render template="/foo/editCore"/>
                 <tr>
                     <td colspan="2">
                         <wcy:requiredLegend/>

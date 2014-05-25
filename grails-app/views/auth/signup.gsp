@@ -78,7 +78,7 @@
                             </td>
                         </tr>
 
-                        <g:render template="/person/editCore"/>
+                        <g:render template="/foo/editCore"/>
 
                         <tr class="prop">
                             <td valign="top" class="required name">

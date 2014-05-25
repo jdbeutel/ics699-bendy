@@ -22,7 +22,7 @@
   </g:form>
 </div>
 <div class="body">
-    <g:render template="/person/list"/>
+    <g:render template="/foo/list"/>
 </div>
 </body>
 </html>

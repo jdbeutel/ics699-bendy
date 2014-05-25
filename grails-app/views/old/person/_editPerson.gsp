@@ -29,7 +29,7 @@
         </div>
         <div style="display:none">
             <div>
-                <g:render template="/person/editName" model="['personInstance':personInstance]"/>
+                <g:render template="/foo/editName" model="['personInstance':personInstance]"/>
             </div>
         </div>
     </td>
@@ -56,7 +56,7 @@
   </tr>
 </g:each>
 
-<g:render template="/person/listConnections" model="['personInstance':personInstance]"/>
+<g:render template="/foo/listConnections" model="['personInstance':personInstance]"/>
 
 <tr class="prop">
     <td valign="top" class="required name">

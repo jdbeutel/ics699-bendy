@@ -68,7 +68,7 @@
                 <td colspan="4">
                     <div> <!-- Effect.BlindUp/Down requires this double div -->
                         <div>
-                            <g:render template="/person/editPerson" model="['personInstance':personInstance]"/>
+                            <g:render template="/foo/editPerson" model="['personInstance':personInstance]"/>
                         </div>
                     </div>
                 </td>

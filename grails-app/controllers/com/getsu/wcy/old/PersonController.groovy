@@ -32,7 +32,7 @@ class PersonController {
             redirect(action: "show", id: personInstance.id)
         }
         else {
-            render(view: "create", model: [personInstance: personInstance])
+            render(view: "/old/person/create", model: [personInstance: personInstance])
         }
     }
 
@@ -66,7 +66,7 @@ class PersonController {
                 if (personInstance.version > version) {
 
                     personInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'person.label', default: 'Person')] as Object[], "Another user has updated this Person while you were editing")
-                    render(view: "edit", model: [personInstance: personInstance])
+                    render(view: "/old/person/edit", model: [personInstance: personInstance])
                     return
                 }
             }
@@ -76,7 +76,7 @@ class PersonController {
                 redirect(action: "show", id: personInstance.id)
             }
             else {
-                render(view: "edit", model: [personInstance: personInstance])
+                render(view: "/old/person/edit", model: [personInstance: personInstance])
             }
         }
         else {
@@ -108,7 +108,7 @@ class PersonController {
                 if (personInstance.version > version) {
                     
                     personInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'person.label', default: 'Person')] as Object[], "Another user has updated this Person while you were editing")
-                    render(view: "editMyProfile", model: [personInstance: personInstance])
+                    render(view: "/old/person/editMyProfile", model: [personInstance: personInstance])
                     return
                 }
             }
@@ -128,7 +128,7 @@ class PersonController {
                 redirect(action: "editMyProfile", id: personInstance.id) // success, but always editing
             }
             else {
-                render(view: "editMyProfile", model: [personInstance: personInstance]) // failure, display errors
+                render(view: "/old/person/editMyProfile", model: [personInstance: personInstance]) // failure, display errors
             }
         }
         else {
