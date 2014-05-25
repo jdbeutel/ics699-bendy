@@ -1,1 +1,67 @@
-todo: contacts
+<div collapse="!hasAlerts">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}">
+        <bendy-alert-icon type="{{alert.type}}"></bendy-alert-icon> {{alert.msg}}
+    </alert>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <form name="searchContactsForm" id="searchContactsForm" class="form-inline" role="form" ng-submit="search(searchTerms)">
+            <div ng-controller="BendyDirtyFormCtrl">
+                <div class="form-group">
+                    <label for="searchTerms" class="sr-only">search terms</label>
+                    <input type="text" class="form-control"
+                           id="searchTerms" name="searchTerms" ng-model="searchTerms" bendy-dirty
+                           size="42"/>
+                </div>
+                <button type="submit" class="btn btn-default"
+                        ng-disabled="!searchContactsForm.$dirty"
+                        ng-class="{changed: searchContactsForm.$dirty}">
+                    Search
+                </button>
+                <button type="button" class="btn btn-default" ng-click="addContact()">
+                    <span class="glyphicon glyphicon-plus"></span> Add Contact
+                </button>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped table-hover table-responsive">
+        <thead>
+        <tr>
+            <!-- todo: sortable, configurable -->
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="person in contacts">
+                <td>
+                    {{person.name}}
+                </td>
+                <td>
+                    <span ng-if="person.preferredEmail">
+                        {{person.preferredEmail.type}}
+                        {{person.preferredEmail.address}}
+                    </span>
+                </td>
+                <td>
+                    <span ng-if="person.preferredPhone">
+                        {{person.preferredPhone.type}}
+                        {{person.preferredPhone.number}}
+                    </span>
+                </td>
+                <td>
+                    <span ng-if="person.preferredConnection">
+                        {{person.preferredConnection.line1}}
+                        {{person.preferredConnection.line2}}
+                        {{person.preferredConnection.city}}
+                        {{person.preferredConnection.state}}
+                        {{person.preferredConnection.postalCode}}
+                        {{person.preferredConnection.countryCode}}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
