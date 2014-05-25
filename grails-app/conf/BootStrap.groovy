@@ -45,7 +45,7 @@ class BootStrap {
         builder.classNameResolver = 'com.getsu.wcy'
         def joe = builder.user(login:'joe.cool@example.com', password:passwordEncoder('password')) {
             person(firstGivenName:'Joe', middleGivenNames:'B.', familyName:'Cool', preferredName:'J.C.', honorific:'Mr.') {
-                photo(fileName:'david-n-ben.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/david-n-ben.JPG')))
+                photo(fileName:'david-n-ben.JPG', contents:BootStrap.class.getResourceAsStream('dev/david-n-ben.JPG').bytes)
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, line1:'123 King St.', city:'Honolulu', state:'HI')
@@ -64,7 +64,7 @@ class BootStrap {
             person(firstGivenName:'Jane', familyName:'Cool',
                     middleGivenNames:'Minerva', preferredName:'Jane', honorific:'Ms.', suffix:'Ph.D.'
             ) {
-                photo(fileName:'ben-tea.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/ben-tea.JPG')))
+                photo(fileName:'ben-tea.JPG', contents:BootStrap.class.getResourceAsStream('dev/ben-tea.JPG').bytes)
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, postalType:true, line1:'222 Kapiolani Blvd.', city:'Honolulu', state:'HI')
@@ -94,7 +94,7 @@ class BootStrap {
         builder.classNameResolver = 'com.getsu.wcy'
         def jane = builder.user(login:'coworker@example.com', password:passwordEncoder('password')) {
             person(firstGivenName:'Alex', familyName:'McFee', honorific:'Mr.', middleGivenNames:'Trouble') {
-                photo(fileName:'ben-korea.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/ben-korea.JPG')))
+                photo(fileName:'ben-korea.JPG', contents:BootStrap.class.getResourceAsStream('dev/ben-korea.JPG').bytes)
                 connection(type:ConnectionType.WORK) {
                     place {
                         address(streetType:true, line1:'76 Pensicola Ave.', city:'Honolulu', state:'HI')
@@ -116,7 +116,7 @@ class BootStrap {
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
         def granny = builder.person(honorific:'Mrs.', firstGivenName:'Bertha', familyName:'Cool') {
-            photo(fileName:'slippers.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG')))
+            photo(fileName:'slippers.JPG', contents:BootStrap.class.getResourceAsStream('dev/slippers.JPG').bytes)
             connection(type:ConnectionType.HOME) {
                 place {
                     address(streetType:true, line1:'333 Date St.', city:'Honolulu', state:'HI')
@@ -131,7 +131,7 @@ class BootStrap {
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
         def hal = builder.person(firstGivenName:'Hal', familyName:'Homeless') {
-            photo(fileName:'slippers.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG')))
+            photo(fileName:'slippers.JPG', contents:BootStrap.class.getResourceAsStream('dev/slippers.JPG').bytes)
             phoneNumber(type:PhoneNumberType.MOBILE, number:'555-8888')
         }
         hal.save(failOnError:true)
@@ -142,7 +142,7 @@ class BootStrap {
         builder.classNameResolver = 'com.getsu.wcy'
         (10..55).each { index ->
             def person = builder.person(firstGivenName:"Test$index", familyName:'Smith') {
-                photo(fileName:'slippers.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG')))
+                photo(fileName:'slippers.JPG', contents:BootStrap.class.getResourceAsStream('dev/slippers.JPG').bytes)
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, line1:"$index Citron Ave.", city:'Honolulu', state:'HI', postalCode:'96811')
@@ -178,24 +178,6 @@ class BootStrap {
         new Notification(recipient:joe, date:daysFromNow(-7.3), subject:coworker, verb:'shared with you', object:coworker.person).save(failOnError:true)
         new Notification(recipient:joe, date:daysFromNow(-7.2), subject:coworker, verb:'added work phone', object:coworker.person).save(failOnError:true)
         new Notification(recipient:joe, date:daysFromNow(-4.1), subject:coworker, verb:'updated work phone', object:coworker.person).save(failOnError:true)
-    }
-
-    // from Groovy 1.7.1
-    private static byte[] getBytes(InputStream is) throws IOException {
-        ByteArrayOutputStream answer = new ByteArrayOutputStream();
-        // reading the content of the file within a byte buffer
-        byte[] byteBuffer = new byte[8192];
-        int nbByteRead /* = 0*/;
-        try {
-            while ((nbByteRead = is.read(byteBuffer)) != -1) {
-                // appends buffer
-                answer.write(byteBuffer, 0, nbByteRead);
-            }
-            is.close();
-        } finally {
-            DefaultGroovyMethodsSupport.closeWithWarning(is);
-        }
-        return answer.toByteArray();
     }
 
      def destroy = {
