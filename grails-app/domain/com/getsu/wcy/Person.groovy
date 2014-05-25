@@ -16,8 +16,7 @@ class Person {
     String familyName // last names in English
     String suffix // e.g. Jr., III, Sr., M.D., Ph.D.
 
-    byte[] photo
-    String photoFileName // keep for format clues in the file name extension?
+    Photo photo
     Date birthDate
 
     List<Connection> connections // to Places
@@ -45,8 +44,7 @@ class Person {
         middleGivenNames nullable:true
         familyName blank:false
         suffix nullable:true
-        photo nullable:true, size: 0..(1024*1024)       // todo: proper type for a binary in a real db?
-        photoFileName nullable:true
+        photo nullable:true
         birthDate nullable:true
 
         // Connection's belongsTo = Person handles validation, but generating errors one level too high, so

@@ -17,7 +17,7 @@ class BootStrap {
          events.onNewUserObject = { loginID -> User.createSignupInstance(loginID) }
          events.onSignup = { params ->
              def includes = [ 'preferredName', 'honorific', 'firstGivenName', 'middleGivenNames', 'familyName',
-                     'suffix', 'photo', 'photoFileName', 'birthDate',
+                     'suffix', 'birthDate',
                      'connections[0].place.addresses[0].city',
                      'connections[0].place.addresses[0].state',
                      'connections[0].place.addresses[0].streetType'
@@ -44,10 +44,8 @@ class BootStrap {
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
         def joe = builder.user(login:'joe.cool@example.com', password:passwordEncoder('password')) {
-            person(firstGivenName:'Joe', middleGivenNames:'B.', familyName:'Cool',
-                    preferredName:'J.C.', honorific:'Mr.', photoFileName:'david-n-ben.JPG',
-                    photo: getBytes(BootStrap.class.getResourceAsStream('dev/david-n-ben.JPG'))
-            ) {
+            person(firstGivenName:'Joe', middleGivenNames:'B.', familyName:'Cool', preferredName:'J.C.', honorific:'Mr.') {
+                photo(fileName:'david-n-ben.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/david-n-ben.JPG')))
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, line1:'123 King St.', city:'Honolulu', state:'HI')
@@ -64,10 +62,9 @@ class BootStrap {
         builder.classNameResolver = 'com.getsu.wcy'
         def jane = builder.user(login:'jane.cool@rr.net', password:passwordEncoder('password')) {
             person(firstGivenName:'Jane', familyName:'Cool',
-                    middleGivenNames:'Minerva', preferredName:'Jane', honorific:'Ms.', suffix:'Ph.D.',
-                    photoFileName:'ben-tea.JPG',
-                    photo: getBytes(BootStrap.class.getResourceAsStream('dev/ben-tea.JPG'))
+                    middleGivenNames:'Minerva', preferredName:'Jane', honorific:'Ms.', suffix:'Ph.D.'
             ) {
+                photo(fileName:'ben-tea.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/ben-tea.JPG')))
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, postalType:true, line1:'222 Kapiolani Blvd.', city:'Honolulu', state:'HI')
@@ -96,10 +93,8 @@ class BootStrap {
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
         def jane = builder.user(login:'coworker@example.com', password:passwordEncoder('password')) {
-            person(firstGivenName:'Alex', familyName:'McFee', honorific:'Mr.', middleGivenNames:'Trouble',
-                    photoFileName:'ben-korea.JPG',
-                    photo: getBytes(BootStrap.class.getResourceAsStream('dev/ben-korea.JPG'))
-            ) {
+            person(firstGivenName:'Alex', familyName:'McFee', honorific:'Mr.', middleGivenNames:'Trouble') {
+                photo(fileName:'ben-korea.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/ben-korea.JPG')))
                 connection(type:ConnectionType.WORK) {
                     place {
                         address(streetType:true, line1:'76 Pensicola Ave.', city:'Honolulu', state:'HI')
@@ -120,9 +115,8 @@ class BootStrap {
     private static addGranny() { // no User, only Person
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
-        def granny = builder.person(honorific:'Mrs.', firstGivenName:'Bertha', familyName:'Cool', photoFileName:'slippers.JPG',
-                photo: getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG'))
-        ) {
+        def granny = builder.person(honorific:'Mrs.', firstGivenName:'Bertha', familyName:'Cool') {
+            photo(fileName:'slippers.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG')))
             connection(type:ConnectionType.HOME) {
                 place {
                     address(streetType:true, line1:'333 Date St.', city:'Honolulu', state:'HI')
@@ -136,9 +130,8 @@ class BootStrap {
     private static addPhoneOnly() { // no User, only Person
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
-        def hal = builder.person(firstGivenName:'Hal', familyName:'Homeless', photoFileName:'slippers.JPG',
-                photo: getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG'))
-        ) {
+        def hal = builder.person(firstGivenName:'Hal', familyName:'Homeless') {
+            photo(fileName:'slippers.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG')))
             phoneNumber(type:PhoneNumberType.MOBILE, number:'555-8888')
         }
         hal.save(failOnError:true)
@@ -148,9 +141,8 @@ class BootStrap {
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
         (10..55).each { index ->
-            def person = builder.person(firstGivenName:"Test$index", familyName:'Smith', photoFileName:'slippers.JPG',
-                                            photo: getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG'))
-            ) {
+            def person = builder.person(firstGivenName:"Test$index", familyName:'Smith') {
+                photo(fileName:'slippers.JPG', contents:getBytes(BootStrap.class.getResourceAsStream('dev/slippers.JPG')))
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, line1:"$index Citron Ave.", city:'Honolulu', state:'HI', postalCode:'96811')
