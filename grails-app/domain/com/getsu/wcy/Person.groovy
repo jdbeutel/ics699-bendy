@@ -78,9 +78,9 @@ class Person {
     // for sortableColumn & JSON (todo: make updates of associates trigger update of Person)
     PhoneNumber getPreferredPhone() {
         // todo: user preferences and smarter selection by PhoneNumberType and ConnectionType
-        def connectionWithPhoneNumber = connections.find {it.phoneNumbers}
-        def connectionWithPlacePhoneNumber = connections.find {it.place.phoneNumbers}
-        [this, connectionWithPhoneNumber, connectionWithPlacePhoneNumber].findResult {it?.phoneNumbers?.getAt(0)}
+        def phoneNumbersOfConnection = connections.findResult {it.phoneNumbers}
+        def phoneNumbersOfPlace = connections.findResult {it.place.phoneNumbers}
+        [phoneNumbers, phoneNumbersOfConnection, phoneNumbersOfPlace].findResult {it?.getAt(0)}
     }
 
     // for sortableColumn & JSON (todo: make updates of associates trigger update of Person)
