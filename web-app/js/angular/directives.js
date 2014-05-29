@@ -110,3 +110,31 @@ bendyDirectives.directive('bendyAlertIcon', function() {
         replace: true
     }
 });
+
+bendyDirectives.directive('bendyTypeIcon', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            kind: '@',
+            type: '='
+        },
+        controller: function($scope) {
+            var iconMaps = {
+                connection: {
+                    HOME: 'glyphicon-home',
+                    WORK: 'glyphicon-briefcase',
+                    SCHOOL: 'glyphicon-book'
+                },
+                phone: {
+                    LANDLINE: 'glyphicon-phone-alt',
+                    MOBILE: 'glyphicon-phone',
+                    FAX: 'glyphicon-print'
+                }
+            };
+            var icons = iconMaps[$scope.kind] || {};
+            $scope.iconClass = icons[$scope.type] || null;
+        },
+        template: '<span ng-if="iconClass" class="glyphicon {{iconClass}}" title="{{type}}"><span class="sr-only">{{type}}</span></span>',
+        replace: true
+    }
+});

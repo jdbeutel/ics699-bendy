@@ -41,28 +41,30 @@
                 </td>
                 <td>
                     <span ng-if="person.preferredEmail">
+                        <!-- todo: some clear way to display the level?  Or remove from domain, if it will only confuse users?
                         <span ng-if="person.preferredEmail.level == 'GENERAL'">
                             {{person.preferredEmail.level}}
                         </span>
-                        {{person.preferredEmail.connectionType}}
+                        -->
+                        <bendy-type-icon kind="connection" type="person.preferredEmail.connectionType"></bendy-type-icon>
                         {{person.preferredEmail.address}}
                     </span>
                 </td>
                 <td>
                     <span ng-if="person.preferredPhone">
+                        <!-- todo: some clear way to display the level?  Or remove from domain, if it will only confuse users?
                         <span ng-if="person.preferredPhone.level == 'GENERAL'">
                             {{person.preferredPhone.level}}
                         </span>
-                        {{person.preferredPhone.connectionType}}
-                        <span ng-if="person.preferredPhone.type != 'LANDLINE'">
-                            {{person.preferredPhone.type}}
-                        </span>
+                        -->
+                        <bendy-type-icon kind="connection" type="person.preferredPhone.connectionType"></bendy-type-icon>
+                        <bendy-type-icon kind="phone" type="person.preferredPhone.type"></bendy-type-icon>
                         {{person.preferredPhone.number}}
                     </span>
                 </td>
                 <td>
                     <span ng-if="person.preferredConnection && person.preferredConnection.preferredAddress">
-                        {{person.preferredConnection.type}}
+                        <bendy-type-icon kind="connection" type="person.preferredConnection.type"></bendy-type-icon>
                         {{person.preferredConnection.preferredAddress.line1}}
                         {{person.preferredConnection.preferredAddress.line2}}
                         {{person.preferredConnection.preferredAddress.city}}
