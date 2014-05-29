@@ -10,7 +10,11 @@ class EmailAddress {
     String name
     String address
 
+    CommunicationLinks.Level level              // de-normalized for preferredEmail
+    Connection.ConnectionType connectionType    // de-normalized for preferredEmail
+
     static constraints = {
         address email:true
+        connectionType nullable:true
     }
 }

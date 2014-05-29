@@ -29,9 +29,9 @@ class Person {
     List<TwitterName> twitterNames
     // etc...
 
-    String originalValuesJSON
-
-    static transients = ['originalValuesJSON', 'preferredPhone', 'preferredConnection', 'preferredEmail']
+    EmailAddress preferredEmail     // de-normalized
+    PhoneNumber preferredPhone      // de-normalized
+    Connection preferredConnection  // de-normalized
 
     static hasMany = CommunicationLinks.hasMany + [
             connections:Connection,
@@ -46,6 +46,10 @@ class Person {
         suffix nullable:true
         photo nullable:true
         birthDate nullable:true
+
+        preferredEmail nullable:true
+        preferredPhone nullable:true
+        preferredConnection nullable:true
 
         // Connection's belongsTo = Person handles validation, but generating errors one level too high, so
         connections validator: { it?.every { it?.validate() } }  // work-around to get errors on specific connections
@@ -63,50 +67,27 @@ class Person {
     @Deprecated void setName(String ignored) {}
     String getName() { "${preferredName ?: firstGivenName} ${familyName}" }
 
-    // I doubt GORM can persist this (for sortableColumn), because updates of associates
-    // would need to cascade up to trigger updates of Person.
-    def getPreferredEmail() {
+    // for sortableColumn & JSON (todo: make updates of associates trigger update of Person)
+    EmailAddress getPreferredEmail() {
         // todo: user preferences and smarter selection by ConnectionType
         def connectionWithEmail = connections.find {it.emailAddresses}
         def connectionWithPlaceEmail = connections.find {it.place.emailAddresses}
-        if (emailAddresses[0]) {
-            return [type:'PERSONAL', address:emailAddresses[0].address]
-        } else if (connectionWithEmail) {
-            def c = connectionWithEmail
-            return [type:"$c.type", address:c.emailAddresses[0].address]
-        } else if (connectionWithPlaceEmail) {
-            def c = connectionWithPlaceEmail
-            return [type:"$c.type", address:c.place.emailAddresses[0].address]
-        } else {
-            return null
-        }
+        [this, connectionWithEmail, connectionWithPlaceEmail].findResult {it?.emailAddresses?.getAt(0)}
     }
 
-    // I doubt GORM can persist this (for sortableColumn), because updates of associates
-    // would need to cascade up to trigger updates of Person.
-    def getPreferredPhone() {
+    // for sortableColumn & JSON (todo: make updates of associates trigger update of Person)
+    PhoneNumber getPreferredPhone() {
         // todo: user preferences and smarter selection by PhoneNumberType and ConnectionType
         def connectionWithPhoneNumber = connections.find {it.phoneNumbers}
         def connectionWithPlacePhoneNumber = connections.find {it.place.phoneNumbers}
-        if (phoneNumbers[0]) {
-            return [type:phoneNumbers[0].type, number:phoneNumbers[0].number]
-        } else if (connectionWithPhoneNumber) {
-            def c = connectionWithPhoneNumber
-            return [type:"$c.type ${c.phoneNumbers[0].type}", number:c.phoneNumbers[0].number]
-        } else if (connectionWithPlacePhoneNumber) {
-            def c = connectionWithPlacePhoneNumber
-            return [type:"$c.type ${c.place.phoneNumbers[0].type}", number:c.place.phoneNumbers[0].number]
-        } else {
-            return null
-        }
+        [this, connectionWithPhoneNumber, connectionWithPlacePhoneNumber].findResult {it?.phoneNumbers?.getAt(0)}
     }
 
-    // I doubt GORM can persist this (for sortableColumn), because updates of associates
-    // would need to cascade up to trigger updates of Person.
+    // for sortableColumn & JSON (todo: make updates of associates trigger update of Person)
     Connection getPreferredConnection() {
         // todo: user preferences and smarter selection by ConnectionType and streetType/postalType
         def home = connections.find {it.type == ConnectionType.HOME && it.place?.addresses}
         def work = connections.find {it.type == ConnectionType.WORK && it.place?.addresses}
-        return home ?: work
+        home ?: work
     }
 }

@@ -31,4 +31,10 @@ class CommunicationLinks {
         delegate.skypeNames cascade:'persist,merge,save-update' // specified because not all SkypeNames belongsTo Person
         delegate.twitterNames cascade:'persist,merge,save-update' // specified because not all TwitterNames belongsTo Person
     }
+
+    enum Level {
+        PERSONAL,   // on Person
+        DIRECT,     // on Connection
+        GENERAL     // on Place
+    }
 }

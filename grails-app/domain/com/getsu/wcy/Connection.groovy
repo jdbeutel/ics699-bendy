@@ -18,11 +18,18 @@ class Connection {
     List<TwitterName> twitterNames
     // etc...
 
+    EmailAddress preferredEmail     // de-normalized
+    PhoneNumber preferredPhone      // de-normalized
+    Address preferredAddress        // de-normalized
+
     static belongsTo = Person
     static hasMany = CommunicationLinks.hasMany
-    static transients = ['preferredPhone', 'preferredAddress', 'preferredEmail']
 
     static constraints = {
+        preferredEmail nullable:true
+        preferredPhone nullable:true
+        preferredAddress nullable:true
+
         place validator: { it?.validate() }  // work-around to deepValidate for cascade
         CommunicationLinks.constraints(delegate)
     }
@@ -33,33 +40,21 @@ class Connection {
     }
 
     enum ConnectionType {
-        HOME, WORK
+        HOME, WORK, SCHOOL
     }
 
-    def getPreferredEmail() {
+    EmailAddress getPreferredEmail() {
         // todo: user preferences for selection
-        if (emailAddresses[0]) { // todo: no [0]?
-            return [type:'DIRECT', address:emailAddresses[0].address]
-        } else if (place.emailAddresses) {
-            return [type:'', address:place.emailAddresses[0].address]
-        } else {
-            return null
-        }
+        [this, place].findResult {it?.emailAddresses?.getAt(0)}
     }
 
-    def getPreferredPhone() {
+    PhoneNumber getPreferredPhone() {
         // todo: user preferences and smarter selection by PhoneNumberType
-        if (phoneNumbers[0]) {
-            return [type:phoneNumbers[0].type, number:phoneNumbers[0].number]
-        } else if (place.phoneNumbers) {
-            return [type:"${place.phoneNumbers[0].type}", number:place.phoneNumbers[0].number]
-        } else {
-            return null
-        }
+        [this, place].findResult {it?.phoneNumbers?.getAt(0)}
     }
 
     Address getPreferredAddress() {
         // todo: user preferences and smarter selection by streetType/postalType
-        return place?.addresses[0]
+        place?.addresses ? place.addresses[0] : null
     }
 }

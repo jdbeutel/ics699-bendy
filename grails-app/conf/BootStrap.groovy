@@ -1,7 +1,9 @@
+import com.getsu.wcy.CommunicationLinks
+import grails.converters.JSON
+import org.codehaus.groovy.grails.web.converters.marshaller.json.DeepDomainClassMarshaller
 import org.springframework.web.context.support.WebApplicationContextUtils
 import com.getsu.wcy.User
 import com.getsu.wcy.Connection.ConnectionType
-import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 import com.getsu.wcy.Person
 import com.getsu.wcy.Notification
 import com.getsu.wcy.WcyDomainBuilder
@@ -9,8 +11,20 @@ import com.getsu.wcy.PhoneNumber.PhoneNumberType
 
 class BootStrap {
 
-     def init = { servletContext ->
+    def grailsApplication
+
+    def init = { servletContext ->
         def appCtx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
+
+        JSON.createNamedConfig('deep') {
+            it.registerObjectMarshaller(new DeepDomainClassMarshaller(true, grailsApplication))
+            it.registerObjectMarshaller(Enum) { e ->
+                e.name()
+            }
+            it.registerObjectMarshaller(java.sql.Date) { date ->      // avoid including the time part of the date
+                date.toString()
+            }
+        }
 
          // init auth events
          def events = appCtx.authenticationService.events // start with defaults
@@ -68,21 +82,28 @@ class BootStrap {
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, postalType:true, line1:'222 Kapiolani Blvd.', city:'Honolulu', state:'HI')
+                        phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-1111',
+                                level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.HOME)
                     }
-                    phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-1111')
                 }
                 connection(type:ConnectionType.WORK) {
                     place {
                         address(streetType:true, line1:'42 Nuuanu Ave.', city:'Honolulu', state:'HI')
                         address(postalType:true, line1:'P.O.Box 1001', city:'Honolulu', state:'HI')
-                        phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-3333')
-                        phoneNumber(type:PhoneNumberType.FAX, number:'555-4444')
+                        phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-3333',
+                                level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.WORK)
+                        phoneNumber(type:PhoneNumberType.FAX, number:'555-4444',
+                                level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.WORK)
                     }
-                    phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-3333 x123')
-                    emailAddress(name:'Jane Cool, V.P. Sales', address:'jane@foo.com')
+                    phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-3333 x123',
+                            level:CommunicationLinks.Level.DIRECT, connectionType: ConnectionType.WORK)
+                    emailAddress(name:'Jane Cool, V.P. Sales', address:'jane@foo.com',
+                            level:CommunicationLinks.Level.DIRECT, connectionType: ConnectionType.WORK)
                 }
-                phoneNumber(type:PhoneNumberType.MOBILE, number:'555-5555')
-                emailAddress(name:'Jane Cool', address:'jane.cool@rr.net')
+                phoneNumber(type:PhoneNumberType.MOBILE, number:'555-5555',
+                        level:CommunicationLinks.Level.PERSONAL, connectionType: null)
+                emailAddress(name:'Jane Cool', address:'jane.cool@rr.net',
+                        level:CommunicationLinks.Level.PERSONAL, connectionType: null)
             }
             settings(dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
         }
@@ -99,11 +120,15 @@ class BootStrap {
                     place {
                         address(streetType:true, line1:'76 Pensicola Ave.', city:'Honolulu', state:'HI')
                         address(postalType:true, line1:'P.O.Box 2002', city:'Honolulu', state:'HI')
-                        phoneNumber(type:PhoneNumberType.FAX, number:'555-7777')
-                        phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-6666')
+                        phoneNumber(type:PhoneNumberType.FAX, number:'555-7777',
+                                level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.WORK)
+                        phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-6666',
+                                level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.WORK)
                     }
-                    phoneNumber(type:PhoneNumberType.MOBILE, number:'555-3333 x123')
-                    emailAddress(name:'Alex McFee, Engineer', address:'coworker@example.com')
+                    phoneNumber(type:PhoneNumberType.MOBILE, number:'555-3333 x123',
+                            level:CommunicationLinks.Level.DIRECT, connectionType: ConnectionType.WORK)
+                    emailAddress(name:'Alex McFee, Engineer', address:'coworker@example.com',
+                            level:CommunicationLinks.Level.DIRECT, connectionType: ConnectionType.WORK)
                 }
             }
             settings(dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
@@ -120,7 +145,8 @@ class BootStrap {
             connection(type:ConnectionType.HOME) {
                 place {
                     address(streetType:true, line1:'333 Date St.', city:'Honolulu', state:'HI')
-                    phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-2222')
+                    phoneNumber(type:PhoneNumberType.LANDLINE, number:'555-2222',
+                            level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.HOME)
                 }
             }
         }
@@ -132,7 +158,8 @@ class BootStrap {
         builder.classNameResolver = 'com.getsu.wcy'
         def hal = builder.person(firstGivenName:'Hal', familyName:'Homeless') {
             photo(fileName:'slippers.JPG', contents:BootStrap.class.getResourceAsStream('dev/slippers.JPG').bytes)
-            phoneNumber(type:PhoneNumberType.MOBILE, number:'555-8888')
+            phoneNumber(type:PhoneNumberType.MOBILE, number:'555-8888',
+                    level:CommunicationLinks.Level.PERSONAL, connectionType: null)
         }
         hal.save(failOnError:true)
     }
@@ -146,7 +173,8 @@ class BootStrap {
                 connection(type:ConnectionType.HOME) {
                     place {
                         address(streetType:true, line1:"$index Citron Ave.", city:'Honolulu', state:'HI', postalCode:'96811')
-                        phoneNumber(type:PhoneNumberType.LANDLINE, number:"555-$index$index")
+                        phoneNumber(type:PhoneNumberType.LANDLINE, number:"555-$index$index",
+                                level:CommunicationLinks.Level.GENERAL, connectionType: ConnectionType.HOME)
                     }
                 }
             }

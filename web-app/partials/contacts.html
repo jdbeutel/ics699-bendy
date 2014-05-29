@@ -41,24 +41,34 @@
                 </td>
                 <td>
                     <span ng-if="person.preferredEmail">
-                        {{person.preferredEmail.type}}
+                        <span ng-if="person.preferredEmail.level == 'GENERAL'">
+                            {{person.preferredEmail.level}}
+                        </span>
+                        {{person.preferredEmail.connectionType}}
                         {{person.preferredEmail.address}}
                     </span>
                 </td>
                 <td>
                     <span ng-if="person.preferredPhone">
-                        {{person.preferredPhone.type}}
+                        <span ng-if="person.preferredPhone.level == 'GENERAL'">
+                            {{person.preferredPhone.level}}
+                        </span>
+                        {{person.preferredPhone.connectionType}}
+                        <span ng-if="person.preferredPhone.type != 'LANDLINE'">
+                            {{person.preferredPhone.type}}
+                        </span>
                         {{person.preferredPhone.number}}
                     </span>
                 </td>
                 <td>
-                    <span ng-if="person.preferredConnection">
-                        {{person.preferredConnection.line1}}
-                        {{person.preferredConnection.line2}}
-                        {{person.preferredConnection.city}}
-                        {{person.preferredConnection.state}}
-                        {{person.preferredConnection.postalCode}}
-                        {{person.preferredConnection.countryCode}}
+                    <span ng-if="person.preferredConnection && person.preferredConnection.preferredAddress">
+                        {{person.preferredConnection.type}}
+                        {{person.preferredConnection.preferredAddress.line1}}
+                        {{person.preferredConnection.preferredAddress.line2}}
+                        {{person.preferredConnection.preferredAddress.city}}
+                        {{person.preferredConnection.preferredAddress.state}}
+                        {{person.preferredConnection.preferredAddress.postalCode}}
+                        {{person.preferredConnection.preferredAddress.countryCode}}
                     </span>
                 </td>
             </tr>

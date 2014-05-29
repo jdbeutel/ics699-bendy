@@ -10,8 +10,12 @@ class PhoneNumber {
     String number
     PhoneNumberType type
 
+    CommunicationLinks.Level level              // de-normalized for preferredPhone
+    Connection.ConnectionType connectionType    // de-normalized for preferredPhone
+
     static constraints = {
         number minSize:3
+        connectionType nullable:true
     }
 
     enum PhoneNumberType {
