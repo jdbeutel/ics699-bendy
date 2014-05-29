@@ -17,7 +17,7 @@ class BootStrap {
         def appCtx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
 
         JSON.createNamedConfig('deep') {
-            it.registerObjectMarshaller(new DeepDomainClassMarshaller(true, grailsApplication))
+            it.registerObjectMarshaller(new DeepDomainClassMarshaller(false, grailsApplication))
             it.registerObjectMarshaller(Enum) { e ->
                 e.name()
             }
