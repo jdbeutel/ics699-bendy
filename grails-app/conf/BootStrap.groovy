@@ -1,6 +1,5 @@
 import com.getsu.wcy.CommunicationLinks
 import grails.converters.JSON
-import org.codehaus.groovy.grails.web.converters.marshaller.json.DeepDomainClassMarshaller
 import org.springframework.web.context.support.WebApplicationContextUtils
 import com.getsu.wcy.User
 import com.getsu.wcy.Connection.ConnectionType
@@ -11,19 +10,14 @@ import com.getsu.wcy.PhoneNumber.PhoneNumberType
 
 class BootStrap {
 
-    def grailsApplication
-
     def init = { servletContext ->
         def appCtx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
 
-        JSON.createNamedConfig('deep') {
-            it.registerObjectMarshaller(new DeepDomainClassMarshaller(false, grailsApplication))
-            it.registerObjectMarshaller(Enum) { e ->
-                e.name()
-            }
-            it.registerObjectMarshaller(java.sql.Date) { date ->      // avoid including the time part of the date
-                date.toString()
-            }
+        JSON.registerObjectMarshaller(Enum) { e ->
+            e.name()
+        }
+        JSON.registerObjectMarshaller(java.sql.Date) { date ->      // avoid including the time part of the date
+            date.toString()
         }
 
          // init auth events

@@ -173,12 +173,95 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
     function ($scope, Person) {
         $scope.contacts = Person.query();
 
-        $scope.editName = function(person) {    // todo: separate controller w/ state vars in its scope instead of on domain
-            person.editingName = true;
+        $scope.collapse = function(person) {
+            person.isCollapsed = true;  // hack because I can't get the BendyPersonCtrl (scope) over both table rows
         };
 
-        $scope.cancelEditName = function(person) {
-            person.editingName = false;
+        $scope.expand = function(person) {
+            person.isCollapsed = false;
         };
     }
 ]);
+
+bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person',
+    function ($scope, Person) {
+        $scope.editingPerson = null;
+
+        $scope.edit = function() {
+            $scope.editingPerson = angular.copy($scope.person);  // inherited from ng-repeat
+        };
+
+        $scope.cancel = function() {
+            $scope.editingPerson = null;
+        };
+
+        $scope.update = function() {
+            $scope.copyNameProperties($scope.person, $scope.editingPerson);
+            Person.update(
+                    {id: $scope.editingPerson.id},
+                    $scope.editingPerson,
+                    function success(updatedPerson, putResponseHeaders) {
+                        updatedPerson.isCollapsed = $scope.person.isCollapsed; // preserve hack
+                        $scope.setPerson(updatedPerson);
+                        $scope.editingPerson = null;
+                        // todo: positive feedback
+                    },
+                    function error(response) {
+                        alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                    }
+            )
+        };
+
+        $scope.copyNameProperties = function(src, dest) {
+            var nameProps = ['preferredName', 'honorific', 'firstGivenName', 'middleGivenNames', 'familyName', 'suffix'];
+            angular.forEach(nameProps, function(value) {
+                dest[value] = src[value];
+            })
+        };
+
+        $scope.setPerson = function(person) {
+            angular.copy(person, $scope.person); // allows update by child scope
+        }
+    }
+]);
+
+bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person',
+    function ($scope, Person) {
+        $scope.editingName = null;
+        $scope.isNameCollapsed = true;
+
+        $scope.collapseName = function() {
+            $scope.isNameCollapsed = true;
+        };
+
+        $scope.expandName = function() {
+            $scope.isNameCollapsed = false;
+        };
+
+        $scope.editName = function() {
+            $scope.editingName = angular.copy($scope.person);  // inherited from ng-repeat via BendyPersonCtrl
+        };
+
+        $scope.updateName = function() {
+            var freshName = angular.copy($scope.person);  // inherited from ng-repeat via BendyPersonCtrl
+            $scope.copyNameProperties($scope.editingName, freshName);
+            Person.update(
+                    {id: freshName.id},
+                    freshName,
+                    function success(updatedPerson, putResponseHeaders) {
+                        $scope.setPerson(updatedPerson);
+                        $scope.editingName = null;
+                        // todo: positive feedback
+                    },
+                    function error(response) {
+                        alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                    }
+            )
+        };
+
+        $scope.cancelEditName = function() {
+            $scope.editingName = null;
+        };
+    }
+]);
+

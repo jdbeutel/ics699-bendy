@@ -1,73 +1,76 @@
-<ng-form class="form-horizontal ws-validate" role="form" ng-submit="update(person)">
+<ng-form name="personForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyPersonCtrl">
     <div class="row">
         <div class="col-xs-4">
-            <button class="btn btn-default btn-xs" ng-click="person.isCollapsed = true">
+            <button class="btn btn-default btn-xs" ng-click="collapse(person)">
                 <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
             {{person.name}}
         </div>
         <div class="col-xs-8">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div ng-init="person.isNameCollapsed = true" ng-show="person.isNameCollapsed">
-                        <button class="btn btn-default btn-xs" ng-click="person.isNameCollapsed = false">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                        </button>
-                        <span ng-click="person.isNameCollapsed = false">
-                            (
-                            {{person.honorific}}
-                            {{person.firstGivenName}}
-                            <span ng-if="person.preferredName">
-                                ({{person.preferredName}})
-                            </span>
-                            {{person.middleGivenNames}}
-                            {{person.familyName}}{{person.suffix ? ',' : ''}}
-                            {{person.suffix}}
-                            )
-                        </span>
-                    </div>
-                    <ng-include src="'partials/personNameDetails.html'"/>
-                </div>
-            </div>
+            <ng-include src="'partials/personNameDetails.html'"/>
         </div>
     </div>
 
-    <div class="form-group" ng-repeat="emailAddress in person.emailAddresses" ng-form>
-        <div ng-hide="person.editing">
+    <div ng-hide="editingPerson">
+        <div class="form-group" ng-repeat="emailAddress in person.emailAddresses" ng-form>
             <label class="col-xs-3 control-label">Personal Email</label>
             <div class="col-xs-9">
                 <p class="form-control-static">{{emailAddress.address}}</p>
             </div>
         </div>
-        <div ng-show="person.editing">
+    </div>
+    <div ng-show="editingPerson">
+        <div class="form-group" ng-repeat="emailAddress in editingPerson.emailAddresses" ng-form>
             <label class="col-xs-3 control-label"
                     for="person{{person.id}}emailAddresses{{$index}}">Personal Email</label>
             <div class="col-xs-9">
                 <input type="text" class="form-control"
                        id="person{{person.id}}emailAddresses{{$index}}"
-                       value="{{emailAddress.address}}"/>
+                       ng-model="emailAddress.address"/>
             </div>
         </div>
     </div>
 
-    <div class="form-group" ng-repeat="phoneNumber in person.phoneNumbers" ng-form>
-        <div ng-hide="person.editing">
+    <div ng-hide="editingPerson">
+        <div class="form-group" ng-repeat="phoneNumber in person.phoneNumbers" ng-form>
             <label class="col-xs-3 control-label">Personal {{phoneNumber.type}}</label>
             <div class="col-xs-9">
                 <p class="form-control-static">{{phoneNumber.number}}</p>
             </div>
         </div>
-        <div ng-show="person.editing">
+    </div>
+    <div ng-show="editingPerson">
+        <div class="form-group" ng-repeat="phoneNumber in editingPerson.phoneNumbers" ng-form>
             <label class="col-xs-3 control-label"
                     for="person{{person.id}}phoneNumbers{{$index}}">Personal {{phoneNumber.type}}</label>
+            <!-- todo: select phoneNumber.type -->
             <div class="col-xs-9">
                 <input type="text" class="form-control"
                        id="person{{person.id}}phoneNumbers{{$index}}"
-                       value="{{phoneNumber.number}}"/>
+                       ng-model="phoneNumber.number"/>
             </div>
         </div>
     </div>
 
+    <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-3">
+            <button type="button" class="btn btn-default"
+                    ng-hide="editingPerson" ng-click="edit()">
+                Edit
+            </button>
+            <button type="submit" class="save btn btn-default"
+                    ng-show="editingPerson" ng-disabled="!personForm.$dirty"
+                    ng-class="{changed: personForm.$dirty}" ng-click="update()">
+                Save
+            </button>
+        </div>
+        <div class="col-xs-3">
+            <button type="button" class="btn btn-default"
+                    ng-show="editingPerson" ng-click="cancel()">
+                Cancel
+            </button>
+        </div>
+    </div>
 </ng-form>
 
         <!--

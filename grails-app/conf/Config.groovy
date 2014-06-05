@@ -76,6 +76,7 @@ grails {
 }
  
 grails.converters.encoding = "UTF-8"
+grails.converters.json.default.deep = true
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
