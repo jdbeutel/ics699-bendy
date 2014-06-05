@@ -1,0 +1,112 @@
+<div ng-hide="person.isNameCollapsed" ng-form="nameForm" role="form">
+    <div ng-controller="BendyDirtyFormCtrl">
+        <div class="form-group">
+            <div class="col-xs-1">
+                <button class="btn btn-default btn-xs" ng-click="person.isNameCollapsed = true">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+            </div>
+            <label class="control-label col-xs-3"
+                   for="person{{person.id}}preferredName">Nickname</label>
+            <div class="col-xs-8">
+                <div ng-hide="person.editingName">
+                    <p class="form-control-static">{{person.preferredName}}</p>
+                </div>
+                <div ng-show="person.editingName">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}preferredName"
+                           ng-model="person.preferredName" bendy-dirty/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 control-label"
+                    for="person{{person.id}}honorific">Honorific</label>
+            <div class="col-xs-8">
+                <div ng-hide="person.editingName">
+                    <p class="form-control-static">{{person.honorific}}</p>
+                </div>
+                <div ng-show="person.editingName">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}honorific"
+                           ng-model="person.honorific" bendy-dirty placeholder="e.g., Mr., Dr., etc."/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 control-label"
+                   for="person{{person.id}}firstGivenName">First Name</label>
+            <div class="col-xs-8">
+                <div ng-hide="person.editingName">
+                    <p class="form-control-static">{{person.firstGivenName}}</p>
+                </div>
+                <div ng-show="person.editingName">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}firstGivenName"
+                           ng-model="person.firstGivenName" bendy-dirty placeholder="John"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 control-label"
+                   for="person{{person.id}}middleGivenNames">Middle Names</label>
+            <div class="col-xs-8">
+                <div ng-hide="person.editingName">
+                    <p class="form-control-static">{{person.middleGivenNames}}</p>
+                </div>
+                <div ng-show="person.editingName">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}middleGivenNames"
+                           ng-model="person.middleGivenNames" bendy-dirty/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 control-label"
+                   for="person{{person.id}}familyName">Last Name</label>
+            <div class="col-xs-8">
+                <div ng-hide="person.editingName">
+                    <p class="form-control-static">{{person.familyName}}</p>
+                </div>
+                <div ng-show="person.editingName">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}familyName"
+                           ng-model="person.familyName" bendy-dirty placeholder="Doe"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 control-label"
+                   for="person{{person.id}}suffix">Suffix</label>
+            <div class="col-xs-8">
+                <div ng-hide="person.editingName">
+                    <p class="form-control-static">{{person.suffix}}</p>
+                </div>
+                <div ng-show="person.editingName">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}suffix"
+                           ng-model="person.suffix" bendy-dirty placeholder="e.g., Jr., Ph.D., etc."/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-4 col-xs-3">
+                <button type="button" class="btn btn-default"
+                        ng-hide="person.editingName" ng-click="editName(person)">
+                    Edit
+                </button>
+                <button type="submit" class="save btn btn-default"
+                        ng-show="person.editingName" ng-disabled="!nameForm.$dirty"
+                        ng-class="{changed: nameForm.$dirty}">
+                    Save
+                </button>
+            </div>
+            <div class="col-xs-3">
+                <button type="button" class="btn btn-default"
+                        ng-show="person.editingName" ng-click="cancelEditName(person)">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

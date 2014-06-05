@@ -172,5 +172,13 @@ bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route', '$scope',
 bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
     function ($scope, Person) {
         $scope.contacts = Person.query();
+
+        $scope.editName = function(person) {    // todo: separate controller w/ state vars in its scope instead of on domain
+            person.editingName = true;
+        };
+
+        $scope.cancelEditName = function(person) {
+            person.editingName = false;
+        };
     }
 ]);
