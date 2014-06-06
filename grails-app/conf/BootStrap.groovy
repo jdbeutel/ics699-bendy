@@ -1,4 +1,5 @@
 import com.getsu.wcy.CommunicationLinks
+import com.getsu.wcy.Photo
 import grails.converters.JSON
 import org.springframework.web.context.support.WebApplicationContextUtils
 import com.getsu.wcy.User
@@ -18,6 +19,9 @@ class BootStrap {
         }
         JSON.registerObjectMarshaller(java.sql.Date) { date ->      // avoid including the time part of the date
             date.toString()
+        }
+        JSON.registerObjectMarshaller(Photo) { photo ->
+            [id: photo.id, fileName: photo.fileName]    // exclude Photo binary contents from JSON
         }
 
          // init auth events
