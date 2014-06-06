@@ -26,7 +26,8 @@ bendyServices.factory('Password', ['$resource',
 bendyServices.factory('Person', ['$resource',
     function($resource) {
         return $resource('/people/:id.json', {}, {
-            update: {method:'PUT'}
+            update: {method:'PUT'},
+            query: {method:'GET', isArray:false}
         });
     }
 ]);

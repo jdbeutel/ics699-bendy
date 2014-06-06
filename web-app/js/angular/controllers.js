@@ -171,7 +171,32 @@ bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route', '$scope',
 
 bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
     function ($scope, Person) {
-        $scope.contacts = Person.query();
+        $scope.nextPageSize = 100;
+
+        var peopleModel = Person.query(function() {    // PeopleModel
+            $scope.contacts = peopleModel.people;
+            $scope.peopleCount = peopleModel.peopleCount;
+            $scope.phoneNumberTypes = peopleModel.phoneNumberTypes;
+            $scope.connectionTypes = peopleModel.connectionTypes;
+        });
+
+        $scope.remainingCount = function() {
+            return $scope.contacts ? $scope.peopleCount - $scope.contacts.length : 0;
+        };
+
+        $scope.nextIsFinalPage = function() {
+             // To finish off the results, the server will go up to 30% over max.
+            return $scope.remainingCount() <= $scope.nextPageSize * 1.30;
+        };
+
+        $scope.loadNextPage = function () {
+            peopleModel = Person.query(
+                    {offset: $scope.contacts.length, q: $scope.searchTerms, max: $scope.nextPageSize},
+                    function () {    // PeopleModel
+                        Array.prototype.push.apply($scope.contacts, peopleModel.people);
+                        $scope.peopleCount = peopleModel.peopleCount;
+                    });
+        };
 
         $scope.collapse = function(person) {
             person.isCollapsed = true;  // hack because I can't get the BendyPersonCtrl (scope) over both table rows
