@@ -171,14 +171,19 @@ bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route', '$scope',
 
 bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
     function ($scope, Person) {
+        $scope.initialPageSize = 10;
         $scope.nextPageSize = 100;
+        $scope.sort = 'name';
+        $scope.order = 'asc';
 
-        var peopleModel = Person.query(function() {    // PeopleModel
-            $scope.contacts = peopleModel.people;
-            $scope.peopleCount = peopleModel.peopleCount;
-            $scope.phoneNumberTypes = peopleModel.phoneNumberTypes;
-            $scope.connectionTypes = peopleModel.connectionTypes;
-        });
+        var peopleModel = Person.query(
+                {max: $scope.initialPageSize, sort: $scope.sort, order: $scope.order},
+                function () {    // PeopleModel
+                    $scope.contacts = peopleModel.people;
+                    $scope.peopleCount = peopleModel.peopleCount;
+                    $scope.phoneNumberTypes = peopleModel.phoneNumberTypes;
+                    $scope.connectionTypes = peopleModel.connectionTypes;
+                });
 
         $scope.remainingCount = function() {
             return $scope.contacts ? $scope.peopleCount - $scope.contacts.length : 0;
@@ -189,13 +194,35 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
             return $scope.remainingCount() <= $scope.nextPageSize * 1.30;
         };
 
-        $scope.loadNextPage = function () {
+        $scope.loadNextPage = function() {
+            $scope.loadMoreContacts($scope.nextPageSize);
+        };
+
+        $scope.loadMoreContacts = function(max) {
             peopleModel = Person.query(
-                    {offset: $scope.contacts.length, q: $scope.searchTerms, max: $scope.nextPageSize},
+                    {
+                        offset: $scope.contacts.length,
+                        q: $scope.searchTerms,
+                        max: max,
+                        sort: $scope.sort,
+                        order: $scope.order
+                    },
                     function () {    // PeopleModel
                         Array.prototype.push.apply($scope.contacts, peopleModel.people);
-                        $scope.peopleCount = peopleModel.peopleCount;
+                        $scope.peopleCount = peopleModel.peopleCount;   // probably hasn't changed, but anyway
                     });
+        };
+
+        this.sortBy = function(property) {
+            if (property == $scope.sort) {
+                $scope.order = ($scope.order == 'asc' ? 'desc' : 'asc');
+            } else {
+                $scope.sort = property;
+                $scope.order = 'asc';
+            }
+            $scope.contacts.length = 0;     // clear list
+            $scope.peopleCount = 0;
+            $scope.loadMoreContacts($scope.initialPageSize);
         };
 
         $scope.collapse = function(person) {

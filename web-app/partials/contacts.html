@@ -28,11 +28,23 @@
         <table class="table table-condensed table-hover">
             <thead>
             <tr>
-                <!-- todo: sortable, configurable -->
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
+                <!-- todo: configurable -->
+                <th>
+                    Name
+                    <bendy-sort-button property-name="name" sort="sort" order="order"></bendy-sort-button>
+                </th>
+                <th>
+                    Email
+                    <bendy-sort-button property-name="preferredEmail" sort="sort" order="order"></bendy-sort-button>
+                </th>
+                <th>
+                    Phone
+                    <bendy-sort-button property-name="preferredPhone" sort="sort" order="order"></bendy-sort-button>
+                </th>
+                <th>
+                    Address
+                    <bendy-sort-button property-name="preferredConnection" sort="sort" order="order"></bendy-sort-button>
+                </th>
             </tr>
             </thead>
             <tbody>

@@ -129,12 +129,58 @@ bendyDirectives.directive('bendyTypeIcon', function() {
                     LANDLINE: 'glyphicon-phone-alt',
                     MOBILE: 'glyphicon-phone',
                     FAX: 'glyphicon-print'
+                },
+                order: {
+                    asc: 'glyphicon-sort-by-alphabet',
+                    desc: 'glyphicon-sort-by-alphabet-alt'
                 }
             };
             var icons = iconMaps[$scope.kind] || {};
-            $scope.iconClass = icons[$scope.type] || null;
+            $scope.getIconClass = function() {      // to re-evaluate when parent $scope.type changes
+                return icons[$scope.type] || null;
+            }
         },
-        template: '<span ng-if="iconClass" class="glyphicon {{iconClass}}" title="{{type}}"><span class="sr-only">{{type}}</span></span>',
+        template: '<span ng-if="getIconClass()" class="glyphicon {{getIconClass()}}" title="{{type}}"><span class="sr-only">{{type}}</span></span>',
+        replace: true
+    }
+});
+
+bendyDirectives.directive('bendySortButton', function () {
+    return {
+        restrict: 'E',
+        require: ['bendySortButton', '^ngController'],
+        scope: {
+            propertyName: '@',
+            sort: '=',
+            order: '='
+        },
+        controller: function ($scope) {
+            function sortingOnThisProperty() {
+                return $scope.sort == $scope.propertyName;
+            }
+            $scope.selectedClass = function () {
+                return {'btn-info': sortingOnThisProperty()}
+            };
+            $scope.selectedOrder = function () {
+                return sortingOnThisProperty() ? $scope.order : 'asc';
+            };
+            this.linkCtrl = function (bendyContactsCtrl) {
+                $scope.bendyContactsCtrl = bendyContactsCtrl;
+            };
+            $scope.doSort = function () {
+                $scope.bendyContactsCtrl.sortBy($scope.propertyName);
+            }
+        },
+        link: function postLink(scope, element, attrs, ctrls) {
+
+            var sortButton = ctrls[0],
+                    bendyContactsCtrl = ctrls[1];
+
+            sortButton.linkCtrl(bendyContactsCtrl);
+        },
+        template: '<button type="button" class="btn btn-default btn-xs" ng-class="selectedClass()" ng-click="doSort()">'
+                + '    <bendy-type-icon kind="order" type="selectedOrder()"></bendy-type-icon>'
+                + '</button>',
         replace: true
     }
 });
