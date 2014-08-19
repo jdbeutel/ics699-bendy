@@ -7,6 +7,10 @@ package com.getsu.wcy
 
 class SkypeName {
 
+    static searchable = {
+        skypeName   index: 'not_analyzed'
+    }
+
     String skypeName
 
     static constraints = {

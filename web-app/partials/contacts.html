@@ -5,7 +5,7 @@
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <form name="searchContactsForm" id="searchContactsForm" class="form-inline" role="form" ng-submit="search(searchTerms)">
+        <form name="searchContactsForm" id="searchContactsForm" class="form-inline" role="form">
             <div ng-controller="BendyDirtyFormCtrl">
                 <div class="form-group">
                     <label for="searchTerms" class="sr-only">search terms</label>
@@ -14,6 +14,7 @@
                            size="42"/>
                 </div>
                 <button type="submit" class="btn btn-default"
+                        ng-click="search(searchTerms)"
                         ng-disabled="!searchContactsForm.$dirty"
                         ng-class="{changed: searchContactsForm.$dirty}">
                     Search

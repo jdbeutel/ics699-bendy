@@ -9,6 +9,28 @@ import com.getsu.wcy.Connection.ConnectionType
 
 class Person {
 
+    static searchable = {
+        connections component: true
+        phoneNumbers component: true
+        emailAddresses component: true
+        instantMessengerAddresses component: true
+        skypeNames component: true
+        twitterNames component: true
+        preferredEmail component: true
+        preferredPhone component: true
+        preferredConnection component: true
+        photo component: true
+
+        name boost: 4.0, index: 'not_analyzed'
+
+        preferredName   index: 'not_analyzed'
+        honorific   index: 'not_analyzed'
+        firstGivenName boost: 3.0, index: 'not_analyzed'
+        middleGivenNames boost: 2.0, index: 'not_analyzed'
+        familyName   index: 'not_analyzed'
+        suffix   index: 'not_analyzed'
+    }
+
     String preferredName
     String honorific // e.g. Mr., Dr.
     String firstGivenName

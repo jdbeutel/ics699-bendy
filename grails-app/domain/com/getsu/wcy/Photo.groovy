@@ -2,6 +2,11 @@ package com.getsu.wcy
 
 class Photo {
 
+    static searchable = {
+        except = ['contents']
+        fileName   index: 'not_analyzed'
+    }
+
     byte[] contents
     String fileName // keep for format clues in the file name extension?
 

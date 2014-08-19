@@ -7,6 +7,10 @@ package com.getsu.wcy
 
 class TwitterName {
 
+    static searchable = {
+        twitterName   index: 'not_analyzed'
+    }
+
     String twitterName
 
     static constraints = {

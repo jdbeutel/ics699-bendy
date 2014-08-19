@@ -169,8 +169,8 @@ bendyControllers.controller('BendyAppCtrl', ['$rootScope', '$route', '$scope',
     }
 ]);
 
-bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
-    function ($scope, Person) {
+bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person', '$timeout',
+    function ($scope, Person, $timeout) {
         $scope.initialPageSize = 10;
         $scope.nextPageSize = 100;
         $scope.sort = 'name';
@@ -213,6 +213,12 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
                     });
         };
 
+        function reload() {
+            $scope.contacts.length = 0;     // clear list
+            $scope.peopleCount = 0;
+            $scope.loadMoreContacts($scope.initialPageSize);
+        }
+
         this.sortBy = function(property) {
             if (property == $scope.sort) {
                 $scope.order = ($scope.order == 'asc' ? 'desc' : 'asc');
@@ -220,9 +226,15 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person',
                 $scope.sort = property;
                 $scope.order = 'asc';
             }
-            $scope.contacts.length = 0;     // clear list
-            $scope.peopleCount = 0;
-            $scope.loadMoreContacts($scope.initialPageSize);
+            reload();
+        };
+
+        $scope.search = function(searchTerms) {
+            $scope.searchTerms = searchTerms;
+            reload();
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.searchContactsForm.$setPristine();
+            });
         };
 
         $scope.collapse = function(person) {

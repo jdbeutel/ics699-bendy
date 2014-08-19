@@ -7,6 +7,11 @@ package com.getsu.wcy
 
 class InstantMessengerAddress {
 
+    static searchable = {
+        network   index: 'not_analyzed'
+        name   index: 'not_analyzed'
+    }
+
     String network // e.g. AIM
     String name
 

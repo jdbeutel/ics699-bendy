@@ -1,7 +1,8 @@
 package com.getsu.wcy
 
-import grails.orm.PagedResultList
 import grails.rest.RestfulController
+import org.elasticsearch.search.sort.SortBuilders
+import org.elasticsearch.search.sort.SortOrder
 
 class PersonController extends RestfulController {
 
@@ -12,64 +13,76 @@ class PersonController extends RestfulController {
     }
 
 
-    def index(Integer max, Integer offset) {
-        params.max = Math.min(max ?: 10, 100)
-        params.offset = offset ?: 0
-        params.readOnly = true
+    def index(String sort, String order, Integer offset, Integer max) {
+        def from = offset ?: 0
+        def size = Math.min(max ?: 10, 100)
 
-        def sort = params.remove('sort')
-        def ord = params.remove('order')
-        PagedResultList results = listSorted(sort, ord)
-        results = finishUpIfClose(results, sort, ord)
+        def searchResults = search(sort, order, from, size)
+        searchResults = finishUpIfClose(searchResults, sort, order, from, size)
 
-        respond new PeopleModel(people: results, peopleCount: results.totalCount)
+        respond new PeopleModel(people: searchResults.searchResults, peopleCount: searchResults.total)
     }
 
-    private PagedResultList listSorted(sort, ord) {
-        Person.createCriteria().list(params) {
-            switch (sort) {
-                case 'name':
-                    order 'name', ord
-                    break
-                case 'preferredEmail':
-                    preferredEmail {
-                        order 'connectionType', ord
-                        order 'address', ord
-                    }
-                    order 'name', 'asc'     // secondary sort
-                    break
-                case 'preferredPhone':
-                    preferredPhone {
-                        order 'connectionType', ord
-                        order 'type', ord
-                        order 'number', ord
-                    }
-                    order 'name', 'asc'     // secondary sort
-                    break
-                case 'preferredConnection':
-                    preferredConnection {
-                        order 'type', ord
-                        preferredAddress {
-                            order 'countryCode', ord
-                            order 'state', ord
-                            order 'city', ord
-                            order 'postalCode', ord
-                            order 'line1', ord
-                            order 'line2', ord
-                        }
-                    }
-                    order 'name', 'asc'     // secondary sort
-                    break
+    private search(String sortColumn, String ord, Integer from, Integer size) {
+        def sorts = buildSorts(sortColumn, ord == 'asc' ? SortOrder.ASC : SortOrder.DESC)
+        Person.search([sort: sorts, from: from, size: size]) {
+            if (params.q?.trim()) {
+                query_string(query: params.q)
+            } else {
+                match_all()
             }
+            // todo: must(term("userid", userid)) w/ SpringSecurity ACL & history
         }
     }
 
+    private static buildSorts(String sortColumn, SortOrder order) {
+        switch (sortColumn) {
+
+            case 'name':
+                return buildFieldSorts(name: order)
+
+            case 'preferredEmail':
+                return buildFieldSorts(
+                        'preferredEmail.connectionType': order,
+                        'preferredEmail.address': order,
+                        'name': SortOrder.ASC     // secondary sort
+                )
+
+            case 'preferredPhone':
+                return buildFieldSorts(
+                        'preferredPhone.connectionType': order,
+                        'preferredPhone.type': order,
+                        'preferredPhone.number': order,
+                        'name': SortOrder.ASC     // secondary sort
+                )
+
+            case 'preferredConnection':
+                return buildFieldSorts(
+                    'preferredConnection.type': order,
+                    'preferredConnection.preferredAddress.countryCode': order,
+                    'preferredConnection.preferredAddress.state': order,
+                    'preferredConnection.preferredAddress.city': order,
+                    'preferredConnection.preferredAddress.postalCode': order,
+                    'preferredConnection.preferredAddress.line1': order,
+                    'preferredConnection.preferredAddress.line2': order,
+                    'name': SortOrder.ASC     // secondary sort
+                )
+
+            default:
+                return []
+        }
+    }
+
+    private static buildFieldSorts(Map<String, SortOrder> fields) {
+        fields.collect { field, order -> SortBuilders.fieldSort(field).order(order) }
+    }
+
     // If the remainder is 30% or less of the page size, then just get the rest now too, to spare the user the extra request.
-    private finishUpIfClose(PagedResultList results, sort, ord) {
-        params.offset += results.size()
-        int remainder = results.totalCount - params.offset
-        if (remainder in 1..(params.max * 0.30)) {
-            listSorted(sort, ord).each {results.add(it)}
+    private finishUpIfClose(results, String sort, String order, Integer from, Integer size) {
+        from += results.size()
+        int remainder = results.total - from
+        if (remainder in 1..(size * 0.30)) {
+            search(sort, order, from, size).each {results.searchResults.add(it)}
         }
         results
     }

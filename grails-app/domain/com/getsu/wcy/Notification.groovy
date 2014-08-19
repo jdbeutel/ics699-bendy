@@ -7,6 +7,10 @@ package com.getsu.wcy
 
 class Notification {
 
+    static searchable = {
+        verb       index: 'not_analyzed'
+    }
+
     User recipient
     Date date
     User subject

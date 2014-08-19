@@ -1,6 +1,7 @@
 import com.getsu.wcy.CommunicationLinks
 import com.getsu.wcy.Photo
 import grails.converters.JSON
+import org.hibernate.SessionFactory
 import org.springframework.web.context.support.WebApplicationContextUtils
 import com.getsu.wcy.User
 import com.getsu.wcy.Connection.ConnectionType
@@ -10,6 +11,9 @@ import com.getsu.wcy.WcyDomainBuilder
 import com.getsu.wcy.PhoneNumber.PhoneNumberType
 
 class BootStrap {
+
+    def elasticSearchService
+    SessionFactory sessionFactory
 
     def init = { servletContext ->
         def appCtx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
@@ -50,6 +54,9 @@ class BootStrap {
                  addNotifications()
 //             }
 //         }
+
+        sessionFactory.currentSession.flush()   // because elasticSearchService.index() uses a new session
+        elasticSearchService.index()
      }
 
     private static addJoe(Closure passwordEncoder) {

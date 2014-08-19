@@ -7,6 +7,18 @@ package com.getsu.wcy
 
 class Connection {
 
+    static searchable = {
+        place component: true
+        phoneNumbers component: true
+        emailAddresses component: true
+        instantMessengerAddresses component: true
+        skypeNames component: true
+        twitterNames component: true
+        preferredEmail component: true
+        preferredPhone component: true
+        preferredAddress component: true
+    }
+
     Place place
     ConnectionType type
 

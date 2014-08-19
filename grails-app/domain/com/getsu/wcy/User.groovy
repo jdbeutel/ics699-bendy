@@ -9,11 +9,17 @@ import com.getsu.wcy.Connection.ConnectionType
 
 class User {
 
+    static searchable = {
+        except = ['settings', 'password']
+        login   index: 'not_analyzed'
+        email   index: 'not_analyzed'
+    }
+
     // next 4 are required by authentication plugin
     String login // we use an email address here
     String password // SHA1 hash hex
     String email // unused and not persisted
-    int status // required and used by authentication plugin
+    Integer status = 0 // required and used by authentication plugin, objectified to work around elasticsearch plugin bug
 
     Person person
     Settings settings

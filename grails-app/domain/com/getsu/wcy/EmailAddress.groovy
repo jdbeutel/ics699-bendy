@@ -7,6 +7,13 @@ package com.getsu.wcy
 
 class EmailAddress {
 
+    static searchable = {
+        name       index: 'not_analyzed'
+        address    index: 'not_analyzed'
+        level      index: 'not_analyzed'
+        connectionType  index: 'not_analyzed'
+    }
+
     String name
     String address
 

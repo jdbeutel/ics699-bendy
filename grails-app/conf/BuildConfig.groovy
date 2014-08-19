@@ -54,20 +54,21 @@ grails.project.dependency.resolution = {
 
     plugins {
         // plugins for the build system only
-        build ":tomcat:7.0.52.1"
+        build ":tomcat:7.0.54"
 
         // plugins for the compile step
-        compile ":scaffolding:2.0.1"
-        compile ':cache:1.1.1'
+        compile ":scaffolding:2.0.3"
+        compile ':cache:1.1.7'
         compile ":authentication:2.0.1"
         compile ":platform-core:1.0.RC6"	// for navigation
 
         // plugins needed at runtime but not for compilation
-        runtime ":hibernate:3.6.10.10" // or ":hibernate4:4.3.4"
-        runtime ":database-migration:1.3.8"
-        runtime ":jquery:1.11.0.2"
+        runtime ":hibernate:3.6.10.16" // or ":hibernate4:4.3.5.4"
+        runtime ":database-migration:1.4.0"
+        runtime ":jquery:1.11.1"
+        runtime ":resources:1.2.8"
+        runtime ":elasticsearch:0.0.3.2"
         runtime ":prototype:1.0"    // todo: convert to jquery
-        runtime ":resources:1.2.7"
         runtime ":twitter-bootstrap:3.0.3"  // Angular UI Bootstrap 0.10.0 was tested with Bootstrap CSS 3.0.3.
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0.1"

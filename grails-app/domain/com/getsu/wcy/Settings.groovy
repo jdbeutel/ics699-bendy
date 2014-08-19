@@ -8,6 +8,8 @@ package com.getsu.wcy
 
 class Settings {
 
+    // static searchable = false        any value makes it searchable
+
     String dateFormat   // pattern for SimpleDateFormat
     TimeZone timeZone
 

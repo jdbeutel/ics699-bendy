@@ -7,6 +7,15 @@ package com.getsu.wcy
 
 class Address {
 
+    static searchable = {
+        line1   index: 'not_analyzed'
+        line2   index: 'not_analyzed'
+        city   index: 'not_analyzed'
+        state   index: 'not_analyzed'
+        postalCode   index: 'not_analyzed'
+        countryCode   index: 'not_analyzed'
+    }
+
     String line1
     String line2
     String city

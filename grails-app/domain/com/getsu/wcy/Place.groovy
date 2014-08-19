@@ -10,6 +10,15 @@ package com.getsu.wcy
  */
 class Place {
 
+    static searchable = {
+        phoneNumbers component: true
+        emailAddresses component: true
+        instantMessengerAddresses component: true
+        skypeNames component: true
+        twitterNames component: true
+        addresses component: true
+    }
+
     List<Address> addresses
 
     // communication links for this whole Place (not specific to any Person)

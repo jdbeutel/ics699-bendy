@@ -7,6 +7,13 @@ package com.getsu.wcy
 
 class PhoneNumber {
 
+    static searchable = {
+        number   index: 'not_analyzed'
+        type   index: 'not_analyzed'
+        level   index: 'not_analyzed'
+        connectionType   index: 'not_analyzed'
+    }
+
     String number
     PhoneNumberType type
 
