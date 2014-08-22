@@ -3,6 +3,7 @@ package com.getsu.wcy
 import grails.rest.RestfulController
 import org.elasticsearch.search.sort.SortBuilders
 import org.elasticsearch.search.sort.SortOrder
+import org.springframework.web.multipart.MultipartFile
 
 class PersonController extends RestfulController {
 
@@ -85,6 +86,37 @@ class PersonController extends RestfulController {
             search(sort, order, from, size).each {results.searchResults.add(it)}
         }
         results
+    }
+
+    // non-REST-full
+
+    def viewPhoto() {
+        log.debug 'called viewPhoto'
+        Person p = Person.get(params.id)
+        // todo: check access authorization
+        response.setHeader("Content-disposition", "attachment; filename=${p.photo.fileName}")
+        // response.contentType = p.photo.fileType //'image/jpeg' will do too
+        response.outputStream << p.photo.contents
+        response.outputStream.flush()
+    }
+
+    def uploadPhoto() {
+        Person p = Person.get(params.id)
+        MultipartFile uploadedFile = request.getFile('file')
+        // todo: if (uploadedFile.size > UPLOAD_LIMIT) { result status = error code... }
+        def photo = new Photo()
+        photo.contents = uploadedFile.bytes
+        photo.fileName = getOriginalFileName(uploadedFile)
+        assert photo.save()    // redundant w/ cascade on p.save()?
+        p.photo = photo
+        assert p.save()
+        // todo: validate file image format and scale down if too big?
+        render 'uploaded photo'
+    }
+
+    public static getOriginalFileName(MultipartFile uploadedFile) {
+        char otherSeparatorChar = (char) (File.separatorChar == '/' ? '\\' : '/')
+        return new File(uploadedFile.originalFilename.replace(otherSeparatorChar, File.separatorChar)).name
     }
 }
 

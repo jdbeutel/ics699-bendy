@@ -1,3 +1,46 @@
+/* from http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/ */
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/* based on http://angular-file-upload.appspot.com/ */
+
+.text-drop-box {
+    background: none repeat scroll 0 0 #F8F8F8;
+    padding-top: 35px;
+    text-align: center;
+}
+.drop-box img, .text-drop-box {
+    height: 100px;
+    width: 133px;
+}
+.drop-box {
+    border: 5px dashed #DDDDDD;
+}
+.drop-box.dragover {
+    border: 5px dashed #0000FF;
+}
+.drop-box.dragover-err {
+    border: 5px dashed #FF0000;
+}
+
 /* added for http://angular-ui.github.io/bootstrap/ */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 

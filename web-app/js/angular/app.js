@@ -8,6 +8,7 @@
 var bendyApp = angular.module('bendyApp', [
         'ui.bootstrap',
         'ngRoute',
+        'angularFileUpload',
         'bendyControllers',
         'bendyServices',
         'bendyDirectives'

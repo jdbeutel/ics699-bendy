@@ -3,8 +3,7 @@ import com.getsu.wcy.User
 elasticSearch.datastoreImpl = 'hibernateDatastore'
 elasticSearch.bulkIndexOnStartup = false
 elasticSearch.disableAutoIndex = true
-//elasticSearch.index.store.type = 'simplefs'
-//elasticSearch.client.mode = 'node'    // for debugging w/ local elasticsearch server
+elasticSearch.client.mode = 'node'    // for debugging w/ local elasticsearch server
 
 // authentication plugin
 authenticationUserClass = User

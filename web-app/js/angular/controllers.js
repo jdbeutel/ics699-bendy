@@ -247,9 +247,10 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person', '$timeout'
     }
 ]);
 
-bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person',
-    function ($scope, Person) {
+bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload',
+    function ($scope, Person, $upload) {
         $scope.editingPerson = null;
+        $scope.photoNoCache = '';
 
         $scope.edit = function() {
             $scope.editingPerson = angular.copy($scope.person);  // inherited from ng-repeat
@@ -285,6 +286,18 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person',
 
         $scope.setPerson = function(person) {
             angular.copy(person, $scope.person); // allows update by child scope
+        };
+
+        $scope.onFileSelect = function($files) {
+            $scope.upload = $upload.upload({
+                url: '/person/uploadPhoto/' + $scope.editingPerson.id,
+                file: $files[0]
+            }).progress(function(evt) {
+                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+            }).success(function(data, status, headers, config) {
+                console.log(data);
+                $scope.photoNoCache = '?photoNoCache=' + new Date().getTime();    // force img reload
+            })
         }
     }
 ]);
