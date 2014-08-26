@@ -255,6 +255,10 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload',
         $scope.edit = function() {
             $scope.editingPerson = angular.copy($scope.person);  // inherited from ng-repeat
         };
+            // avoid sending derivative properties, which cannot be edited directly and may override edits
+            delete $scope.editingPerson.preferredEmail;
+            delete $scope.editingPerson.preferredPhone;
+            delete $scope.editingPerson.preferredConnection;
 
         $scope.cancel = function() {
             $scope.editingPerson = null;
