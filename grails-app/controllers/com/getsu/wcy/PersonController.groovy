@@ -3,9 +3,12 @@ package com.getsu.wcy
 import grails.rest.RestfulController
 import org.elasticsearch.search.sort.SortBuilders
 import org.elasticsearch.search.sort.SortOrder
+import org.grails.plugins.elasticsearch.ElasticSearchService
 import org.springframework.web.multipart.MultipartFile
 
 class PersonController extends RestfulController {
+
+    ElasticSearchService elasticSearchService
 
     static responseFormats = ['json']
 
@@ -88,7 +91,16 @@ class PersonController extends RestfulController {
         results
     }
 
-    // non-REST-full
+    @Override
+    Object update() {
+        super.update()
+        def p = Person.get(params.id)
+        if (p) {
+            elasticSearchService.index(p)   // had problems with auto-index, so doing it explicitly
+        }
+    }
+
+// non-REST-full
 
     def viewPhoto() {
         log.debug 'called viewPhoto'
