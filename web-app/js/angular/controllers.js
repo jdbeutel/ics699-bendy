@@ -247,18 +247,19 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person', '$timeout'
     }
 ]);
 
-bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload',
-    function ($scope, Person, $upload) {
+bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', 'datepickerConfig', '$filter',
+    function ($scope, Person, $upload, datepickerConfig, $filter) {
         $scope.editingPerson = null;
         $scope.photoNoCache = '';
+        datepickerConfig.showWeeks = false;
 
         $scope.edit = function() {
             $scope.editingPerson = angular.copy($scope.person);  // inherited from ng-repeat
-        };
             // avoid sending derivative properties, which cannot be edited directly and may override edits
             delete $scope.editingPerson.preferredEmail;
             delete $scope.editingPerson.preferredPhone;
             delete $scope.editingPerson.preferredConnection;
+        };
 
         $scope.cancel = function() {
             $scope.editingPerson = null;
@@ -266,6 +267,8 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload',
 
         $scope.update = function() {
             $scope.copyNameProperties($scope.person, $scope.editingPerson);
+            // Avoid submitting local time part of date, because the server may be in a different time zone.
+            $scope.editingPerson.birthDate = $filter('date')($scope.editingPerson.birthDate, 'yyyy-MM-dd');
             Person.update(
                     {id: $scope.editingPerson.id},
                     $scope.editingPerson,
@@ -302,7 +305,13 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload',
                 console.log(data);
                 $scope.photoNoCache = '?photoNoCache=' + new Date().getTime();    // force img reload
             })
-        }
+        };
+
+        $scope.openBirthDatePicker = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.birthDatePickerOpened = true;
+        };
     }
 ]);
 

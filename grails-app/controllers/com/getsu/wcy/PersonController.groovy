@@ -23,8 +23,20 @@ class PersonController extends RestfulController {
 
         def searchResults = search(sort, order, from, size)
         searchResults = finishUpIfClose(searchResults, sort, order, from, size)
+        fillInDates(searchResults.searchResults)
 
         respond new PeopleModel(people: searchResults.searchResults, peopleCount: searchResults.total)
+    }
+
+    private static void fillInDates(people) {
+        // The birthDates are indexed in elasticsearch as native dates, which would be loaded into java.util.Date.
+        // However, if the server and browser are in different time zones,
+        // then sending the time component between them would cause errors,
+        // and just yyyy-MM-dd fails to bind into java.util.Date, anyway.
+        // So, birthDate is java.sql.Date, and needs to be fetched from the db.
+        for (p in people) {
+            p.birthDate = Person.get(p.id).birthDate
+        }
     }
 
     private search(String sortColumn, String ord, Integer from, Integer size) {

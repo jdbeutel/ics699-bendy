@@ -81,7 +81,8 @@ class BootStrap {
         builder.classNameResolver = 'com.getsu.wcy'
         def jane = builder.user(login:'jane.cool@rr.net', password:passwordEncoder('password')) {
             person(firstGivenName:'Jane', familyName:'Cool',
-                    middleGivenNames:'Minerva', preferredName:'Jane', honorific:'Ms.', suffix:'Ph.D.'
+                    middleGivenNames:'Minerva', preferredName:'Jane', honorific:'Ms.', suffix:'Ph.D.',
+                    birthDate: java.sql.Date.valueOf('1954-03-25')
             ) {
                 photo(fileName:'ben-tea.JPG', contents:BootStrap.class.getResourceAsStream('dev/ben-tea.JPG').bytes)
                 connection(type:ConnectionType.HOME) {
@@ -107,7 +108,13 @@ class BootStrap {
                 }
                 phoneNumber(type:PhoneNumberType.MOBILE, number:'555-5555',
                         level:CommunicationLinks.Level.PERSONAL, connectionType: null)
+                phoneNumber(type:PhoneNumberType.FAX, number:'555-1155',
+                        level:CommunicationLinks.Level.PERSONAL, connectionType: null)
                 emailAddress(name:'Jane Cool', address:'jane.cool@rr.net',
+                        level:CommunicationLinks.Level.PERSONAL, connectionType: null)
+                emailAddress(name:'Jane Cool', address:'jane.cool@gmail.com',
+                        level:CommunicationLinks.Level.PERSONAL, connectionType: null)
+                emailAddress(name:'Jane Cool', address:'jane.cool@facebook.com',
                         level:CommunicationLinks.Level.PERSONAL, connectionType: null)
             }
             settings(dateFormat:'yyyy-MM-dd HH:mm', timeZone:TimeZone.default )
@@ -119,7 +126,8 @@ class BootStrap {
         def builder = new WcyDomainBuilder()
         builder.classNameResolver = 'com.getsu.wcy'
         def jane = builder.user(login:'coworker@example.com', password:passwordEncoder('password')) {
-            person(firstGivenName:'Alex', familyName:'McFee', honorific:'Mr.', middleGivenNames:'Trouble') {
+            person(firstGivenName:'Alex', familyName:'McFee', honorific:'Mr.', middleGivenNames:'Trouble',
+                    birthDate: java.sql.Date.valueOf('1974-07-04')) {
                 photo(fileName:'ben-korea.JPG', contents:BootStrap.class.getResourceAsStream('dev/ben-korea.JPG').bytes)
                 connection(type:ConnectionType.WORK) {
                     place {

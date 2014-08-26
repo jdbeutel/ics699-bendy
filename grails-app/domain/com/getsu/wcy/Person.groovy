@@ -39,7 +39,7 @@ class Person {
     String suffix // e.g. Jr., III, Sr., M.D., Ph.D.
 
     Photo photo
-    Date birthDate
+    java.sql.Date birthDate
 
     List<Connection> connections // to Places
 

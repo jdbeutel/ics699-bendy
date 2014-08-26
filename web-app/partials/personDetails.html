@@ -1,126 +1,155 @@
 <ng-form name="personForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyPersonCtrl">
-    <div class="row">
-        <div class="col-xs-4">
-            <button class="btn btn-default btn-xs" ng-click="collapse(person)">
-                <span class="glyphicon glyphicon-chevron-down"></span>
-            </button>
-            {{person.name}}
+        <div class="row">
+            <div class="col-xs-4">
+                <button class="btn btn-default btn-xs" ng-click="collapse(person)">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                {{person.name}}
+            </div>
+            <div class="col-xs-8">
+                <ng-include src="'partials/personNameDetails.html'"/>
+            </div>
         </div>
-        <div class="col-xs-8">
-            <ng-include src="'partials/personNameDetails.html'"/>
-        </div>
-    </div>
 
-    <div ng-hide="editingPerson">
-        <div class="form-group" ng-repeat="emailAddress in person.emailAddresses" ng-form>
-            <label class="col-xs-3 control-label">Personal Email</label>
-            <div class="col-xs-9">
-                <p class="form-control-static">{{emailAddress.address}}</p>
+    <div ng-controller="BendyDirtyFormCtrl">
+        <div ng-hide="editingPerson">
+            <div class="form-group" ng-repeat="emailAddress in person.emailAddresses">
+                <label class="col-xs-3 control-label">Personal Email</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{emailAddress.address}}</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div ng-show="editingPerson">
-        <div class="form-group" ng-repeat="emailAddress in editingPerson.emailAddresses" ng-form>
-            <label class="col-xs-3 control-label"
-                    for="person{{person.id}}emailAddresses{{$index}}">Personal Email</label>
-            <div class="col-xs-9">
-                <input type="text" class="form-control"
-                       id="person{{person.id}}emailAddresses{{$index}}"
-                       ng-model="emailAddress.address"/>
+        <div ng-show="editingPerson">
+            <div class="form-group" ng-repeat="emailAddress in editingPerson.emailAddresses">
+                <label class="col-xs-3 control-label"
+                        for="person{{person.id}}emailAddresses{{$index}}">Personal Email</label>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}emailAddresses{{$index}}"
+                           ng-model="emailAddress.address" bendy-dirty/>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div ng-hide="editingPerson">
-        <div class="form-group" ng-repeat="phoneNumber in person.phoneNumbers" ng-form>
-            <label class="col-xs-3 control-label">Personal {{phoneNumber.type}}</label>
-            <div class="col-xs-9">
-                <p class="form-control-static">{{phoneNumber.number}}</p>
+        <div ng-hide="editingPerson">
+            <div class="form-group" ng-repeat="phoneNumber in person.phoneNumbers">
+                <label class="col-xs-3 control-label">Personal {{phoneNumber.type}}</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{phoneNumber.number}}</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div ng-show="editingPerson">
-        <div class="form-group" ng-repeat="phoneNumber in editingPerson.phoneNumbers" ng-form>
-            <label class="col-xs-3 control-label"
-                    for="person{{person.id}}phoneNumbers{{$index}}">Personal {{phoneNumber.type}}</label>
-            <!-- todo: select phoneNumber.type -->
-            <div class="col-xs-9">
-                <input type="text" class="form-control"
-                       id="person{{person.id}}phoneNumbers{{$index}}"
-                       ng-model="phoneNumber.number"/>
+        <div ng-show="editingPerson">
+            <div class="form-group" ng-repeat="phoneNumber in editingPerson.phoneNumbers">
+                <label class="col-xs-3 control-label"
+                        for="person{{person.id}}phoneNumbers{{$index}}">Personal {{phoneNumber.type}}</label>
+                <!-- todo: select phoneNumber.type -->
+                <div class="col-xs-9">
+                    <input type="text" class="form-control"
+                           id="person{{person.id}}phoneNumbers{{$index}}"
+                           ng-model="phoneNumber.number" bendy-dirty/>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div ng-hide="editingPerson || !person.photo">
-        <div class="form-group">
-            <label class="col-xs-3 control-label">Photo</label>
-            <div class="col-xs-9">
-                <img alt="photo" height="100px" width="133px" class="photo"
-                     ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
+        <div ng-hide="editingPerson || !person.birthDate">
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Birth Date</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{person.birthDate}}</p> <!-- todo: person.birthdate | date: preferences.dateFormat -->
+                </div>
             </div>
         </div>
-    </div>
-    <div ng-show="editingPerson">
-        <div class="form-group" ng-form>
-            <label class="col-xs-3 control-label"
-                   for="person{{person.id}}photo">Photo</label>
-            <div ng-show="person.photo" class="col-xs-3">
-                <div ng-file-drop="onFileSelect($files)"
-                     ng-file-drag-over-class="dragOverClass($event)" ng-file-drag-over-delay="200" class="drop-box">
-                    <img alt="photo" class="photo"
+        <div ng-show="editingPerson && (person.birthDate || addingBirthDate)">
+            <div class="form-group">
+                <label class="col-xs-3 control-label"
+                       for="person{{person.id}}birthDate">Birth Date</label>
+                <div class="col-xs-9">
+                    <p class="input-group"> <!-- todo: preferences.dateFormat -->
+                        <input type="text" class="form-control"
+                               datepicker-popup="yyyy-MM-dd"
+                               is-open="birthDatePickerOpened"
+                               id="person{{person.id}}birthDate"
+                               ng-model="editingPerson.birthDate"/>     <!-- todo: bendy-dirty conflicts w/ datepicker-popup -->
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                    ng-click="openBirthDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div ng-hide="editingPerson || !person.photo">
+            <div class="form-group">
+                <label class="col-xs-3 control-label">Photo</label>
+                <div class="col-xs-9">
+                    <img alt="photo" height="100px" width="133px" class="photo"
                          ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
                 </div>
             </div>
-            <div ng-hide="person.photo" class="col-xs-3">
-                <div ng-show="dropSupported" ng-file-drop="onFileSelect($files)"
-                     ng-file-drag-over-class="dragOverClass($event)" ng-file-drag-over-delay="200" class="drop-box text-drop-box">
-                    drop image file here, or
+        </div>
+        <div ng-show="editingPerson">
+            <div class="form-group">
+                <label class="col-xs-3 control-label"
+                       for="person{{person.id}}photo">Photo</label>
+                <div ng-show="person.photo" class="col-xs-3">
+                    <div ng-file-drop="onFileSelect($files)"
+                         ng-file-drag-over-class="dragOverClass($event)" ng-file-drag-over-delay="200" class="drop-box">
+                        <img alt="photo" class="photo"
+                             ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
+                    </div>
                 </div>
-            </div>
-            <div class="col-xs-6">
-                <div>
-                    <span class="btn btn-default btn-file">
-                        Upload {{person.photo ? 'New' : ''}} Photo
-                        <input type="file" class="form-control"
-                               id="person{{person.id}}photo"
-                               ng-file-select="onFileSelect($files)" accept="image/*"/>
-                    </span>
+                <div ng-hide="person.photo" class="col-xs-3">
+                    <div ng-show="dropSupported" ng-file-drop="onFileSelect($files)"
+                         ng-file-drag-over-class="dragOverClass($event)" ng-file-drag-over-delay="200" class="drop-box text-drop-box">
+                        drop image file here, or
+                    </div>
                 </div>
-                <!-- local upload is too fast to see this status bar and cancel button?  Or it doesn't work? -->
-                <div ng-show="hasUploader(0) && progress[0] < 100">
-                    <div class="progress">
-                        <div class="progress-bar progress-striped active" role="progressbar"
-                             aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: {{progress[0]}}%">
-                            <span class="sr-only">{{progress[0]}}% Complete</span>
+                <div class="col-xs-6">
+                    <div>
+                        <span class="btn btn-default btn-file">
+                            Upload {{person.photo ? 'New' : ''}} Photo
+                            <input type="file" class="form-control"
+                                   id="person{{person.id}}photo"
+                                   ng-file-select="onFileSelect($files)" accept="image/*"/>
+                        </span>
+                    </div>
+                    <!-- local upload is too fast to see this status bar and cancel button?  Or it doesn't work? -->
+                    <div ng-show="hasUploader(0) && progress[0] < 100">
+                        <div class="progress">
+                            <progressbar class="progress-striped active" value="progress[0]">
+                                <span class="sr-only">{{progress[0]}}% Complete</span>
+                            </progressbar>
+                            <button type="button" class="btn btn-default"
+                                    ng-click="abort(0)">
+                                Cancel Upload
+                            </button>
                         </div>
-                        <button type="button" class="btn btn-default"
-                                ng-click="abort(0)">
-                            Cancel Upload
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-xs-offset-3 col-xs-3">
-            <button type="button" class="btn btn-default"
-                    ng-hide="editingPerson" ng-click="edit()">
-                Edit
-            </button>
-            <button type="submit" class="save btn btn-default"
-                    ng-show="editingPerson" ng-disabled="!personForm.$dirty"
-                    ng-class="{changed: personForm.$dirty}" ng-click="update()">
-                Save
-            </button>
-        </div>
-        <div class="col-xs-3">
-            <button type="button" class="btn btn-default"
-                    ng-show="editingPerson" ng-click="cancel()">
-                Cancel
-            </button>
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-3">
+                <button type="button" class="btn btn-default"
+                        ng-hide="editingPerson" ng-click="edit()">
+                    Edit
+                </button>
+                <button type="submit" class="save btn btn-default"
+                        ng-show="editingPerson" ng-disabled="!personForm.$dirty"
+                        ng-class="{changed: personForm.$dirty}" ng-click="update()">
+                    Save
+                </button>
+            </div>
+            <div class="col-xs-3">
+                <button type="button" class="btn btn-default"
+                        ng-show="editingPerson" ng-click="cancel()">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
 </ng-form>
@@ -130,15 +159,6 @@
     <tbody>
 
     <g:render template="/foo/listConnections" model="['personInstance':personInstance]"/>
-
-    <tr class="prop">
-        <td valign="top" class="name">
-            <label for="birthDate"><g:message code="person.birthDate.label" default="Birth Date"/></label>
-        </td>
-        <td colspan="3" valign="top" class="value ${hasErrors(bean: personInstance, field: 'birthDate', 'errors')}">
-            <g:datePicker name="birthDate" precision="day" value="${personInstance?.birthDate}" noSelection="['': '']"/>
-        </td>
-    </tr>
 
     <tr class="prop">
         <td valign="top" class="name">
