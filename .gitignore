@@ -61,9 +61,9 @@
 .idea/dynamic.xml
 
 ## File-based project format
-*.ipr
-*.iws
-*.iml
+#*.ipr
+#*.iws
+#*.iml
 
 ## Additional for IntelliJ
 out/

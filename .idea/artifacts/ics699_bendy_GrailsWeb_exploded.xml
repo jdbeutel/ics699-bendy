@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="ics699-bendy:GrailsWeb exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/ics699_bendy_GrailsWeb_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="ics699-bendy/web/GrailsWeb" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="javaee-facet-classes" facet="ics699-bendy/web/GrailsWeb" />
+          <element id="module-output" name="ics699-bendy-grailsPlugins" />
+          <element id="javaee-facet-classes" facet="ics699-bendy-grailsPlugins/web/GrailsWeb" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="module" name="Grails User Library (ics699-bendy-grailsPlugins)" module-name="ics699-bendy-grailsPlugins" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="ics699-bendy-grailsPlugins/web/GrailsWeb" />
+    </root>
+  </artifact>
+</component>
