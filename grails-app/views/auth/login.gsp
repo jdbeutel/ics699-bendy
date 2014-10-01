@@ -43,13 +43,17 @@ You've registered but we're still waiting to confirm your account. <g:link actio
 
     <div class="col-sm-12">
         <auth:form authAction="login" success="[controller:'settings', action:'appIndex']"
-                   error="[controller:'auth', action:'login']" role="form" class="login">
+                   error="[controller:'auth', action:'login']" role="form" class="login ws-validate">
             <div class="well well-lg">
                 <p class="h3">Please sign in</p>
-                <input type="email" id="login" name="login" size="42" value="${flash.loginForm?.login?.encodeAsHTML()}"
+                <div class="form-group">
+                    <input type="email" id="login" name="login" size="42" value="${flash.loginForm?.login?.encodeAsHTML()}"
                             placeholder="Email address" required="" autofocus="" class="form-control"/>
-                <input id="password" name="password" value="" type="password"
+                </div>
+                <div class="form-group">
+                    <input id="password" name="password" value="" type="password"
                             placeholder="Password" required="" class="form-control"/>
+                </div>
                 <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
             </div>
 

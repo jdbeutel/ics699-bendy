@@ -9,6 +9,7 @@
     <link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'apple-touch-icon.png')}">
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
     <r:require module="application"/>
+    <r:require module="unauth"/>  %{-- jquery needed by js-webshim --}%
     <r:layoutResources />
     %{-- js-webshim loads more files dynamically, so needs non-static path, cannot go in ApplicationResources. --}%
     <script src="${resource(dir:'js/lib/js-webshim-1.12.5/dev/extras', file:'modernizr-custom.js')}" ></script>
@@ -26,7 +27,7 @@
                 submitCheck: true,
 
                 // bootstrap specific classes
-                errorBoxClass: 'col-sm-offset-4 col-sm-8',
+                // errorBoxClass: 'col-sm-offset-4 col-sm-8',
                 errorMessageClass: 'help-block',
                 successWrapperClass: 'has-success',
                 errorWrapperClass: 'has-error',

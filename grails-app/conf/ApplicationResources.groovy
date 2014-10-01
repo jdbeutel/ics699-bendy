@@ -4,6 +4,9 @@ modules = {
         resource url:'js/application.js'
         resource url:'css/navigation.css', disposition: "head"
     }
+    unauth {
+        dependsOn 'jquery'
+    }
     angular {
         dependsOn 'jquery'
         resource url:'/js/lib/angular-file-upload-bower-1.6.5/angular-file-upload-shim.js'

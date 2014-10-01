@@ -133,9 +133,14 @@ form.login input[type="email"] {
     border-bottom-left-radius: 0;
 }
 form.login input[type="password"] {
-    margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+form.login button {
+    margin-top: 10px;
+}
+form.login .form-group {
+    margin-bottom: 0;
 }
 div.errors ul {
     list-style: none;
