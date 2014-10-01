@@ -36,7 +36,11 @@
                     <a href="#/settings">Settings</a>
                 </li>
             </ul>
-            <nav:menu scope="authOptions" class="nav navbar-nav navbar-right"/>
+            <ul  class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/auth/logout">Sign Out</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

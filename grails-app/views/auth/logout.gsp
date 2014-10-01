@@ -8,19 +8,23 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="unauth"/>
-    <title>Logged out</title>
+    <title>Signed out</title>
 </head>
 <body>
 <div class="body">
     <auth:ifLoggedIn>
-        <div class="errors">
-            <ul><li>Sorry but your logout failed - reason: <g:message code="authentication.failure.${flash.authenticationFailure.result}"/></li></ul>
+        <div class="errors alert alert-danger">
+            <ul><li>Sorry but your sign out failed - reason: <g:message code="authentication.failure.${flash.authenticationFailure.result}"/></li></ul>
         </div>
     </auth:ifLoggedIn>
     <auth:ifNotLoggedIn>
-        <div class="message">Logout succeeded</div>
+        <div class="alert alert-success col-sm-offset-2 col-sm-8">
+            <span class="glyphicon glyphicon-ok"></span> Sign out succeeded
+        </div>
 
-        <g:link action="login">Log back in again</g:link><br/>
+        <div class="col-sm-offset-8 col-sm-4">
+            <g:link action="login">Sign back in again</g:link><br/>
+        </div>
     </auth:ifNotLoggedIn>
 </div>
 </body>
