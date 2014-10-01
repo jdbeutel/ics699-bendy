@@ -104,3 +104,45 @@ p.navbar-brand {
         background-color: #ffff99;
     }
 }
+
+/* login page */
+
+form.login {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+form.login h3  {
+    margin-bottom: 10px;
+}
+form.login .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+form.login .form-control:focus {
+    z-index: 2;
+}
+form.login input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+form.login input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+div.errors ul {
+    list-style: none;
+    padding: 0;
+}
+div.errors li {
+    background: url(../images/skin/exclamation.png) 8px 0 no-repeat;
+    line-height: 16px;
+    padding-left: 30px;
+}
