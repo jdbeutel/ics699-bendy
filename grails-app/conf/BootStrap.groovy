@@ -1,4 +1,5 @@
 import com.getsu.wcy.CommunicationLinks
+import com.getsu.wcy.Invitation
 import com.getsu.wcy.Photo
 import grails.converters.JSON
 import org.hibernate.SessionFactory
@@ -32,14 +33,8 @@ class BootStrap {
          def events = appCtx.authenticationService.events // start with defaults
          events.onNewUserObject = { loginID -> User.createSignupInstance(loginID) }
          events.onSignup = { params ->
-             def includes = [ 'preferredName', 'honorific', 'firstGivenName', 'middleGivenNames', 'familyName',
-                     'suffix', 'birthDate',
-                     'connections[0].place.addresses[0].city',
-                     'connections[0].place.addresses[0].state',
-                     'connections[0].place.addresses[0].streetType'
-             ]
-             params.user.person.properties[includes] = params.params
-             params.user.person.save(failOnError:true)
+             params.user.person = params.params.signupForm.invitation.person
+             params.user.save(failOnError:true)
          }
 //         events.onValidatePassword = { password -> return !appCtx.myDictionaryService.containsWord(password) }
 
@@ -49,6 +44,8 @@ class BootStrap {
                  addJane(events.onEncodePassword)
                  addCoworker(events.onEncodePassword)
                  addGranny()
+                 addFujie()
+                 addScott()
                  addPhoneOnly()
                  addGenericPeople()
                  addNotifications()
@@ -164,6 +161,36 @@ class BootStrap {
             }
         }
         granny.save(failOnError:true)
+    }
+
+    private static addFujie() {
+        def builder = new WcyDomainBuilder()
+        def email = 'fujie.beutel@example.com'
+        builder.classNameResolver = 'com.getsu.wcy'
+        def fujie = builder.invitation(email: email) {
+            person(firstGivenName:'Fujie', middleGivenNames:'A.', familyName:'Beutel', honorific:'Mrs.') {
+                emailAddress(name: 'Fujie Beutel', address: email,
+                        level: CommunicationLinks.Level.PERSONAL, connectionType: null)
+            }
+        }
+        fujie.id = 1919     // will be a random number/ticket for security
+        fujie.person.save(failOnError:true)
+        fujie.save(failOnError:true)
+    }
+
+    private static addScott() {
+        def builder = new WcyDomainBuilder()
+        def email = 'Scott.Robertson@example.com'
+        builder.classNameResolver = 'com.getsu.wcy'
+        def scott = builder.invitation(email:email) {
+            person(firstGivenName:'Scott', familyName:'Robertson', honorific:'Professor', suffix: 'Ph.D') {
+                emailAddress(name:'Scott Roberson', address:email,
+                        level:CommunicationLinks.Level.PERSONAL, connectionType: null)
+            }
+        }
+        scott.id = 4242     // will be a random number/ticket for security
+        scott.person.save(failOnError:true)
+        scott.save(failOnError:true)
     }
 
     private static addPhoneOnly() { // no User, only Person

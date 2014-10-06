@@ -7,118 +7,87 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="layout" content="unauth"/>
+    <meta name="layout" content="signup"/>
     <title>Sign up</title>
-    <r:require module="angular"/>
+    <r:require module="unauth"/>
 </head>
 <body>
 <div class="body">
     <auth:ifLoggedIn>
-        You are currently logged in as: <auth:user/>
+        You are currently signed in as: <auth:user/>
         <g:if test="${flash.authenticationFailure}">
-            <div class="errors">
-                <ul><li>Sorry but your logout failed - reason: <g:message code="authentication.failure.${flash.authenticationFailure.result}"/></li></ul>
+            <div class="errors alert alert-danger">
+                <ul><li>Sorry but your sign out failed - reason: <g:message code="authentication.failure.${flash.authenticationFailure.result}"/></li></ul>
             </div>
         </g:if>
-        <h2>Log out</h2>
         <auth:form authAction="logout" success="[controller:'login', action:'signup']" error="[controller:'login', action:'signup']">
-            <div class="buttons">
-                <g:actionSubmit value="Log out"/>
-            </div>
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign out</button>
         </auth:form>
     </auth:ifLoggedIn>
 
     <auth:ifNotLoggedIn>
-        <div class="body" ng-app="bendyApp">
-            <h2>Please sign up</h2>
-            <g:if test="${flash.message}">
-                <div class="message">${flash.message}</div>
-            </g:if>
-            <g:hasErrors bean="${personInstance}">
-                <div class="errors">
-                    <g:renderErrors bean="${personInstance}" as="list" />
+        <g:if test="${alreadySignedUp}">
+            <div class="alert alert-warning">
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                ${alreadySignedUp.login} has already signed up.
+            </div>
+            <h3>Please <g:link action="login">sign in</g:link> instead.</h3>
+        </g:if>
+        <g:else>
+
+        </g:else>
+            <h3>Welcome, ${invitation.person.name}!</h3>
+            <h4>Please choose a password.</h4>
+            <g:form action="doSignup" method="post" name="signupForm" class="form-horizontal ws-validate" role="form">
+                <g:hiddenField name="invitation.id" value="${invitation.id}" />
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Email Address (for sign in)</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">${invitation.email}</p>
+                    </div>
                 </div>
-            </g:hasErrors>
-            <g:hasErrors bean="${signupForm}">
-                <div class="errors">
-                    <g:renderErrors bean="${signupForm}" as="list" />
+
+                <div class="form-group">
+                    <label for="password" class="col-sm-4 control-label">Password</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="password" name="password"
+                               autocomplete="off" required
+                               class="form-control" maxlength="40"/>
+                    </div>
                 </div>
-            </g:hasErrors>
-            <g:uploadForm name="htmlForm" action="doSignup" method="post" ng-controller="BendyChangeCtrl">
-                <div class="dialog">
 
-                    <table>
-                        <tbody>
-                        <tr class="prop">
-                            <td valign="top" class="required name">
-                                <label for="login">Email</label>
-                            </td>
-                            <td valign="top" class="required value ${hasErrors(bean: signupForm, field: 'login', 'errors')}">
-                                <g:textField name="login" size="42" value="${signupForm?.login}" bendy-change-checker="" required="required"/> <wcy:required/>
-                            </td>
-                        </tr>
-
-                        <g:hiddenField name="email" value="ignored@example.com"/>
-
-                        <tr class="prop">
-                            <td valign="top" class="required name">
-                                <label for="password">Password</label>
-                            </td>
-                            <td valign="top" class="required value ${hasErrors(bean: signupForm, field: 'password', 'errors')}">
-                                <g:passwordField name="password" value="" bendy-change-checker="" required="required"/> <wcy:required/>
-                            </td>
-                        </tr>
-
-                        <tr class="prop">
-                            <td valign="top" class="required name">
-                                <label for="passwordConfirm">Confirm password</label>
-                            </td>
-                            <td valign="top" class="required value ${hasErrors(bean: signupForm, field: 'passwordConfirm', 'errors')}">
-                                <g:passwordField name="passwordConfirm" value="" bendy-change-checker="" required="required"/> <wcy:required/>
-                            </td>
-                        </tr>
-
-                        <g:render template="/foo/editCore"/>
-
-                        <tr class="prop">
-                            <td valign="top" class="required name">
-                                <label for="connections[0].place.addresses[0].city">Home City</label>
-                            </td>
-                            <td valign="top" class="required value ${hasErrors(bean: personInstance, field: 'connections[0].place.addresses[0].city', 'errors')}">
-                                <g:hiddenField name="connections[0].type" value="HOME" /> %{-- constraint --}%
-                                <g:hiddenField name="connections[0].place.addresses[0].streetType" value="true" /> %{-- force bind to create, for easier validation --}%
-                                <g:textField name="connections[0].place.addresses[0].city"
-                                        value="${personInstance?.connections?.first()?.place?.addresses?.first()?.city}" bendy-change-checker="" required="required"/> <wcy:required/>
-                            </td>
-                        </tr>
-
-                        <tr class="prop">
-                            <td valign="top" class="required name">
-                                <label for="connections[0].place.addresses[0].state">Home State</label>
-                            </td>
-                            <td valign="top" class="required value ${hasErrors(bean: personInstance, field: 'connections[0].place.addresses[0].state', 'errors')}">
-                                <g:textField name="connections[0].place.addresses[0].state"
-                                        value="${personInstance?.connections?.first()?.place?.addresses?.first()?.state}" bendy-change-checker="" required="required"/> <wcy:required/>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="2">
-                                <wcy:requiredLegend/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="form-group">
+                    <label for="passwordConfirm" class="col-sm-4 control-label">Confirm Password</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="passwordConfirm" name="passwordConfirm"
+                               autocomplete="off" required
+                               class="form-control"
+                               data-dependent-validation="password"
+                               data-errormessage-dependent="This does not match the above password."/>
+                    </div>
                 </div>
-                <div class="buttons">
-                    <span class="button">
-                        <g:submitButton name="doSignup" class="save" ng-disabled="!dirty" ng-class="{changed: dirty}"
-                                        value="Sign up" />
-                    </span>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-2">
+                        <button type="submit" class="save btn btn-primary">
+                            Sign up
+                        </button>
+                    </div>
                 </div>
-            </g:uploadForm>
-        </div>
+            </g:form>
     </auth:ifNotLoggedIn>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#password').on('valuevalidation', function(e, extra) {
+            var val = $.trim(extra.value);
+            if (val.length < 6) {
+                return 'Please enter at least 6 characters.';
+            }
+        });
+    });
+</script>
 </body>
 </html>

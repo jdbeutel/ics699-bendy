@@ -25,29 +25,15 @@ class AuthController {
 
     def login = { }
 
-    def signup = { }
+    def signup(Invitation inv) {
+        def alreadySignedUp = User.findByLogin(inv.email)
+        [invitation: inv, alreadySignedUp: alreadySignedUp]
+    }
 
-    def doSignup = { Person p, SignupForm sf ->
-        // todo: home address specific errors up in p.errors?
-        if (!p.validate() || !sf.validate()) {
-            render(view:'signup', model:[personInstance:p, signupForm:sf]) // try again
-            return
-        }
-        MultipartFile uploadedFile = request.getFile('photoUpload')
-        if (uploadedFile?.size) { // avoids overwriting existing photo if not uploading a new one
-            // todo: if (uploadedFile.size > UPLOAD_LIMIT) { flash.message = "Photo too big" ... }
-            params.photo = uploadedFile.bytes
-            params.photoFileName = PersonController.getOriginalFileName(uploadedFile)
-        }
-        // todo: remember photo from previous tries and provide it for display
-        // todo: validate file image format and scale down if too big?
-        if (!params.photo) {
-            p.errors.rejectValue("photo", "signupForm.photo.blank")
-            render(view:'signup', model:[personInstance:p, signupForm:sf]) // try again
-            return
-        }
-        def signupResult = authenticationService.signup( login:sf.login,
-                password:sf.password, email:sf.email, immediate:true, extraParams:params)
+    def doSignup(SignupForm sf) {
+        assert sf.validate()    // browser-side
+        def signupResult = authenticationService.signup( login:sf.invitation.email,
+                password:sf.password, email:sf.invitation.email, immediate:true, extraParams:(params + [signupForm: sf]))
         if ((signupResult.result == 0) || (signupResult.result == AuthenticatedUser.AWAITING_CONFIRMATION)) {
             // onSignup event in BootStrap updates and saves the new user's person with params
             if (log.debugEnabled) {
@@ -71,4 +57,15 @@ class AuthController {
     }
 
     def forgot = { }
+}
+
+class SignupForm implements Serializable {
+    Invitation invitation
+    String password
+    String passwordConfirm
+
+    static constraints = {
+        password(size:6..40, password:true, blank:false, nullable: false)
+        passwordConfirm(password:true, validator: { val, obj -> obj.password == val })
+    }
 }

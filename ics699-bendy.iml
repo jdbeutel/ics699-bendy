@@ -105,6 +105,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="ics699-bendy-grailsPlugins" />
+    <orderEntry type="library" name="sass-stdlib" level="application" />
   </component>
 </module>
 
