@@ -11,12 +11,9 @@ class SettingsController {  // similar to RestfulController
 
     def authenticationService
 
+    // used by login.gsp  (kludge?)
     def appIndex() {
         redirect uri: '/'
-    }
-
-    def edit() {
-        render view: 'edit'
     }
 
     def show() {
