@@ -76,7 +76,7 @@
                 <td valign="top" class="value">
                     <g:if test="${personInstance?.photo}">
                         <img alt="photo" width="200px" height="150px" class="photo"
-                                src="${createLink(controller: 'person', action: 'viewPhoto', id: personInstance?.id)}"/>
+                                src="${createLink(controller: 'oldPerson', action: 'viewPhoto', id: personInstance?.id)}"/>
                         <br/>
                     </g:if>
                 </td>

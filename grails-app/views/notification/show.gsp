@@ -46,7 +46,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="notification.object.label" default="Object" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="person" action="show" id="${notificationInstance?.object?.id}">${notificationInstance?.object?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="oldPerson" action="show" id="${notificationInstance?.object?.id}">${notificationInstance?.object?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

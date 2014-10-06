@@ -65,7 +65,7 @@
     <td colspan="3" valign="top" class="required value ${hasErrors(bean: personInstance, field: 'photo', 'errors')}">
         <g:if test="${personInstance?.photo}">
             <img alt="photo" height="100px" width="133px" class="photo"
-                    src="${createLink(controller: 'person', action: 'viewPhoto', id: personInstance?.id)}"/>
+                    src="${createLink(controller: 'oldPerson', action: 'viewPhoto', id: personInstance?.id)}"/>
             <br/>
         </g:if>
         <input type="file" id="photoUpload" name="photoUpload"/> <wcy:required/>

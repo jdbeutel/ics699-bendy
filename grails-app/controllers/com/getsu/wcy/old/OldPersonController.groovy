@@ -4,7 +4,7 @@ import com.getsu.wcy.Person
 import com.getsu.wcy.User
 import org.springframework.web.multipart.MultipartFile
 
-class PersonController {
+class OldPersonController {
 
     static allowedMethods = [save: "POST", update: "POST", updateMyProfile:"POST", delete: "POST"]
 
