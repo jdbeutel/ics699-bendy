@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile
 class PersonController extends RestfulController {
 
     ElasticSearchService elasticSearchService
+    def grailsResourceLocator
 
     static responseFormats = ['json']
 
@@ -118,10 +119,18 @@ class PersonController extends RestfulController {
         log.debug 'called viewPhoto'
         Person p = Person.get(params.id)
         // todo: check access authorization
-        response.setHeader("Content-disposition", "attachment; filename=${p.photo.fileName}")
-        // response.contentType = p.photo.fileType //'image/jpeg' will do too
-        response.outputStream << p.photo.contents
-        response.outputStream.flush()
+        if (p?.photo) {
+            response.setHeader("Content-disposition", "attachment; filename=${p.photo.fileName}")
+            // response.contentType = p.photo.fileType //'image/jpeg' will do too
+            response.outputStream << p.photo.contents
+            response.outputStream.flush()
+        } else {
+            def errorImage = 'images/skin/exclamation.png'
+            URL url = grailsResourceLocator.findResourceForURI(errorImage).URL
+            response.setHeader("Content-disposition", "attachment; filename=${errorImage}")
+            response.outputStream << url.bytes
+            response.outputStream.flush()
+        }
     }
 
     def uploadPhoto() {
@@ -134,6 +143,7 @@ class PersonController extends RestfulController {
         assert photo.save()    // redundant w/ cascade on p.save()?
         p.photo = photo
         assert p.save()
+        elasticSearchService.index(p)   // had problems with auto-index, so doing it explicitly
         // todo: validate file image format and scale down if too big?
         render 'uploaded photo'
     }

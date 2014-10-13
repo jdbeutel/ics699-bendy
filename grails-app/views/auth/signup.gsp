@@ -20,9 +20,9 @@
                 <ul><li>Sorry but your sign out failed - reason: <g:message code="authentication.failure.${flash.authenticationFailure.result}"/></li></ul>
             </div>
         </g:if>
-        <auth:form authAction="logout" success="[controller:'login', action:'signup']" error="[controller:'login', action:'signup']">
-            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign out</button>
-        </auth:form>
+        <g:form action="logout" method="post">
+            <button type="submit" class="btn btn-lg btn-primary">Sign out</button>
+        </g:form>
     </auth:ifLoggedIn>
 
     <auth:ifNotLoggedIn>
@@ -34,8 +34,6 @@
             <h3>Please <g:link action="login">sign in</g:link> instead.</h3>
         </g:if>
         <g:else>
-
-        </g:else>
             <h3>Welcome, ${invitation.person.name}!</h3>
             <h4>Please choose a password.</h4>
             <g:form action="doSignup" method="post" name="signupForm" class="form-horizontal ws-validate" role="form">
@@ -76,6 +74,7 @@
                     </div>
                 </div>
             </g:form>
+        </g:else>
     </auth:ifNotLoggedIn>
 </div>
 

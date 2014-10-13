@@ -355,3 +355,12 @@ bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person',
     }
 ]);
 
+bendyControllers.controller('BendyProfileCtrl', ['$scope', 'Settings',
+    function ($scope, Settings) {
+        $scope.myProfile = true;
+        $scope.person = {};
+        var settings = Settings.get(function() {    // SettingsModel
+            $scope.person = settings.myPerson;
+        });
+    }
+]);

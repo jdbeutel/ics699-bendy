@@ -20,7 +20,7 @@ class SettingsController {  // similar to RestfulController
         assert authenticationService.isLoggedIn(request) // otherwise the filter would have redirected
         // not using params.id because one can edit only one's own Settings
         User user = (User) authenticationService.userPrincipal
-        respond new SettingsModel(settingsCommand: new SettingsCommand(user))
+        respond new SettingsModel(settingsCommand: new SettingsCommand(user), myPerson: user.person)
     }
 
     @Transactional
@@ -47,6 +47,7 @@ class SettingsController {  // similar to RestfulController
 
 class SettingsModel {
     SettingsCommand settingsCommand
+    Person myPerson     // for profile
     def dateFormatOptions = WcyTagLib.dateFormatOptions()
     def timeZoneOptions = WcyTagLib.timeZoneOptions()
 }

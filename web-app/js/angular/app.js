@@ -34,7 +34,7 @@ bendyApp.config(['$routeProvider',
                     }).
                     when('/profile', {
                         templateUrl: 'partials/profile.html',
-//                        controller: 'BendySettingsCtrl',
+                        controller: 'BendyProfileCtrl',
                         title: 'My Profile'
                     }).
                     when('/settings', {

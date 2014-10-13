@@ -1,5 +1,4 @@
 import com.getsu.wcy.CommunicationLinks
-import com.getsu.wcy.Invitation
 import com.getsu.wcy.Photo
 import grails.converters.JSON
 import org.hibernate.SessionFactory
@@ -183,7 +182,7 @@ class BootStrap {
         def email = 'Scott.Robertson@example.com'
         builder.classNameResolver = 'com.getsu.wcy'
         def scott = builder.invitation(email:email) {
-            person(firstGivenName:'Scott', familyName:'Robertson', honorific:'Professor', suffix: 'Ph.D') {
+            person(firstGivenName:'Scott', familyName:'Robertson', honorific:'Professor', suffix: 'Ph.D.') {
                 emailAddress(name:'Scott Roberson', address:email,
                         level:CommunicationLinks.Level.PERSONAL, connectionType: null)
             }

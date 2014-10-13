@@ -1,7 +1,8 @@
 <ng-form name="personForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyPersonCtrl">
         <div class="row">
             <div class="col-xs-4">
-                <button class="btn btn-default btn-xs" ng-click="collapse(person)">
+                <button class="btn btn-default btn-xs"
+                        ng-cloak ng-hide="myProfile" ng-click="collapse(person)">
                     <span class="glyphicon glyphicon-chevron-down"></span>
                 </button>
                 {{person.name}}
@@ -81,12 +82,12 @@
             </div>
         </div>
 
-        <div ng-hide="editingPerson || !person.photo">
+        <div ng-hide="editingPerson || person.photo == null">
             <div class="form-group">
                 <label class="col-xs-3 control-label">Photo</label>
                 <div class="col-xs-9">
                     <img alt="photo" height="100px" width="133px" class="photo"
-                         ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
+                         ng-cloak ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
                 </div>
             </div>
         </div>
@@ -98,7 +99,7 @@
                     <div ng-file-drop="onFileSelect($files)"
                          ng-file-drag-over-class="dragOverClass($event)" ng-file-drag-over-delay="200" class="drop-box">
                         <img alt="photo" class="photo"
-                             ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
+                             ng-cloak ng-src="/person/viewPhoto/{{person.id}}{{photoNoCache}}"/>
                     </div>
                 </div>
                 <div ng-hide="person.photo" class="col-xs-3">
