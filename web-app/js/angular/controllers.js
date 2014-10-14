@@ -247,9 +247,11 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person', '$timeout'
     }
 ]);
 
-bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', 'datepickerConfig', '$filter',
-    function ($scope, Person, $upload, datepickerConfig, $filter) {
+bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', 'datepickerConfig', '$filter', 'BendyUtil',
+    function ($scope, Person, $upload, datepickerConfig, $filter, BendyUtil) {
         $scope.editingPerson = null;
+        $scope.addChoices = [];
+        $scope.addChoicesDropdownStatus = {isOpen: false};  // hack: doesn't work without this indirection
         $scope.photoNoCache = '';
         datepickerConfig.showWeeks = false;
 
@@ -259,6 +261,9 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
             delete $scope.editingPerson.preferredEmail;
             delete $scope.editingPerson.preferredPhone;
             delete $scope.editingPerson.preferredConnection;
+            $scope.addingBirthDate = false;
+            $scope.addingPhoto = false;
+            $scope.refreshAddChoices();
         };
 
         $scope.cancel = function() {
@@ -304,6 +309,7 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
             }).success(function(data, status, headers, config) {
                 console.log(data);
                 $scope.photoNoCache = '?photoNoCache=' + new Date().getTime();    // force img reload
+                $scope.person.photo = {uploaded: true};     // trigger ng-show of first upload
             })
         };
 
@@ -311,6 +317,50 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
             $event.preventDefault();
             $event.stopPropagation();
             $scope.birthDatePickerOpened = true;
+        };
+
+        $scope.refreshAddChoices = function() {
+            if (!$scope.editingPerson) {
+                $scope.addChoices = [];
+            } else {
+                $scope.addChoices = ['Email', 'Phone'];
+                if (!$scope.editingPerson.birthDate && !$scope.addingBirthDate) {
+                    $scope.addChoices.push('Birth Date')
+                }
+                if (!$scope.editingPerson.photo && !$scope.addingPhoto) {
+                    $scope.addChoices.push('Photo')
+                }
+            }
+        };
+
+        $scope.addField = function(choice) {
+            if (choice == 'Email') {
+                var addedEmail = {
+                    name: $scope.editingPerson.name,    // todo: non-redundant name UI
+                    address: '',
+                    level: 'PERSONAL',
+                    connectionType: null
+                };
+                $scope.editingPerson.emailAddresses.push(addedEmail);
+            }
+            if (choice == 'Phone') {
+                var addedPhone = {
+                    type: 'MOBILE',
+                    number: '',
+                    level: 'PERSONAL',
+                    connectionType: null
+                };
+                $scope.editingPerson.phoneNumbers.push(addedPhone);
+            }
+            if (choice == 'Birth Date') {
+                $scope.addingBirthDate = true;
+                BendyUtil.removeFromArray('Birth Date', $scope.addChoices);
+            }
+            if (choice == 'Photo') {
+                $scope.addingPhoto = true;
+                BendyUtil.removeFromArray('Photo', $scope.addChoices);
+            }
+            $scope.addChoicesDropdownStatus.isOpen = false;
         };
     }
 ]);

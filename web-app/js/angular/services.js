@@ -41,6 +41,12 @@ bendyServices.factory('BendyUtil', [
                     map[element.key] = element.value;
                 });
                 return map;
+            },
+            removeFromArray: function(value, array) {
+                var index = jQuery.inArray(value, array);
+                if (index != -1) {
+                    array.splice(index, 1);
+                }
             }
         };
     }
