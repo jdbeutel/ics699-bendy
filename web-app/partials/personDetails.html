@@ -43,9 +43,14 @@
         </div>
         <div ng-show="editingPerson">
             <div class="form-group" ng-repeat="phoneNumber in editingPerson.phoneNumbers">
-                <label class="col-xs-3 control-label"
-                        for="person{{person.id}}phoneNumbers{{$index}}">Personal {{phoneNumber.type}}</label>
-                <!-- todo: select phoneNumber.type -->
+                <div class="col-xs-3 control-label">
+                    <label for="person{{person.id}}phoneNumbers{{$index}}">Personal</label>
+                    <select ng-model="phoneNumber.type" bendy-dirty>
+                        <option>MOBILE</option>
+                        <option>LANDLINE</option>
+                        <option>FAX</option>
+                    </select>
+                </div>
                 <div class="col-xs-9">
                     <input type="text" class="form-control"
                            id="person{{person.id}}phoneNumbers{{$index}}"
@@ -170,11 +175,6 @@
         </td>
     </tr>
 
-    <tr class="prop">
-        <td colspan="4" valign="top">
-            <span class="button"><g:actionSubmit class="editPerson" action="update" value="Save"/></span>
-        </td>
-    </tr>
     </tbody>
 </table>
 -->
