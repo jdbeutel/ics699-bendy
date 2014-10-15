@@ -101,7 +101,7 @@
         </table>
     </div>
     <div class="panel-footer" ng-show="remainingCount()">
-        {{remainingCount()}} more matching contacts...
+        {{remainingCount()}} more {{searchTerms ? 'matching' : ''}} contacts...
         <button type="button" class="btn btn-default"
                 ng-click="loadNextPage()">
             Load {{nextIsFinalPage() ? '' : 'More'}}
