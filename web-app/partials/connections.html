@@ -7,24 +7,24 @@
                     <button class="btn btn-default btn-xs">
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </button>
-                    {{connection.type}}
+                    <bendy-type-icon kind="connection" type="connection.type"></bendy-type-icon>
                 </td>
                 <td>
                     <span ng-if="connection.preferredEmail">
-                        <bendy-type-icon kind="connection" type="connection.preferredEmail.connectionType"></bendy-type-icon>
+                        <!--<bendy-type-icon kind="connection" type="connection.preferredEmail.connectionType"></bendy-type-icon>-->
                         {{connection.preferredEmail.address}}
                     </span>
                 </td>
                 <td>
                     <span ng-if="connection.preferredPhone">
-                        <bendy-type-icon kind="connection" type="connection.preferredPhone.connectionType"></bendy-type-icon>
+                        <!--<bendy-type-icon kind="connection" type="connection.preferredPhone.connectionType"></bendy-type-icon>-->
                         <bendy-type-icon kind="phone" type="connection.preferredPhone.type"></bendy-type-icon>
                         {{connection.preferredPhone.number}}
                     </span>
                 </td>
                 <td>
                     <span ng-if="connection.preferredAddress">
-                        <bendy-type-icon kind="connection" type="connection.type"></bendy-type-icon>
+                        <!--<bendy-type-icon kind="connection" type="connection.type"></bendy-type-icon>-->
                         {{connection.preferredAddress.line1}}
                         {{connection.preferredAddress.line2}}
                         {{connection.preferredAddress.city}}
