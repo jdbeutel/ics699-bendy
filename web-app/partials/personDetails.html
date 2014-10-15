@@ -8,7 +8,7 @@
                 {{person.name}}
             </div>
             <div class="col-xs-8">
-                <ng-include src="'partials/personNameDetails.html'"/>
+                <ng-include src="'partials/personNameDetails.html'"></ng-include>
             </div>
         </div>
 
@@ -63,6 +63,8 @@
                 </div>
             </div>
         </div>
+
+        <ng-include src="'partials/connections.html'"></ng-include>
 
         <div ng-hide="editingPerson || !person.birthDate">
             <div class="form-group">
@@ -181,13 +183,3 @@
         </div>
     </div>
 </form>
-
-        <!--
-<table>
-    <tbody>
-
-    <g:render template="/foo/listConnections" model="['personInstance':personInstance]"/>
-
-    </tbody>
-</table>
--->

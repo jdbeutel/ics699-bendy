@@ -1,0 +1,159 @@
+<div class="panel panel-default" ng-controller="BendyPersonNameCtrl">
+    <div class="panel-body">
+<ng-form name="connectionForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyConnectionCtrl">
+        <div class="row">
+            <div class="col-xs-4">
+                <button class="btn btn-default btn-xs"
+                        ng-cloak ng-click="collapse(connection)">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                {{connection.type}}
+            </div>
+        </div>
+
+    <div ng-controller="BendyDirtyFormCtrl">
+        <div ng-hide="editingConnection">
+            <div class="form-group" ng-repeat="emailAddress in connection.emailAddresses">
+                <label class="col-xs-3 control-label">Direct Email</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{emailAddress.address}}</p>
+                </div>
+            </div>
+        </div>
+        <div ng-show="editingConnection">
+            <div class="form-group" ng-repeat="emailAddress in editingConnection.emailAddresses">
+                <label class="col-xs-3 control-label"
+                       for="connection{{connection.id}}emailAddresses{{$index}}">Direct Email</label>
+                <div class="col-xs-9">
+                    <input type="email" class="form-control"
+                           id="connection{{connection.id}}emailAddresses{{$index}}"
+                           name="connection{{connection.id}}emailAddresses{{$index}}"
+                           ng-model="emailAddress.address" bendy-dirty/>
+                </div>
+            </div>
+        </div>
+
+        <div ng-hide="editingConnection">
+            <div class="form-group" ng-repeat="phoneNumber in connection.phoneNumbers">
+                <label class="col-xs-3 control-label">Direct {{phoneNumber.type}}</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{phoneNumber.number}}</p>
+                </div>
+            </div>
+        </div>
+        <div ng-show="editingConnection">
+            <div class="form-group" ng-repeat="phoneNumber in editingConnection.phoneNumbers">
+                <div class="col-xs-3 control-label">
+                    <label for="connection{{connection.id}}phoneNumbers{{$index}}number">Direct</label>
+                    <select
+                            name="connection{{connection.id}}phoneNumbers{{$index}}type"
+                            ng-model="phoneNumber.type" bendy-dirty>
+                        <!-- todo: after adding phoneNumberTypes to BendyProfileCtrl too? <select ng-model="phoneNumber.type" ng-options="type for type in phoneNumberTypes" bendy-dirty></select>-->
+                        <option>MOBILE</option>
+                        <option>LANDLINE</option>
+                        <option>FAX</option>
+                    </select>
+                </div>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control"
+                           id="connection{{connection.id}}phoneNumbers{{$index}}number"
+                           name="connection{{connection.id}}phoneNumbers{{$index}}number"
+                           ng-model="phoneNumber.number" bendy-dirty/>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- todo: addresses -->
+
+
+        <div ng-hide="editingConnection">
+            <div class="form-group" ng-repeat="emailAddress in connection.place.emailAddresses">
+                <label class="col-xs-3 control-label">Email</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{emailAddress.address}}</p>
+                </div>
+            </div>
+        </div>
+        <div ng-show="editingConnection">
+            <div class="form-group" ng-repeat="emailAddress in editingConnection.place.emailAddresses">
+                <label class="col-xs-3 control-label"
+                        for="connection{{connection.id}}placeEmailAddresses{{$index}}">Email</label>
+                <div class="col-xs-9">
+                    <input type="email" class="form-control"
+                           id="connection{{connection.id}}placeEmailAddresses{{$index}}"
+                           name="connection{{connection.id}}placeEmailAddresses{{$index}}"
+                           ng-model="emailAddress.address" bendy-dirty/>
+                </div>
+            </div>
+        </div>
+
+        <div ng-hide="editingConnection">
+            <div class="form-group" ng-repeat="phoneNumber in connection.place.phoneNumbers">
+                <label class="col-xs-3 control-label">{{phoneNumber.type}}</label>
+                <div class="col-xs-9">
+                    <p class="form-control-static">{{phoneNumber.number}}</p>
+                </div>
+            </div>
+        </div>
+        <div ng-show="editingConnection">
+            <div class="form-group" ng-repeat="phoneNumber in editingConnection.place.phoneNumbers">
+                <div class="col-xs-3 control-label">
+                    <!--<label for="connection{{connection.id}}phoneNumbers{{$index}}number">Direct</label>-->
+                    <select
+                            name="connection{{connection.id}}placePhoneNumbers{{$index}}type"
+                            ng-model="phoneNumber.type" bendy-dirty>
+                        <!-- todo: after adding phoneNumberTypes to BendyProfileCtrl too? <select ng-model="phoneNumber.type" ng-options="type for type in phoneNumberTypes" bendy-dirty></select>-->
+                        <option>MOBILE</option>
+                        <option>LANDLINE</option>
+                        <option>FAX</option>
+                    </select>
+                </div>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control"
+                           id="connection{{connection.id}}placePhoneNumbers{{$index}}number"
+                           name="connection{{connection.id}}placePhoneNumbers{{$index}}number"
+                           ng-model="phoneNumber.number" bendy-dirty/>
+                </div>
+            </div>
+        </div>
+
+
+        <div ng-show="editingConnection" class="form-group">
+            <div class="col-xs-offset-3 col-xs-9">
+                <div class="btn-group" dropdown is-open="addChoicesDropdownStatus.isOpen">
+                    <button type="button" class="btn btn-default dropdown-toggle">
+                        Add <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-repeat="choice in addChoices">
+                            <a href ng-click="addField(choice)">{{choice}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-3">
+                <button type="button" class="btn btn-default"
+                        ng-hide="editingConnection" ng-click="edit()">
+                    Edit
+                </button>
+                <button type="submit" class="save btn btn-default"
+                        ng-show="editingConnection" ng-disabled="!connectionForm.$dirty"
+                        ng-class="{changed: connectionForm.$dirty}" ng-click="update()">
+                    Save
+                </button>
+            </div>
+            <div class="col-xs-3">
+                <button type="button" class="btn btn-default"
+                        ng-show="editingConnection" ng-click="cancel()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-form>
+    </div>
+</div>

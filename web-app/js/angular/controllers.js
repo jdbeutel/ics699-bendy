@@ -276,6 +276,7 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
 
         $scope.update = function() {
             $scope.copyNameProperties($scope.person, $scope.editingPerson);
+            angular.copy($scope.person.connections, $scope.editingPerson.connections);  // preserve nested updates by child forms
             // Avoid submitting local time part of date, because the server may be in a different time zone.
             $scope.editingPerson.birthDate = $filter('date')($scope.editingPerson.birthDate, 'yyyy-MM-dd');
             Person.update(
@@ -420,5 +421,112 @@ bendyControllers.controller('BendyProfileCtrl', ['$scope', 'Settings',
         var settings = Settings.get(function() {    // SettingsModel
             $scope.person = settings.myPerson;
         });
+    }
+]);
+
+bendyControllers.controller('BendyConnectionsCtrl', ['$scope',
+    function ($scope) {
+
+        $scope.collapse = function(connection) {
+            connection.isCollapsed = true;  // like BendyPersonCtrl
+        };
+
+        $scope.expand = function(connection) {
+            connection.isCollapsed = false;
+        };
+    }
+]);
+
+bendyControllers.controller('BendyConnectionCtrl', ['$scope', 'Connection', '$timeout', 'Person',
+    function ($scope, Connection, $timeout, Person) {
+        $scope.editingConnection = null;
+        $scope.addChoices = ['Direct Email', 'Direct Phone', 'Address', 'Email', 'Phone'];
+        $scope.addChoicesDropdownStatus = {isOpen: false};  // hack: doesn't work without this indirection
+
+        $scope.edit = function() {
+            $scope.editingConnection = angular.copy($scope.connection);  // inherited from ng-repeat
+            // avoid sending derivative properties, which cannot be edited directly and may override edits
+            delete $scope.editingConnection.preferredEmail;
+            delete $scope.editingConnection.preferredPhone;
+            delete $scope.editingConnection.preferredAddress;
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.connectionForm.$setPristine();
+                //$('#settingsForm').trigger('resetvalui');     todo: get relative element somehow for this
+            });
+        };
+
+        $scope.cancel = function() {
+            $scope.editingConnection = null;
+        };
+
+        $scope.update = function() {
+            Connection.update(
+                    {id: $scope.editingConnection.id},
+                    $scope.editingConnection,
+                    function success(updatedConnection, putResponseHeaders) {
+                        updatedConnection.isCollapsed = $scope.connection.isCollapsed; // preserve hack
+                        $scope.setConnection(updatedConnection);
+                        $scope.editingConnection = null;
+                        // todo: positive feedback
+                        Person.get(     // update preferred properties on read-only view if necessary
+                                {id: $scope.person.id},
+                                function success(updatedPerson, putResponseHeaders) {
+                                    updatedPerson.isCollapsed = $scope.person.isCollapsed; // preserve hack
+                                    $scope.setPerson(updatedPerson);
+                                },
+                                function error(response) {
+                                    alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                                }
+                        )
+                    },
+                    function error(response) {
+                        alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                    }
+            )
+        };
+
+        $scope.setConnection = function(connection) {
+            angular.copy(connection, $scope.connection); // allows update by child scope
+        };
+
+        $scope.addField = function(choice) {
+            if (choice == 'Direct Email') {
+                var addedDirectEmail = {
+                    name: $scope.person.name,    // todo: non-redundant name UI
+                    address: '',
+                    level: 'DIRECT',
+                    connectionType: $scope.editingConnection.type
+                };
+                $scope.editingConnection.emailAddresses.push(addedDirectEmail);
+            }
+            if (choice == 'Email') {
+                var addedEmail = {
+                    name: $scope.person.name,    // todo: non-redundant name UI
+                    address: '',
+                    level: 'GENERAL',
+                    connectionType: $scope.editingConnection.type
+                };
+                $scope.editingConnection.place.emailAddresses.push(addedEmail);
+            }
+            if (choice == 'Direct Phone') {
+                var addedDirectPhone = {
+                    type: 'MOBILE',
+                    number: '',
+                    level: 'DIRECT',
+                    connectionType: $scope.editingConnection.type
+                };
+                $scope.editingConnection.phoneNumbers.push(addedDirectPhone);
+            }
+            if (choice == 'Phone') {
+                var addedPhone = {
+                    type: 'LANDLINE',
+                    number: '',
+                    level: 'GENERAL',
+                    connectionType: $scope.editingConnection.type
+                };
+                $scope.editingConnection.place.phoneNumbers.push(addedPhone);
+            }
+            $scope.addChoicesDropdownStatus.isOpen = false;
+        };
     }
 ]);

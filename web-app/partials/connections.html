@@ -1,0 +1,44 @@
+<div class="table-responsive" ng-controller="BendyConnectionsCtrl">
+    <table class="table table-condensed table-hover">
+        <tbody>
+            <tr ng-repeat-start="connection in person.connections" ng-class-odd="'odd'"
+                ng-init="connection.isCollapsed=true" ng-show="connection.isCollapsed" ng-click="expand(connection)">
+                <td>
+                    <button class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                    {{connection.type}}
+                </td>
+                <td>
+                    <span ng-if="connection.preferredEmail">
+                        <bendy-type-icon kind="connection" type="connection.preferredEmail.connectionType"></bendy-type-icon>
+                        {{connection.preferredEmail.address}}
+                    </span>
+                </td>
+                <td>
+                    <span ng-if="connection.preferredPhone">
+                        <bendy-type-icon kind="connection" type="connection.preferredPhone.connectionType"></bendy-type-icon>
+                        <bendy-type-icon kind="phone" type="connection.preferredPhone.type"></bendy-type-icon>
+                        {{connection.preferredPhone.number}}
+                    </span>
+                </td>
+                <td>
+                    <span ng-if="connection.preferredAddress">
+                        <bendy-type-icon kind="connection" type="connection.type"></bendy-type-icon>
+                        {{connection.preferredAddress.line1}}
+                        {{connection.preferredAddress.line2}}
+                        {{connection.preferredAddress.city}}
+                        {{connection.preferredAddress.state}}
+                        {{connection.preferredAddress.postalCode}}
+                        {{connection.preferredAddress.countryCode}}
+                    </span>
+                </td>
+            </tr>
+            <tr ng-repeat-end ng-hide="connection.isCollapsed" ng-class-odd="'odd'">
+                <td colspan="4">
+                    <ng-include src="'partials/connectionDetails.html'"></ng-include>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

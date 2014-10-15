@@ -32,6 +32,15 @@ bendyServices.factory('Person', ['$resource',
     }
 ]);
 
+bendyServices.factory('Connection', ['$resource',
+    function($resource) {
+        return $resource('/connections/:id.json', {}, {
+            update: {method:'PUT'},
+            query: {method:'GET', isArray:false}
+        });
+    }
+]);
+
 bendyServices.factory('BendyUtil', [
     function() {
         return {
