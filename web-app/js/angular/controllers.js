@@ -247,8 +247,8 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person', '$timeout'
     }
 ]);
 
-bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', 'datepickerConfig', '$filter', 'BendyUtil',
-    function ($scope, Person, $upload, datepickerConfig, $filter, BendyUtil) {
+bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', 'datepickerConfig', '$filter', 'BendyUtil', '$timeout',
+    function ($scope, Person, $upload, datepickerConfig, $filter, BendyUtil, $timeout) {
         $scope.editingPerson = null;
         $scope.addChoices = [];
         $scope.addChoicesDropdownStatus = {isOpen: false};  // hack: doesn't work without this indirection
@@ -264,6 +264,10 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
             $scope.addingBirthDate = false;
             $scope.addingPhoto = false;
             $scope.refreshAddChoices();
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.personForm.$setPristine();
+                //$('#settingsForm').trigger('resetvalui');     todo: get relative element somehow for this
+            });
         };
 
         $scope.cancel = function() {
@@ -365,8 +369,8 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
     }
 ]);
 
-bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person',
-    function ($scope, Person) {
+bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person', '$timeout',
+    function ($scope, Person, $timeout) {
         $scope.editingName = null;
         $scope.isNameCollapsed = true;
 
@@ -380,6 +384,10 @@ bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person',
 
         $scope.editName = function() {
             $scope.editingName = angular.copy($scope.person);  // inherited from ng-repeat via BendyPersonCtrl
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.nameForm.$setPristine();
+                //$('#settingsForm').trigger('resetvalui');     todo: get relative element somehow for this
+            });
         };
 
         $scope.updateName = function() {

@@ -28,6 +28,7 @@
                 <div class="col-xs-9">
                     <input type="text" class="form-control"
                            id="person{{person.id}}emailAddresses{{$index}}"
+                           name="person{{person.id}}emailAddresses{{$index}}"
                            ng-model="emailAddress.address" bendy-dirty/>
                 </div>
             </div>
@@ -44,8 +45,10 @@
         <div ng-show="editingPerson">
             <div class="form-group" ng-repeat="phoneNumber in editingPerson.phoneNumbers">
                 <div class="col-xs-3 control-label">
-                    <label for="person{{person.id}}phoneNumbers{{$index}}">Personal</label>
-                    <select ng-model="phoneNumber.type" bendy-dirty>
+                    <label for="person{{person.id}}phoneNumbers{{$index}}number">Personal</label>
+                    <select
+                            name="person{{person.id}}phoneNumbers{{$index}}type"
+                            ng-model="phoneNumber.type" bendy-dirty>
                         <!-- todo: after adding phoneNumberTypes to BendyProfileCtrl too? <select ng-model="phoneNumber.type" ng-options="type for type in phoneNumberTypes" bendy-dirty></select>-->
                         <option>MOBILE</option>
                         <option>LANDLINE</option>
@@ -54,7 +57,8 @@
                 </div>
                 <div class="col-xs-9">
                     <input type="text" class="form-control"
-                           id="person{{person.id}}phoneNumbers{{$index}}"
+                           id="person{{person.id}}phoneNumbers{{$index}}number"
+                           name="person{{person.id}}phoneNumbers{{$index}}number"
                            ng-model="phoneNumber.number" bendy-dirty/>
                 </div>
             </div>
@@ -82,6 +86,7 @@
                                datepicker-popup="yyyy-MM-dd"
                                is-open="birthDatePickerOpened"
                                id="person{{person.id}}birthDate"
+                               name="person{{person.id}}birthDate"
                                ng-model="editingPerson.birthDate"/>     <!-- todo: bendy-dirty conflicts w/ datepicker-popup -->
                     </p>
                 </div>
@@ -120,6 +125,7 @@
                             Upload {{person.photo ? 'New' : ''}} Photo
                             <input type="file" class="form-control"
                                    id="person{{person.id}}photo"
+                                   name="person{{person.id}}photo"
                                    ng-file-select="onFileSelect($files)" accept="image/*"/>
                         </span>
                     </div>

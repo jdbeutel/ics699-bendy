@@ -34,6 +34,7 @@
                         <div ng-show="editingName">
                             <input type="text" class="form-control"
                                    id="person{{person.id}}preferredName"
+                                   name="person{{person.id}}preferredName"
                                    ng-model="editingName.preferredName" bendy-dirty/>
                         </div>
                     </div>
@@ -48,6 +49,7 @@
                         <div ng-show="editingName">
                             <input type="text" class="form-control"
                                    id="person{{person.id}}honorific"
+                                   name="person{{person.id}}honorific"
                                    ng-model="editingName.honorific" bendy-dirty placeholder="e.g., Mr., Dr., etc."/>
                         </div>
                     </div>
@@ -62,6 +64,7 @@
                         <div ng-show="editingName">
                             <input type="text" class="form-control"
                                    id="person{{person.id}}firstGivenName"
+                                   name="person{{person.id}}firstGivenName"
                                    ng-model="editingName.firstGivenName" bendy-dirty placeholder="John"/>
                         </div>
                     </div>
@@ -76,6 +79,7 @@
                         <div ng-show="editingName">
                             <input type="text" class="form-control"
                                    id="person{{person.id}}middleGivenNames"
+                                   name="person{{person.id}}middleGivenNames"
                                    ng-model="editingName.middleGivenNames" bendy-dirty/>
                         </div>
                     </div>
@@ -90,6 +94,7 @@
                         <div ng-show="editingName">
                             <input type="text" class="form-control"
                                    id="person{{person.id}}familyName"
+                                   name="person{{person.id}}familyName"
                                    ng-model="editingName.familyName" bendy-dirty placeholder="Doe"/>
                         </div>
                     </div>
@@ -104,6 +109,7 @@
                         <div ng-show="editingName">
                             <input type="text" class="form-control"
                                    id="person{{person.id}}suffix"
+                                   name="person{{person.id}}suffix"
                                    ng-model="editingName.suffix" bendy-dirty placeholder="e.g., Jr., Ph.D., etc."/>
                         </div>
                     </div>
