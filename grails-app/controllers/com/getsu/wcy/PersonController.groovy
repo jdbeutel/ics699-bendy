@@ -5,6 +5,9 @@ import org.elasticsearch.search.sort.SortBuilders
 import org.elasticsearch.search.sort.SortOrder
 import org.grails.plugins.elasticsearch.ElasticSearchService
 import org.springframework.web.multipart.MultipartFile
+import org.codehaus.groovy.grails.web.servlet.HttpHeaders
+
+import static org.springframework.http.HttpStatus.*
 
 class PersonController extends RestfulController {
 
@@ -106,10 +109,53 @@ class PersonController extends RestfulController {
 
     @Override
     Object update() {
-        super.update()
-        def p = Person.get(params.id)
-        if (p) {
-            elasticSearchService.index(p)   // had problems with auto-index, so doing it explicitly
+        if(handleReadOnly()) {
+            return
+        }
+
+        Person instance = (Person) queryForResource(params.id)
+        if (instance == null) {
+            notFound()
+            return
+        }
+
+        instance.properties = getParametersToBind()
+
+        deleteBlankElements(instance)
+
+        if (instance.hasErrors()) {
+            respond instance.errors, view:'edit' // STATUS CODE 422
+            return
+        }
+
+        instance.save flush:true
+
+        elasticSearchService.index(instance)   // had problems with auto-index, so doing it explicitly
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: "${resourceClassName}.label".toString(), default: resourceClassName), instance.id])
+                redirect instance
+            }
+            '*'{
+                response.addHeader(HttpHeaders.LOCATION,
+                        g.createLink(
+                                resource: this.controllerName, action: 'show',id: instance.id, absolute: true,
+                                namespace: hasProperty('namespace') ? this.namespace : null ))
+                respond instance, [status: OK]
+            }
+        }
+    }
+
+    void deleteBlankElements(Person p) {
+        def blank
+        while (blank = p.emailAddresses.find {!it.address}) {
+            p.removeFromEmailAddresses(blank)
+            blank.delete()
+        }
+        while (blank = p.phoneNumbers.find {!it.number}) {
+            p.removeFromPhoneNumbers(blank)
+            blank.delete()
         }
     }
 
