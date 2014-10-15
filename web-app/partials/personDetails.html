@@ -1,4 +1,4 @@
-<ng-form name="personForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyPersonCtrl">
+<form name="personForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyPersonCtrl">
         <div class="row">
             <div class="col-xs-4">
                 <button class="btn btn-default btn-xs"
@@ -26,7 +26,7 @@
                 <label class="col-xs-3 control-label"
                         for="person{{person.id}}emailAddresses{{$index}}">Personal Email</label>
                 <div class="col-xs-9">
-                    <input type="text" class="form-control"
+                    <input type="email" class="form-control"
                            id="person{{person.id}}emailAddresses{{$index}}"
                            name="person{{person.id}}emailAddresses{{$index}}"
                            ng-model="emailAddress.address" bendy-dirty/>
@@ -180,7 +180,7 @@
             </div>
         </div>
     </div>
-</ng-form>
+</form>
 
         <!--
 <table>
