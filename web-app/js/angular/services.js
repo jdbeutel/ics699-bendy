@@ -41,6 +41,15 @@ bendyServices.factory('Connection', ['$resource',
     }
 ]);
 
+bendyServices.factory('Address', ['$resource',
+    function($resource) {
+        return $resource('/addresses/:id.json', {}, {
+            update: {method:'PUT'},
+            query: {method:'GET', isArray:false}
+        });
+    }
+]);
+
 bendyServices.factory('BendyUtil', [
     function() {
         return {

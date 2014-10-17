@@ -305,6 +305,10 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
             angular.copy(person, $scope.person); // allows update by child scope
         };
 
+        $scope.setPersonPreferredConnection = function(connection) {
+            angular.copy(connection, $scope.person.perferredConnection); // allows update by child scope
+        };
+
         $scope.onFileSelect = function($files) {
             $scope.upload = $upload.upload({
                 url: '/person/uploadPhoto/' + $scope.editingPerson.id,
@@ -424,15 +428,15 @@ bendyControllers.controller('BendyProfileCtrl', ['$scope', 'Settings',
     }
 ]);
 
-bendyControllers.controller('BendyConnectionsCtrl', ['$scope',
+bendyControllers.controller('BendyCollapseCtrl', ['$scope',
     function ($scope) {
 
-        $scope.collapse = function(connection) {
-            connection.isCollapsed = true;  // like BendyPersonCtrl
+        $scope.collapse = function(o) {
+            o.isCollapsed = true;  // like BendyPersonCtrl
         };
 
-        $scope.expand = function(connection) {
-            connection.isCollapsed = false;
+        $scope.expand = function(o) {
+            o.isCollapsed = false;
         };
     }
 ]);
@@ -489,6 +493,10 @@ bendyControllers.controller('BendyConnectionCtrl', ['$scope', 'Connection', '$ti
             angular.copy(connection, $scope.connection); // allows update by child scope
         };
 
+        $scope.setConnectionPreferredAddress = function(address) {
+            angular.copy(address, $scope.connection.preferredAddress); // allows update by child scope
+        };
+
         $scope.addField = function(choice) {
             if (choice == 'Direct Email') {
                 var addedDirectEmail = {
@@ -527,6 +535,58 @@ bendyControllers.controller('BendyConnectionCtrl', ['$scope', 'Connection', '$ti
                 $scope.editingConnection.place.phoneNumbers.push(addedPhone);
             }
             $scope.addChoicesDropdownStatus.isOpen = false;
+        };
+    }
+]);
+
+bendyControllers.controller('BendyAddressCtrl', ['$scope', 'Address', '$timeout', 'Connection', 'Person',
+    function ($scope, Address, $timeout, Connection, Person) {
+        $scope.editingAddress = null;
+
+        $scope.edit = function() {
+            $scope.editingAddress = angular.copy($scope.address);  // inherited from ng-repeat
+            $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
+                $scope.addressForm.$setPristine();
+                //$('#settingsForm').trigger('resetvalui');     todo: get relative element somehow for this
+            });
+        };
+
+        $scope.cancel = function() {
+            $scope.editingAddress = null;
+        };
+
+        $scope.update = function() {
+            Address.update(
+                    {id: $scope.editingAddress.id},
+                    $scope.editingAddress,
+                    function success(updatedAddress, putResponseHeaders) {
+                        updatedAddress.isCollapsed = $scope.address.isCollapsed; // preserve hack
+                        angular.copy(updatedAddress, $scope.address);
+                        $scope.editingAddress = null;
+                        // todo: positive feedback
+                        Connection.get(     // update preferred properties on read-only view if necessary
+                                {id: $scope.connection.id},
+                                function success(updatedConnection, putResponseHeaders) {
+                                    $scope.setConnectionPreferredAddress(updatedConnection.preferredAddress);
+                                    Person.get(     // update preferred properties on read-only view if necessary
+                                            {id: $scope.person.id},
+                                            function success(updatedPerson, putResponseHeaders) {
+                                                $scope.setPersonPreferredConnection(updatedPerson.preferredConnection);
+                                            },
+                                            function error(response) {
+                                                alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                                            }
+                                    )
+                                },
+                                function error(response) {
+                                    alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                                }
+                        )
+                    },
+                    function error(response) {
+                        alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                    }
+            )
         };
     }
 ]);

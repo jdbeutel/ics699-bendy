@@ -1,4 +1,4 @@
-<div class="panel panel-default" ng-controller="BendyPersonNameCtrl">
+<div class="panel panel-default">
     <div class="panel-body">
 <ng-form name="connectionForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyConnectionCtrl">
         <div class="row">
@@ -64,7 +64,7 @@
         </div>
 
 
-        <!-- todo: addresses -->
+        <ng-include src="'partials/addresses.html'"></ng-include>
 
 
         <div ng-hide="editingConnection">

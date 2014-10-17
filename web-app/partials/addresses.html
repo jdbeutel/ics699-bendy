@@ -1,0 +1,27 @@
+<div ng-controller="BendyCollapseCtrl">
+    <div class="form-group" ng-repeat-start="address in connection.place.addresses" ng-class-odd="'odd'"
+                ng-init="address.isCollapsed=true" ng-show="address.isCollapsed" ng-click="expand(address)">
+                <div class="col-xs-3 control-label">
+                    <button class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                    <label>
+                        {{address.streetType && address.postalType ? 'Street/Postal' : (address.streetType ? 'Street' : (address.postalType ? 'Postal' : ''))}}
+                        Address
+                    </label>
+                </div>
+                <div class="col-xs-9">
+                    <p class="form-control-static">
+                        {{address.line1}}
+                        {{address.line2}}
+                        {{address.city}}
+                        {{address.state}}
+                        {{address.postalCode}}
+                        {{address.countryCode}}
+                    </p>
+                </div>
+    </div>
+    <div ng-repeat-end ng-hide="address.isCollapsed" ng-class-odd="'odd'">
+        <ng-include src="'partials/addressDetails.html'"></ng-include>
+    </div>
+</div>

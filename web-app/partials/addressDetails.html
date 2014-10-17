@@ -1,0 +1,222 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <ng-form name="addressForm" class="form-horizontal ws-validate" role="form" ng-controller="BendyAddressCtrl">
+            <div class="row">
+                <div class="col-xs-4">
+                    <button class="btn btn-default btn-xs"
+                            ng-cloak ng-click="collapse(address)">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </button>
+                    Address
+                </div>
+            </div>
+
+            <div ng-controller="BendyDirtyFormCtrl">
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Street Type</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.streetType}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}streetType">Street Type</label>
+
+                        <div class="col-xs-9">
+                            <input type="checkbox" class="form-control"
+                                      id="address{{address.id}}streetType"
+                                      name="address{{address.id}}streetType"
+                                      ng-model="editingAddress.streetType" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Postal Type</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.postalType}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}postalType">Postal Type</label>
+
+                        <div class="col-xs-9">
+                            <input type="checkbox" class="form-control"
+                                      id="address{{address.id}}postalType"
+                                      name="address{{address.id}}postalType"
+                                      ng-model="editingAddress.postalType" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Line 1</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.line1}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}line1">Line 1</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control"
+                                   id="address{{address.id}}line1"
+                                   name="address{{address.id}}line1"
+                                   ng-model="editingAddress.line1" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Line 2</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.line2}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}line2">Line 2</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control"
+                                   id="address{{address.id}}line2"
+                                   name="address{{address.id}}line2"
+                                   ng-model="editingAddress.line2" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">City</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.city}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}city">City</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control"
+                                   id="address{{address.id}}city"
+                                   name="address{{address.id}}city"
+                                   ng-model="editingAddress.city" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">State</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.state}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}state">State</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control"
+                                   id="address{{address.id}}state"
+                                   name="address{{address.id}}state"
+                                   ng-model="editingAddress.state" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Postal Code</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.postalCode}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}postalCode">Postal Code</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control"
+                                   id="address{{address.id}}postalCode"
+                                   name="address{{address.id}}postalCode"
+                                   ng-model="editingAddress.postalCode" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-hide="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Country Code</label>
+
+                        <div class="col-xs-9">
+                            <p class="form-control-static">{{address.countryCode}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="editingAddress">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label"
+                               for="address{{address.id}}countryCode">Country Code</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control"
+                                   id="address{{address.id}}countryCode"
+                                   name="address{{address.id}}countryCode"
+                                   ng-model="editingAddress.countryCode" bendy-dirty/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-xs-offset-3 col-xs-3">
+                        <button type="button" class="btn btn-default"
+                                ng-hide="editingAddress" ng-click="edit()">
+                            Edit
+                        </button>
+                        <button type="submit" class="save btn btn-default"
+                                ng-show="editingAddress" ng-disabled="!addressForm.$dirty"
+                                ng-class="{changed: addressForm.$dirty}" ng-click="update()">
+                            Save
+                        </button>
+                    </div>
+                    <div class="col-xs-3">
+                        <button type="button" class="btn btn-default"
+                                ng-show="editingAddress" ng-click="cancel()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>
