@@ -147,6 +147,38 @@ class PersonController extends RestfulController {
         }
     }
 
+    @Override
+    Object save() {
+        if(handleReadOnly()) {
+            return
+        }
+        def instance = createResource(getParametersToBind())
+
+        instance.validate()
+        if (instance.hasErrors()) {
+            respond instance.errors, view:'create' // STATUS CODE 422
+            return
+        }
+
+        instance.save flush:true
+
+        elasticSearchService.index(instance)   // had problems with auto-index, so doing it explicitly
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: "${resourceName}.label".toString(), default: resourceClassName), instance.id])
+                redirect instance
+            }
+            '*' {
+                response.addHeader(HttpHeaders.LOCATION,
+                        g.createLink(
+                                resource: this.controllerName, action: 'show',id: instance.id, absolute: true,
+                                namespace: hasProperty('namespace') ? this.namespace : null ))
+                respond instance, [status: CREATED]
+            }
+        }
+    }
+
     void deleteBlankElements(Person p) {
         def blank
         while (blank = p.emailAddresses.find {!it.address}) {

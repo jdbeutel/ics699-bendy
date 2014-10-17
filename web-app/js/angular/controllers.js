@@ -244,6 +244,19 @@ bendyControllers.controller('BendyContactsCtrl', ['$scope', 'Person', '$timeout'
         $scope.expand = function(person) {
             person.isCollapsed = false;
         };
+
+        $scope.addContact = function() {
+            var newPerson = {
+                connections: [],
+                phoneNumbers: [],
+                emailAddresses: [],
+                instantMessengerAddresses: [],
+                skypeNames: [],
+                twitterNames: []
+            };
+            $scope.contacts.splice( 0, 0, newPerson);
+            $scope.peopleCount++;
+        };
     }
 ]);
 
@@ -279,23 +292,41 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
             angular.copy($scope.person.connections, $scope.editingPerson.connections);  // preserve nested updates by child forms
             // Avoid submitting local time part of date, because the server may be in a different time zone.
             $scope.editingPerson.birthDate = $filter('date')($scope.editingPerson.birthDate, 'yyyy-MM-dd');
-            Person.update(
-                    {id: $scope.editingPerson.id},
-                    $scope.editingPerson,
-                    function success(updatedPerson, putResponseHeaders) {
-                        updatedPerson.isCollapsed = $scope.person.isCollapsed; // preserve hack
-                        $scope.setPerson(updatedPerson);
-                        $scope.editingPerson = null;
-                        // todo: positive feedback
-                    },
-                    function error(response) {
-                        alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
-                    }
-            )
+            if ($scope.editingPerson.id) {
+                Person.update(
+                        {id: $scope.editingPerson.id},
+                        $scope.editingPerson,
+                        function success(updatedPerson, putResponseHeaders) {
+                            updatedPerson.isCollapsed = $scope.person.isCollapsed; // preserve hack
+                            $scope.setPerson(updatedPerson);
+                            $scope.editingPerson = null;
+                            // todo: positive feedback
+                        },
+                        function error(response) {
+                            alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                        }
+                );
+            } else {
+                Person.save(
+                        $scope.editingPerson,
+                        function success(newPerson, putResponseHeaders) {
+                            newPerson.isCollapsed = $scope.person.isCollapsed; // preserve hack
+                            $scope.setPerson(newPerson);
+                            $scope.editingPerson = null;
+                            if ($scope.editingName) {
+                                $scope.editingName.id = newPerson.id;
+                            }
+                            // todo: positive feedback
+                        },
+                        function error(response) {
+                            alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                        }
+                );
+            }
         };
 
         $scope.copyNameProperties = function(src, dest) {
-            var nameProps = ['preferredName', 'honorific', 'firstGivenName', 'middleGivenNames', 'familyName', 'suffix'];
+            var nameProps = ['preferredName', 'honorific', 'firstGivenName', 'middleGivenNames', 'familyName', 'suffix', 'name'];
             angular.forEach(nameProps, function(value) {
                 dest[value] = src[value];
             })
@@ -308,6 +339,10 @@ bendyControllers.controller('BendyPersonCtrl', ['$scope', 'Person', '$upload', '
         $scope.setPersonPreferredConnection = function(connection) {
             angular.copy(connection, $scope.person.perferredConnection); // allows update by child scope
         };
+
+        $scope.setEditingName = function(editingName) {
+            $scope.editingName = editingName;   // by reference, not copied, to pass down id on new person
+        }
 
         $scope.onFileSelect = function($files) {
             $scope.upload = $upload.upload({
@@ -389,6 +424,7 @@ bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person', '$timeou
 
         $scope.editName = function() {
             $scope.editingName = angular.copy($scope.person);  // inherited from ng-repeat via BendyPersonCtrl
+            $scope.setEditingName($scope.editingName);
             $timeout(function() { // after current cycle, so bendyDirty gets updated $modelValue
                 $scope.nameForm.$setPristine();
                 //$('#settingsForm').trigger('resetvalui');     todo: get relative element somehow for this
@@ -398,18 +434,39 @@ bendyControllers.controller('BendyPersonNameCtrl', ['$scope', 'Person', '$timeou
         $scope.updateName = function() {
             var freshName = angular.copy($scope.person);  // inherited from ng-repeat via BendyPersonCtrl
             $scope.copyNameProperties($scope.editingName, freshName);
-            Person.update(
-                    {id: freshName.id},
-                    freshName,
-                    function success(updatedPerson, putResponseHeaders) {
-                        $scope.setPerson(updatedPerson);
-                        $scope.editingName = null;
-                        // todo: positive feedback
-                    },
-                    function error(response) {
-                        alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
-                    }
-            )
+            if (freshName.id) {
+                Person.update(
+                        {id: freshName.id},
+                        freshName,
+                        function success(updatedPerson, putResponseHeaders) {
+                            $scope.setPerson(updatedPerson);
+                            if ($scope.editingPerson) {
+                                $scope.copyNameProperties(updatedPerson, $scope.editingPerson);
+                            }
+                            $scope.editingName = null;
+                            // todo: positive feedback
+                        },
+                        function error(response) {
+                            alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                        }
+                );
+            } else {
+                Person.save(
+                        freshName,
+                        function success(newPerson, putResponseHeaders) {
+                            $scope.setPerson(newPerson);
+                            if ($scope.editingPerson) {
+                                $scope.editingPerson.id = newPerson.id;
+                                $scope.copyNameProperties(newPerson, $scope.editingPerson);     // name required for email
+                            }
+                            $scope.editingName = null;
+                            // todo: positive feedback
+                        },
+                        function error(response) {
+                            alert(response.data.errors);    // todo: $scope.addErrors(response.data.errors);
+                        }
+                );
+            }
         };
 
         $scope.cancelEditName = function() {
